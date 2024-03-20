@@ -45,15 +45,17 @@ $customizerHidden = 'customizer-hide';
           {{-- <h4 class="mb-1 pt-2">Welcome to {{config('variables.templateName')}}! 👋</h4>
           <p class="mb-4">Please sign-in to your account and start the adventure</p> --}}
 
-          <form id="formAuthentication" class="mb-3" action="{{route('pages-home')}}" method="GET">
+          <form id="formAuthentication" class="mb-3" action="{{route('auth-login')}}" method="post">
+            @csrf
             <div class="mb-3">
               <label for="email" class="form-label">Email or Username</label>
-              <input type="text" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" autofocus>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email or username" autofocus>
             </div>
             <div class="mb-3 form-password-toggle">
               <div class="d-flex justify-content-between">
                 <label class="form-label" for="password">Password</label>
-                <a href="javascript:void(0);">
+                {{-- <a href="javascript:void(0);"> --}}
+                <a href="{{ route('forgetPassword') }}">
                   <small>Forgot Password?</small>
                 </a>
               </div>

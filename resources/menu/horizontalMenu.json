@@ -1,15 +1,15 @@
 {
   "menu": [
     {
-      "url": "/",
+      "url": "/dashboard",
       "name": "Home",
       "icon": "menu-icon tf-icons ti ti-smart-home",
       "slug": "pages-home"
     },
     {
-      "url": "page-2",
+      "url": "/modules",
       "icon": "menu-icon tf-icons ti ti-file",
-      "name": "Page 2",
+      "name": "Modules",
       "slug": "pages-page-2"
     },
     {

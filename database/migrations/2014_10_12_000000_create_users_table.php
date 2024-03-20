@@ -12,17 +12,18 @@ return new class extends Migration {
   {
     Schema::create('users', function (Blueprint $table) {
       $table->id();
-      $table->string('first_name');
-      $table->string('last_name')->nullable();
-      $table->string('email')->unique();
+      $table->string('first_name', 64);
+      $table->string('last_name', 64)->nullable();
+      $table->string('email', 128)->unique();
       $table->timestamp('email_verified_at')->nullable();
-      $table->string('password');
-      $table->string('contact_no')->nullable();
-      $table->string('address')->nullable();
+      $table->string('password', 64);
+      $table->string('contact_no', 16)->nullable();
+      $table->string('address', 256)->nullable();
       $table->tinyInteger('is_active')->default(1);
-      $table->string('invitation_token')->nullable();
+      $table->string('invitation_token', 128)->nullable();
       $table->enum('status', ['I', 'A', 'R']); // I=Invited, A=Accepted, R=Rejected
       $table->rememberToken();
+      $table->string('reset_password_token')->nullable();
       $table->timestamps();
       $table->softDeletes();
     });
