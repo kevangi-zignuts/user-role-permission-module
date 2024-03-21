@@ -17,6 +17,7 @@ class ModulesTableSeeder extends Seeder
       [
         'code' => 'con',
         'module_name' => 'Contact',
+        'is_active' => 1,
         'created_by' => 1,
         'updated_by' => 1,
       ],
@@ -24,6 +25,7 @@ class ModulesTableSeeder extends Seeder
         'code' => 'com',
         'module_name' => 'Company',
         'parent_code' => 'con', // submodule
+        'is_active' => 1,
         'created_by' => 1,
         'updated_by' => 1,
       ],
@@ -31,12 +33,14 @@ class ModulesTableSeeder extends Seeder
         'code' => 'peo',
         'module_name' => 'People',
         'parent_code' => 'con', // submodule
+        'is_active' => 0,
         'created_by' => 1,
         'updated_by' => 1,
       ],
       [
         'code' => 'acc',
         'module_name' => 'Account',
+        'is_active' => 1,
         'created_by' => 1,
         'updated_by' => 1,
       ],
@@ -44,6 +48,7 @@ class ModulesTableSeeder extends Seeder
         'code' => 'note',
         'module_name' => 'Notes',
         'parent_code' => 'acc', // submodule
+        'is_active' => 1,
         'created_by' => 1,
         'updated_by' => 1,
       ],
@@ -51,6 +56,7 @@ class ModulesTableSeeder extends Seeder
         'code' => 'act',
         'module_name' => 'Activity',
         'parent_code' => 'acc', // submodule
+        'is_active' => 0,
         'created_by' => 1,
         'updated_by' => 1,
       ],
@@ -58,6 +64,35 @@ class ModulesTableSeeder extends Seeder
         'code' => 'meet',
         'module_name' => 'Meetings',
         'parent_code' => 'acc', // submodule
+        'is_active' => 1,
+        'created_by' => 1,
+        'updated_by' => 1,
+      ],
+      [
+        'code' => 'dash',
+        'module_name' => 'Dashboard',
+        'is_active' => 1,
+        'created_by' => 1,
+        'updated_by' => 1,
+      ],
+      [
+        'code' => 'mod',
+        'module_name' => 'Module Management',
+        'is_active' => 1,
+        'created_by' => 1,
+        'updated_by' => 1,
+      ],
+      [
+        'code' => 'per',
+        'module_name' => 'Permission Management',
+        'is_active' => 1,
+        'created_by' => 1,
+        'updated_by' => 1,
+      ],
+      [
+        'code' => 'role',
+        'module_name' => 'Role Management',
+        'is_active' => 1,
         'created_by' => 1,
         'updated_by' => 1,
       ],

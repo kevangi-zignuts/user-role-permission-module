@@ -7,7 +7,7 @@
       "slug": "pages-home"
     },
     {
-      "url": "/modules",
+      "url": "/modules/index",
       "icon": "menu-icon tf-icons ti ti-file",
       "name": "Modules",
       "slug": "pages-page-2"

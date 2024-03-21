@@ -37,5 +37,7 @@
       },
       'controls': <?php echo json_encode($configData['customizerControls']); ?>,
     });
+
+
   </script>
 @endif
