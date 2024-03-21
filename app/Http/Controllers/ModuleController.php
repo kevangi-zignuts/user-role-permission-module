@@ -32,7 +32,8 @@ class ModuleController extends Controller
           $q->where('module_name', 'like', '%' . $search . '%');
         })
         ->orWhere('module_name', 'like', '%' . $search . '%');
-      $modules = $query->with('submodules')->get();
+      $modules = $query->get();
+
       // $modules = $query
       //   ->where('module_name', 'like', '%' . $search . '%')
       //   ->whereNull('parent_code')

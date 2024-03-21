@@ -6,13 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Module extends Model
+class Permission extends Model
 {
   use HasFactory, SoftDeletes;
 
-  protected $primaryKey = 'code';
-  protected $keyType = 'string';
-  protected $fillable = ['code', 'module_name', 'description', 'is_active', 'parent_code', 'created_by', 'updated_by'];
+  protected $fillable = ['permission_name', 'description', 'is_active', 'created_by', 'updated_by'];
 
   public static function boot()
   {
@@ -33,18 +31,8 @@ class Module extends Model
     });
   }
 
-  public function submodules()
+  public function module()
   {
-    return $this->hasMany(Module::class, 'parent_code', 'code');
-  }
-
-  public function parentModule()
-  {
-    return $this->belongsTo(Module::class, 'parent_code', 'code');
-  }
-
-  public function permission()
-  {
-    return $this->belongsToMany(Permission::class, 'permission_modules', 'permission_id', 'module_code');
+    return $this->belongsToMany(Module::class, 'permission_modules', 'permission_id', 'module_code');
   }
 }
