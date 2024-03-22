@@ -13,22 +13,22 @@ return new class extends Migration {
     Schema::create('permission_modules', function (Blueprint $table) {
       $table->unsignedBigInteger('permission_id');
       $table->string('module_code', 8);
-      $table->tinyInteger('add_access');
-      $table->tinyInteger('view_access');
-      $table->tinyInteger('edit_access');
-      $table->tinyInteger('delete_access');
+      $table->tinyInteger('add_access')->default(0);
+      $table->tinyInteger('view_access')->default(0);
+      $table->tinyInteger('edit_access')->default(0);
+      $table->tinyInteger('delete_access')->default(0);
 
+      $table
+        ->foreign('permission_id')
+        ->references('id')
+        ->on('permissions')
+        ->onDelete('cascade');
       $table
         ->foreign('module_code')
         ->references('code')
         ->on('modules')
         ->onDelete('cascade')
         ->nullable();
-      $table
-        ->foreign('permission_id')
-        ->references('id')
-        ->on('permissions')
-        ->onDelete('cascade');
     });
   }
 

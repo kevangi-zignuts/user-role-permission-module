@@ -33,6 +33,11 @@ class Permission extends Model
 
   public function module()
   {
-    return $this->belongsToMany(Module::class, 'permission_modules', 'permission_id', 'module_code');
+    return $this->belongsToMany(Module::class, 'permission_modules', 'permission_id', 'module_code')->withPivot(
+      'add_access',
+      'view_access',
+      'edit_access',
+      'delete_access'
+    );
   }
 }

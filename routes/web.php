@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\ForgetPasswordController;
-use App\Http\Controllers\ModuleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,15 +24,23 @@ Route::get('/auth/register-basic', $controller_path . '\authentications\Register
   'auth-register-basic'
 );
 Route::middleware('auth')->group(function () use ($controller_path) {
-  // $controller_path = 'App\Http\Controllers';
   // Main Page Route
   Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('pages-home');
-  // Route::get('/page-2', $controller_path . '\pages\Page2@index')->name('pages-page-2');
   Route::group(['prefix' => 'modules'], function () {
     Route::get('/index', [ModuleController::class, 'index'])->name('pages-page-2');
     Route::get('/edit/{code}', [ModuleController::class, 'edit'])->name('modules.edit');
     Route::post('/update/{code}', [ModuleController::class, 'update'])->name('modules.update');
     Route::post('/isActive/{code}', [ModuleController::class, 'updateIsActive'])->name('modules.updateIsActive');
+  });
+
+  Route::group(['prefix' => 'permissions'], function () {
+    Route::get('/index', [PermissionController::class, 'index'])->name('permissions.index');
+    Route::get('/create', [PermissionController::class, 'create'])->name('permissions.create');
+    Route::post('/store', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::get('/edit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
+    Route::post('/update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::post('/delete/{id}', [PermissionController::class, 'delete'])->name('permissions.delete');
+    Route::post('/isActive/{id}', [PermissionController::class, 'updateIsActive'])->name('permissions.updateIsActive');
   });
 
   Route::get('/pages/misc-error', $controller_path . '\pages\MiscError@index')->name('pages-misc-error');

@@ -13,11 +13,10 @@
       "slug": "pages-page-2"
     },
     {
-      "url": "pages/misc-error",
-      "name": "Error",
+      "url": "/permissions/index",
+      "name": "Permissions",
       "icon": "menu-icon tf-icons ti ti-alert-triangle",
-      "slug": "pages-misc-error",
-      "target": "_blank"
+      "slug": "permissions.index"
     },
     {
       "url": "auth/login-basic",
