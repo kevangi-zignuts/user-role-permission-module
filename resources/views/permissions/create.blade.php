@@ -97,6 +97,7 @@ $configData = Helper::appClasses();
             <div class="mb-3">
               <label class="form-label">Permission Name</label>
               <input type="text" class="form-control" name="permission_name" autofocus>
+              <div class="valid-feedback"> Looks good! </div>
             </div>
             <div class="form-group mb-3">
               <label for="exampleFormControlTextarea1">Description</label>

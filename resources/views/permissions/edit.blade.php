@@ -2,6 +2,19 @@
 $configData = Helper::appClasses();
 @endphp
 
+@section('vendor-style')
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/animate-css/animate.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.css')}}" />
+@endsection
+
+@section('vendor-script')
+<script src="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
+@endsection
+
+@section('page-script')
+<script src="{{asset('assets/js/extended-ui-sweetalert2.js')}}"></script>
+@endsection
+
 @extends('layouts/layoutMaster')
 
 @section('title', 'Modules 2')
@@ -14,7 +27,7 @@ $configData = Helper::appClasses();
       <div class="card">
         <div class="card-body">
           <div class="app-brand justify-content-center mb-4 mt-2">
-            <span class="app-brand-text demo text-body fw-bold ms-1">Create Permission</span>
+            <span class="app-brand-text demo text-body fw-bold ms-1">Edit Permission</span>
           </div>
           <form id="formAuthentication" class="mb-3" action="{{ route('permissions.update', ['id' => $permission->id]) }}" method="post">
             @csrf
@@ -70,7 +83,7 @@ $configData = Helper::appClasses();
             </table>
 
             <div class="mb-3 mt-3">
-              <button class="btn btn-primary d-grid" type="submit">Edit</button>
+              <button class="btn btn-primary d-grid" type="submit" id="type-success">Edit</button>
             </div>
           </form>
         </div>

@@ -50,6 +50,11 @@ $configData = Helper::appClasses();
         </tr>
       </thead>
       <tbody>
+        @if ($modules->isEmpty())
+          <tr >
+            <td colspan="5" class="text-center text-danger h5">No data available</td>
+          </tr>
+        @endif
         @foreach ($modules as $module)
           {{-- @if($module->parent_code === null) --}}
             <tr>
@@ -68,9 +73,9 @@ $configData = Helper::appClasses();
               <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i class="fa-solid fa-pen-to-square"></i></a></td>
             </tr>
             <tr id="subModules_{{ $module->code }}_{{ $i }}" class="collapse">
-              <td colspan="4">
+              <td colspan="5">
                   <table class="table">
-                    <thead class="">
+                    <thead class="table-light">
                       <tr class="info">
                         <th scope="col">Submodule Name</th>
                         <th scope="col">Description</th>

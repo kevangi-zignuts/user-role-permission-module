@@ -4,7 +4,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-@section('vendor-style')
+{{-- @section('vendor-style')
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/animate-css/animate.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.css')}}" />
 @endsection
@@ -15,7 +15,7 @@ $configData = Helper::appClasses();
 
 @section('page-script')
 <script src="{{asset('assets/js/extended-ui-sweetalert2.js')}}"></script>
-@endsection
+@endsection --}}
 
 @section('title', 'Permission')
 
@@ -35,21 +35,21 @@ $configData = Helper::appClasses();
 
 <div class="card">
   <div class="card-header d-flex justify-content-between m-5 mb-2">
-    <a href="{{ route('permissions.create') }}" class="btn btn-primary">Add a Permission</a>
+    <a href="{{ route('roles.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add a Role</a>
     <div class="search-container ">
-      <form action="{{ route('permissions.index') }}" method="GET">
+      <form action="{{ route('roles.index') }}" method="GET">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search Permission..." name="search" value="">
+          <input type="text" class="form-control" placeholder="Search Role..." name="search" value="">
           <button class="btn  btn-primary" type="submit"><i class="fas fa-search"></i></button>
         </div>
       </form>
     </div>
-    <form action="{{ route('permissions.index') }}" method="GET">
+    <form action="{{ route('roles.index') }}" method="GET">
       <div class="input-group ">
         <select name="filter" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon" equired>
-          <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Permission</option>
-          <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Permission</option>
-          <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Permission</option>
+          {{-- <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Role</option>
+          <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Role</option>
+          <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Role</option> --}}
         </select>
         <button class="btn btn-outline-primary" type="submit">Filter</button>
       </div>
@@ -68,21 +68,21 @@ $configData = Helper::appClasses();
         </tr>
       </thead>
       <tbody>
-        @if ($permissions->isEmpty())
+        @if ($roles->isEmpty())
           <tr >
-            <td colspan="4" class="text-center text-danger h5">No data available</td>
+            <td colspan="5" class="text-center text-danger h5">No data available</td>
           </tr>
         @endif
-        @foreach ($permissions as $permission)
+        @foreach ($roles as $role)
             <tr>
-              <td>{{ $permission->permission_name }}</td>
-              <td>{{ $permission->description }}</td>
+              <td>{{ $role->role_name }}</td>
+              <td>{{ $role->description }}</td>
               <td>
-                <form action="{{ route('permissions.updateIsActive', ['id' => $permission->id]) }}" method="POST">
+                <form action="{{ route('permissions.updateIsActive', ['id' => $role->id]) }}" method="POST">
                   @csrf
                   <input type="hidden" name="is_active" value="">
                   <div class="form-check form-switch">
-                      <input class="form-check-input" onchange="submit()" type="checkbox" role="switch" id="switchCheckDefault" {{ $permission->is_active == 1 ? 'checked' : '' }}>
+                      <input class="form-check-input" onchange="submit()" type="checkbox" role="switch" id="switchCheckDefault" {{ $role->is_active == 1 ? 'checked' : '' }}>
                   </div>
                 </form>
               </td>
@@ -90,11 +90,11 @@ $configData = Helper::appClasses();
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ route('permissions.edit', ['id' => $permission->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
+                    {{-- <a class="dropdown-item" href="{{ route('permissions.edit', ['id' => $permission->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
                     <form action="{{ route('permissions.delete', ['id' => $permission->id]) }}" method="post" dropdown-item>
                       @csrf
                       <button type="submit"  class="btn text-danger" id="confirm-text"><i class="ti ti-trash me-1"></i> Delete</button>
-                    </form>
+                    </form> --}}
                   </div>
                 </div>
               </td>

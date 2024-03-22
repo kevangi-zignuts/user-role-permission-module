@@ -19,11 +19,10 @@
       "slug": "permissions.index"
     },
     {
-      "url": "auth/login-basic",
-      "name": "Login",
-      "icon": "menu-icon tf-icons ti ti-login",
-      "slug": "auth-login-basic",
-      "target": "_blank"
+      "url": "/roles/index",
+      "name": "Roles",
+      "icon": "menu-icon tf-icons ti ti-user",
+      "slug": "roles.index"
     },
     {
       "url": "auth/register-basic",

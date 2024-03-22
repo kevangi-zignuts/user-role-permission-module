@@ -29,7 +29,9 @@ class PermissionController extends Controller
 
   public function create()
   {
-    $modules = Module::where('parent_code', null)->get();
+    $modules = Module::where('parent_code', null)
+      ->where('is_active', 1)
+      ->get();
     return view('permissions.create', ['modules' => $modules]);
   }
 
@@ -42,10 +44,7 @@ class PermissionController extends Controller
       'modules.*' => 'array|nullable',
     ]);
 
-    $permission = Permission::create([
-      'permission_name' => $request->input('permission_name'),
-      'description' => $request->input('description'),
-    ]);
+    $permission = Permission::create($request->only(['permission_name', 'description']));
 
     foreach ($request->input('modules') as $moduleCode => $modules) {
       $module = Module::where('code', $moduleCode)->first();

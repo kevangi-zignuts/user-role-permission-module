@@ -40,4 +40,19 @@ class Permission extends Model
       'delete_access'
     );
   }
+
+  public function role()
+  {
+    return $this->belongsToMany(Role::class, 'role_permissions', 'role_id', 'permission_id');
+  }
+
+  public function hasAccess($module, $permission)
+  {
+    // Check if the permission exists for the given module
+    if ($this->module->contains($module)) {
+      return (bool) $this->module->find($module)->pivot->{$permission . '_access'};
+    }
+
+    return false;
+  }
 }
