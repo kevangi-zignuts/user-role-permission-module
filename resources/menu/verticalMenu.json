@@ -25,10 +25,10 @@
       "slug": "roles.index"
     },
     {
-      "url": "/roles/index",
+      "url": "/users/index",
       "name": "Users",
       "icon": "menu-icon tf-icons ti ti-user",
-      "slug": "roles.index"
+      "slug": "users.index"
     }
   ]
 }

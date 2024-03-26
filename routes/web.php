@@ -57,8 +57,8 @@ Route::middleware('auth')->group(function () use ($controller_path) {
 
   Route::group(['prefix' => 'users'], function () {
     Route::get('/index', [UserController::class, 'index'])->name('users.index');
-    // Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
-    // Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/store', [UserController::class, 'store'])->name('users.store');
     // Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
     // Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
     // Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
