@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\authentications\LoginBasic;
@@ -48,10 +49,20 @@ Route::middleware('auth')->group(function () use ($controller_path) {
     Route::get('/index', [RoleController::class, 'index'])->name('roles.index');
     Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
     Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
-    // Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
-    //   Route::post('/update/{id}', [RoleController::class, 'update'])->name('permissions.update');
-    //   Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('permissions.delete');
+    Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
     Route::post('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
+  });
+
+  Route::group(['prefix' => 'users'], function () {
+    Route::get('/index', [UserController::class, 'index'])->name('users.index');
+    // Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
+    // Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
+    // Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+    // Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
+    // Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
+    // Route::post('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
   });
 
   Route::get('/pages/misc-error', $controller_path . '\pages\MiscError@index')->name('pages-misc-error');

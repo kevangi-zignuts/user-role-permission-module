@@ -25,11 +25,10 @@
       "slug": "roles.index"
     },
     {
-      "url": "auth/register-basic",
-      "name": "Register",
+      "url": "/roles/index",
+      "name": "Users",
       "icon": "menu-icon tf-icons ti ti-user",
-      "slug": "auth-register-basic",
-      "target": "_blank"
+      "slug": "roles.index"
     }
   ]
 }
