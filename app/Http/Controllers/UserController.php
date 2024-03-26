@@ -69,7 +69,7 @@ class UserController extends Controller
 
     return redirect()
       ->route('roles.index')
-      ->with('success', 'Roles updated successfully!');
+      ->with('success', "User's data Inserted successfully!");
   }
 
   public function updateIsActive(Request $request, $id)
@@ -80,5 +80,43 @@ class UserController extends Controller
     return redirect()
       ->route('users.index')
       ->with('success', 'User status updated successfully.');
+  }
+
+  public function edit($id)
+  {
+    $user = User::with('role')->find($id);
+    $roles = Role::where('is_active', 1)->get();
+    return view('users.edit', ['user' => $user, 'roles' => $roles]);
+  }
+
+  public function update(Request $request, $id)
+  {
+    $request->validate([
+      'first_name' => 'required|string|max:255',
+      'contact_no' => 'numeric',
+      'roles' => 'array',
+    ]);
+
+    $user = User::findOrFail($id);
+    $user->update($request->only(['first_name', 'last_name', 'contact_no', 'address']));
+    $user->role()->sync($request->input('roles', []));
+
+    return redirect()
+      ->route('users.index')
+      ->with('success', "User's data updated Successfully");
+  }
+
+  public function delete($id)
+  {
+    $user = User::find($id);
+    if (!$user) {
+      return redirect()
+        ->route('users.index')
+        ->with('fail', 'We can not found data');
+    }
+    $user->delete();
+    return redirect()
+      ->route('users.index')
+      ->with('success', "User's data deleted successfully");
   }
 }

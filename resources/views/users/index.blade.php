@@ -4,23 +4,28 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-{{-- @section('vendor-style')
-<link rel="stylesheet" href="{{asset('assets/vendor/libs/animate-css/animate.css')}}" />
-<link rel="stylesheet" href="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.css')}}" />
+@section('title', 'Permission')
+
+@section('vendor-style')
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css')}}">
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css')}}">
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css')}}" />
 @endsection
 
 @section('vendor-script')
-<script src="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js')}}"></script>
+
+<script src="{{asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js')}}"></script>
 @endsection
 
 @section('page-script')
-<script src="{{asset('assets/js/extended-ui-sweetalert2.js')}}"></script>
-@endsection --}}
-
-@section('title', 'Permission')
+<script src="{{asset('assets/js/app-access-roles.js')}}"></script>
+<script src="{{asset('assets/js/modal-add-role.js')}}"></script>
+@endsection
 
 @section('content')
-
 
 @if (session('success'))
       <div class="alert alert-success" role="alert">
@@ -94,11 +99,13 @@ $configData = Helper::appClasses();
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                   <div class="dropdown-menu">
-                    {{-- <a class="dropdown-item" href="{{ route('roles.edit', ['id' => $role->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
-                    <form action="{{ route('roles.delete', ['id' => $role->id]) }}" method="post" dropdown-item>
+                    <a class="dropdown-item" href="{{ route('users.edit', ['id' => $user->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
+                    <form action="{{ route('users.delete', ['id' => $user->id]) }}" method="post" dropdown-item>
                       @csrf
                       <button type="submit"  class="btn text-danger" id="confirm-text"><i class="ti ti-trash me-1"></i> Delete</button>
-                    </form> --}}
+                    </form>
+                    {{-- <button data-bs-target="#addRoleModal" data-bs-toggle="modal" class="btn text-primary add-new-role"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i> Add New Role</button> --}}
+                    <a data-bs-target="#addRoleModal" data-bs-toggle="modal" class="dropdown-item add-new-role "><i class="ti ti-pencil me-1"></i> Reset Password</a>
                   </div>
                 </div>
               </td>
@@ -109,5 +116,7 @@ $configData = Helper::appClasses();
     </div>
   </div>
 </div>
+
+@include('users.resetPassword')
 
 @endsection

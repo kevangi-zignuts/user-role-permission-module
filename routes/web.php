@@ -59,9 +59,9 @@ Route::middleware('auth')->group(function () use ($controller_path) {
     Route::get('/index', [UserController::class, 'index'])->name('users.index');
     Route::get('/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/store', [UserController::class, 'store'])->name('users.store');
-    // Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
-    // Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
-    // Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
+    Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
+    Route::post('/update/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
     Route::post('/isActive/{id}', [UserController::class, 'updateIsActive'])->name('users.updateIsActive');
   });
 
