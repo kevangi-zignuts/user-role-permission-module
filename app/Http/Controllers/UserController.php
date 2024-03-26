@@ -17,19 +17,19 @@ class UserController extends Controller
     $filter = $request->query('filter', 'all');
     $query = User::query();
 
-    // if ($filter !== 'all') {
-    //   $query->where('is_active', $request->filter)->get();
-    // }
-    // $roles = $query->get();
+    if ($filter !== 'all') {
+      $query->where('is_active', $request->filter)->get();
+    }
+    $users = $query->with('role')->get();
 
-    // $search = $request->input('search');
-    // if (!empty($search)) {
-    //   $query->where('role_name', 'like', '%' . $search . '%');
-    //   $roles = $query->get();
-    // }
+    $search = $request->input('search');
+    if (!empty($search)) {
+      $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
+      $users = $query->get();
+    }
 
-    // return view('users.index', ['roles' => $roles, 'filter' => $filter]);
-    return view('users.index');
+    return view('users.index', ['users' => $users, 'filter' => $filter]);
+    // return view('users.index');
   }
 
   public function create()
@@ -62,15 +62,23 @@ class UserController extends Controller
     $user->save();
 
     Mail::to($email)->send(new InvitationEmail($token, $temporaryPassword));
-    dd('here');
-    $role = Role::create($request->only(['role_name', 'description']));
 
-    $permissionIds = $request->input('permissions', []);
+    $roleIds = $request->input('roles', []);
 
-    $role->permission()->sync($permissionIds);
+    $user->role()->sync($roleIds);
 
     return redirect()
       ->route('roles.index')
       ->with('success', 'Roles updated successfully!');
+  }
+
+  public function updateIsActive(Request $request, $id)
+  {
+    $user = User::findOrFail($id);
+    $user->update(['is_active' => !$user->is_active]);
+
+    return redirect()
+      ->route('users.index')
+      ->with('success', 'User status updated successfully.');
   }
 }
