@@ -42,7 +42,7 @@ $configData = Helper::appClasses();
             @csrf
             <div class="mb-3">
               <label class="form-label">Role Name</label>
-              <input type="text" class="form-control" name="roles_name" autofocus>
+              <input type="text" class="form-control" name="role_name" autofocus>
             </div>
             <div class="form-group mb-3">
               <label for="exampleFormControlTextarea1">Description</label>

@@ -38,8 +38,8 @@ class RoleController extends Controller
     $request->validate([
       'role_name' => 'required|string|max:255',
       'description' => 'nullable|string',
+      'permissions' => 'array',
     ]);
-
     $role = Role::create($request->only(['role_name', 'description']));
 
     $permissionIds = $request->input('permissions', []);
@@ -49,5 +49,15 @@ class RoleController extends Controller
     return redirect()
       ->route('roles.index')
       ->with('success', 'Roles updated successfully!');
+  }
+
+  public function updateIsActive(Request $request, $id)
+  {
+    $role = Role::findOrFail($id);
+    $role->update(['is_active' => !$role->is_active]);
+
+    return redirect()
+      ->route('roles.index')
+      ->with('success', 'Role status updated successfully.');
   }
 }

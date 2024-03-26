@@ -78,7 +78,7 @@ $configData = Helper::appClasses();
               <td>{{ $role->role_name }}</td>
               <td>{{ $role->description }}</td>
               <td>
-                <form action="{{ route('permissions.updateIsActive', ['id' => $role->id]) }}" method="POST">
+                <form action="{{ route('roles.updateIsActive', ['id' => $role->id]) }}" method="POST">
                   @csrf
                   <input type="hidden" name="is_active" value="">
                   <div class="form-check form-switch">

@@ -76,7 +76,9 @@ class PermissionController extends Controller
   public function edit($id)
   {
     $permission = Permission::with('module')->findOrFail($id);
-    $modules = Module::where('parent_code', null)->get();
+    $modules = Module::where('parent_code', null)
+      ->where('is_active', 1)
+      ->get();
     return view('permissions.edit', ['permission' => $permission, 'modules' => $modules]);
   }
 

@@ -93,7 +93,7 @@ $configData = Helper::appClasses();
                     <a class="dropdown-item" href="{{ route('permissions.edit', ['id' => $permission->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
                     <form action="{{ route('permissions.delete', ['id' => $permission->id]) }}" method="post" dropdown-item>
                       @csrf
-                      <button type="submit"  class="btn text-danger" id="confirm-text"><i class="ti ti-trash me-1"></i> Delete</button>
+                      <button type="submit"  class="btn text-danger" onclick="return confirm('Are you sure you want to Delete?')"><i class="ti ti-trash me-1"></i> Delete</button>
                     </form>
                   </div>
                 </div>

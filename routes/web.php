@@ -48,10 +48,10 @@ Route::middleware('auth')->group(function () use ($controller_path) {
     Route::get('/index', [RoleController::class, 'index'])->name('roles.index');
     Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
     Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
-    //   Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('permissions.edit');
+    // Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
     //   Route::post('/update/{id}', [RoleController::class, 'update'])->name('permissions.update');
     //   Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('permissions.delete');
-    //   Route::post('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('permissions.updateIsActive');
+    Route::post('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
   });
 
   Route::get('/pages/misc-error', $controller_path . '\pages\MiscError@index')->name('pages-misc-error');
