@@ -81,3 +81,8 @@ Route::middleware('auth')->group(function () use ($controller_path) {
 Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForgetPasswordForm'])->name(
   'forgetPassword'
 );
+Route::post('/forget-password', [ForgetPasswordController::class, 'submitForgetPasswordForm'])->name(
+  'forgetPasswordForm'
+);
+Route::get('/reset-password-link/{id}', [ForgetPasswordController::class, 'resetPasswordForm'])->name('resetPassword');
+Route::post('/reset-password/{id}', [ForgetPasswordController::class, 'resetPassword'])->name('resetPasswordSubmit');

@@ -53,7 +53,8 @@ $configData = Helper::appClasses();
         <!-- /Logo -->
         <h3 class="mb-1 fw-bold">Forgot Password? 🔒</h3>
         <p class="mb-4">Enter your email and we'll send you instructions to reset your password</p>
-        <form id="formAuthentication" class="mb-3" action="{{url('auth/reset-password-cover')}}" method="POST">
+        <form id="formAuthentication" class="mb-3" action="{{route('forgetPasswordForm')}}" method="post">
+          @csrf
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" autofocus>

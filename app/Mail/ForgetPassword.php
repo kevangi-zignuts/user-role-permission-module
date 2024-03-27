@@ -13,14 +13,14 @@ class ForgetPassword extends Mailable
 {
   use Queueable, SerializesModels;
 
-  public $email;
+  public $id;
 
   /**
    * Create a new message instance.
    */
-  public function __construct($email)
+  public function __construct($id)
   {
-    $this->email = $email;
+    $this->id = $id;
   }
 
   /**
@@ -28,7 +28,7 @@ class ForgetPassword extends Mailable
    */
   public function envelope(): Envelope
   {
-    return new Envelope(subject: 'Forget Password');
+    return new Envelope(subject: 'Reset Password Link');
   }
 
   /**

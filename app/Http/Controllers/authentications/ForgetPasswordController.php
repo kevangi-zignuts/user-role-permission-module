@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\authentications;
 
 use App\Models\User;
+use App\Mail\ResetPassword;
 use Illuminate\Support\Str;
 use App\Mail\forgetPassword;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class ForgetPasswordController extends Controller
@@ -30,32 +32,28 @@ class ForgetPasswordController extends Controller
     // Store the reset password token in the users table
     $user->update(['reset_password_token' => $token]);
 
-    Mail::to($user->email)->send(new ResetPassword());
-    Mail::send('content.ForgetPassword.forgetPasswordMail', ['token' => $token], function ($message) use ($request) {
-      $message->to($request->email);
-      $message->subject('Reset Password');
-    });
+    Mail::to($user->email)->send(new ForgetPassword($user->id));
 
     return back()->with('message', 'We have e-mailed your password reset link!');
-    // $email = $request['email'];
-    // Mail::to($email)->send(new ForgetPassword());
-    // dd(Auth::check());
-    // if (Auth::check()) {
-    //   $email = Auth::user()->email;
-    //   Mail::to($email)->send(new ForgetPassword($email));
-    //   return redirect()
-    //     ->back()
-    //     ->with();
-    //   return response()->json(['email' => $email]);
-    // } else {
-    //   return response()->json(['error' => 'User is not authenticated'], 401);
-    // }
   }
 
-  public function resetPassword(Request $request, $email)
+  public function resetPasswordForm($id)
+  {
+    return view('content.forgetPassword.passwordResetForm', compact('id'));
+  }
+
+  public function resetPassword(Request $request, $id)
   {
     $request->validate([
-      'password' => 'required|min:8|confirmed',
+      'password' => 'required|confirmed',
     ]);
+    $user = User::findOrFail($id);
+    $password = Hash::make($request['password']);
+    $user->update(['password' => $password]);
+    Mail::to($user->email)->send(new ResetPassword());
+
+    return redirect()
+      ->route('login')
+      ->with('success', "User's password updated successfully");
   }
 }
