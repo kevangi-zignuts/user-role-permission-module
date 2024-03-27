@@ -84,6 +84,7 @@ class PermissionController extends Controller
 
   public function update(Request $request, $id)
   {
+    // dd($request->all());
     $request->validate([
       'permission_name' => 'required|string|max:255',
       'description' => 'nullable|string',
@@ -96,13 +97,35 @@ class PermissionController extends Controller
 
     foreach ($request->input('modules') as $moduleCode => $modules) {
       $module = Module::where('code', $moduleCode)->first();
+      // if ($module) {
+      //   $permission->module()->updateExistingPivot($module->code, [
+      //     'add_access' => isset($modules['add_access']),
+      //     'view_access' => isset($modules['view_access']),
+      //     'edit_access' => isset($modules['edit_access']),
+      //     'delete_access' => isset($modules['delete_access']),
+      //   ]);
+      // }
       if ($module) {
-        $permission->module()->updateExistingPivot($module->code, [
+        $pivotData = [
           'add_access' => isset($modules['add_access']),
           'view_access' => isset($modules['view_access']),
           'edit_access' => isset($modules['edit_access']),
           'delete_access' => isset($modules['delete_access']),
-        ]);
+        ];
+
+        // Check if the pivot record exists
+        $existingPivot = $permission
+          ->module()
+          ->wherePivot('module_code', $module->code)
+          ->first();
+
+        if ($existingPivot) {
+          // If the pivot record exists, update it
+          $permission->module()->updateExistingPivot($module->code, $pivotData);
+        } else {
+          // If the pivot record doesn't exist, add it
+          $permission->module()->attach($module->code, $pivotData);
+        }
       }
     }
     return redirect()

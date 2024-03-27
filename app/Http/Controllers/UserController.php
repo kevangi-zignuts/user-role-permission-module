@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Mail\ResetPassword;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\InvitationEmail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -51,24 +55,20 @@ class UserController extends Controller
     $temporaryPassword = Str::random(10);
 
     $user = new User();
-    $user->first_name = $request['first_name'];
-    $user->last_name = $request['last_name'];
-    $user->email = $email;
+    $user->fill($request->only('first_name', 'last_name', 'email', 'contact_no', 'address'));
     $user->password = Hash::make($temporaryPassword);
-    $user->contact_no = $request['contact_no'];
-    $user->address = $request['address'];
     $user->invitation_token = $token;
     $user->status = 'I';
     $user->save();
 
-    Mail::to($email)->send(new InvitationEmail($token, $temporaryPassword));
+    Mail::to($request->input('email'))->send(new InvitationEmail($token, $temporaryPassword));
 
     $roleIds = $request->input('roles', []);
 
     $user->role()->sync($roleIds);
 
     return redirect()
-      ->route('roles.index')
+      ->route('users.index')
       ->with('success', "User's data Inserted successfully!");
   }
 
@@ -118,5 +118,85 @@ class UserController extends Controller
     return redirect()
       ->route('users.index')
       ->with('success', "User's data deleted successfully");
+  }
+
+  public function resetPassword(Request $request, $id)
+  {
+    $request->validate([
+      'password' => 'required|confirmed',
+    ]);
+
+    $user = User::findOrFail($id);
+    // dd($user);
+    $password = Hash::make($request['password']);
+    $user->update(['password' => $password]);
+    Mail::to($user->email)->send(new ResetPassword());
+
+    return redirect()
+      ->route('users.index')
+      ->with('success', "User's password updated successfully");
+  }
+
+  // public function forceLogout(Request $request, $id)
+  // {
+  //   // Ensure $userId is a valid integer
+  //   if (!is_numeric($id)) {
+  //     return redirect()
+  //       ->back()
+  //       ->with('error', 'Invalid user ID.');
+  //   }
+
+  //   $user = User::find($id);
+
+  //   if (!$user) {
+  //     return redirect()
+  //       ->back()
+  //       ->with('error', 'User not found.');
+  //   }
+
+  //   // Regenerate session to force logout immediately
+  //   $this->invalidateUserSession($id);
+
+  //   return redirect()
+  //     ->back()
+  //     ->with('success', 'User has been forced to log out.');
+  // }
+
+  // protected function invalidateUserSession($userId)
+  // {
+  //   $sessionName = 'user_' . $userId . '_session';
+  //   $sessionId = Session::getId();
+
+  //   // Regenerate session ID to invalidate the current session
+  //   Session::regenerate();
+
+  //   // Delete the session data associated with the user
+  //   Session::remove($sessionName);
+  // }
+
+  public function forceLogout($userId)
+  {
+    // Get the user by their ID
+    $user = User::find($userId);
+
+    if ($user) {
+      // Invalidate user's session tokens
+      DB::table('sessions')
+        ->where('user_id', $user->id)
+        ->delete();
+
+      // Optionally, you can also logout the user from the current device
+      Auth::logout();
+
+      // Redirect or return a response as needed
+      return redirect()
+        ->route('login')
+        ->with('success', 'User logged out from all devices.');
+    } else {
+      // Handle case where user is not found
+      return redirect()
+        ->back()
+        ->with('error', 'User not found.');
+    }
   }
 }

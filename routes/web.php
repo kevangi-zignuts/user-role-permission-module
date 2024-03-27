@@ -63,6 +63,8 @@ Route::middleware('auth')->group(function () use ($controller_path) {
     Route::post('/update/{id}', [UserController::class, 'update'])->name('users.update');
     Route::post('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
     Route::post('/isActive/{id}', [UserController::class, 'updateIsActive'])->name('users.updateIsActive');
+    Route::post('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('users.resetPassword');
+    Route::post('/forced-logout/{id}', [UserController::class, 'forceLogout'])->name('users.forceLogout');
   });
 
   Route::get('/pages/misc-error', $controller_path . '\pages\MiscError@index')->name('pages-misc-error');
@@ -71,8 +73,11 @@ Route::middleware('auth')->group(function () use ($controller_path) {
   //   '/forger-password-link',
   //   $controller_path . '\authentications\ForgetPasswordController@howForgetPasswordForm'
   // )->name('forgetPassword');
-  // Route::post(
-  //   '/email/forgetPassword',
-  //   $controller_path . '\authentications\ForgetPasswordController@submitForgetPasswordForm'
-  // )->name('email.forget.password');
+  Route::post(
+    '/email/forgetPassword',
+    $controller_path . '\authentications\ForgetPasswordController@submitForgetPasswordForm'
+  )->name('email.forget.password');
 });
+Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForgetPasswordForm'])->name(
+  'forgetPassword'
+);

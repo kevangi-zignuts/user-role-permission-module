@@ -4,6 +4,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
+
 {{-- @section('vendor-style')
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/animate-css/animate.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.css')}}" />
@@ -87,13 +88,14 @@ $configData = Helper::appClasses();
                 </form>
               </td>
               <td>
+
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ route('roles.edit', ['id' => $role->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
                     <form action="{{ route('roles.delete', ['id' => $role->id]) }}" method="post" dropdown-item>
                       @csrf
-                      <button type="submit"  class="btn text-danger" id="confirm-text"><i class="ti ti-trash me-1"></i> Delete</button>
+                      <button type="submit"  class="btn text-danger" onclick="confirm('Are you sure you Want to delete?')"><i class="ti ti-trash me-1"></i> Delete</button>
                     </form>
                   </div>
                 </div>
@@ -105,5 +107,6 @@ $configData = Helper::appClasses();
     </div>
   </div>
 </div>
+
 
 @endsection

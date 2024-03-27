@@ -23,6 +23,7 @@ $configData = Helper::appClasses();
 @section('page-script')
 <script src="{{asset('assets/js/app-access-roles.js')}}"></script>
 <script src="{{asset('assets/js/modal-add-role.js')}}"></script>
+{{-- <script src="{{asset('assets/js/reset-password.js')}}"></script> --}}
 @endsection
 
 @section('content')
@@ -82,8 +83,18 @@ $configData = Helper::appClasses();
             <tr>
               <td>{{ $user->first_name }}</td>
               <td>
+                @php
+                  $total = $user->role->count();
+                  $count = 0;
+                @endphp
                 @foreach ($user->role as $role)
-                  {{ $role->role_name . ", "}}
+                  @if ($count < 2)
+                    {{ $role->role_name . ", "}}
+                    {{ $count += 1 }}
+                  @else
+                     + {{ $total - 2 }} more,
+                    @break;
+                  @endif
                 @endforeach
               </td>
               <td>
@@ -91,7 +102,7 @@ $configData = Helper::appClasses();
                   @csrf
                   <input type="hidden" name="is_active" value="">
                   <div class="form-check form-switch">
-                      <input class="form-check-input" onchange="submit()" type="checkbox" role="switch" id="switchCheckDefault" {{ $user->is_active == 1 ? 'checked' : '' }}>
+                      <input class="form-check-input" onchange="submit()" type="checkbox" role="switch" {{ $user->is_active == 1 ? 'checked' : '' }}>
                   </div>
                 </form>
               </td>
@@ -102,21 +113,55 @@ $configData = Helper::appClasses();
                     <a class="dropdown-item" href="{{ route('users.edit', ['id' => $user->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
                     <form action="{{ route('users.delete', ['id' => $user->id]) }}" method="post" dropdown-item>
                       @csrf
-                      <button type="submit"  class="btn text-danger" id="confirm-text"><i class="ti ti-trash me-1"></i> Delete</button>
+                      <button type="submit"  class="btn text-danger" ><i class="ti ti-trash me-1"></i> Delete</button>
                     </form>
-                    {{-- <button data-bs-target="#addRoleModal" data-bs-toggle="modal" class="btn text-primary add-new-role"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i> Add New Role</button> --}}
-                    <a data-bs-target="#addRoleModal" data-bs-toggle="modal" class="dropdown-item add-new-role "><i class="ti ti-pencil me-1"></i> Reset Password</a>
+                    <a href="#" data-route="{{ route('users.resetPassword', ['id' => $user->id]) }}"  data-email="{{ $user->email }}" class="dropdown-item add-new-role" data-bs-target="#addRoleModal" data-bs-toggle="modal" class="dropdown-item add-new-role"><i class="ti ti-pencil me-1"></i> Reset Password</a>
+                    {{-- <a href="{{ route('users.resetPasswordForm', ['id' => $user->id]) }}">Reset Password</a> --}}
+                    <form method="post" action="{{ route('users.forceLogout', ['id' => $user->id]) }}">
+                      @csrf
+                      <button type="submit" class="btn text-danger">Force Logout</button>
+                    </form>
                   </div>
                 </div>
               </td>
             </tr>
-        @endforeach
-      </tbody>
-    </table>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
+  @include('users.resetPassword')
 
-@include('users.resetPassword')
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var links = document.querySelectorAll('a[data-bs-toggle="modal"]');
+  links.forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent the default action of the link
+      var email = this.getAttribute('data-email');
+      var form = document.getElementById('resetPasswordForm');
+      if (form) {
+        var emailInput = document.getElementById('email');
+        if (emailInput) {
+          emailInput.value = email;
+          var route = this.getAttribute('data-route');
+          if (route) {
+            form.setAttribute('action', route); // Set form action to the route URL
+          } else {
+            console.error('Data-route attribute not found on link.');
+          }
+        } else {
+          console.error('Email input not found.');
+        }
+      } else {
+        console.error('Form not found.');
+      }
+    });
+  });
+});
+</script>
+
 
 @endsection

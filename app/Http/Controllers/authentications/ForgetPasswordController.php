@@ -30,6 +30,7 @@ class ForgetPasswordController extends Controller
     // Store the reset password token in the users table
     $user->update(['reset_password_token' => $token]);
 
+    Mail::to($user->email)->send(new ResetPassword());
     Mail::send('content.ForgetPassword.forgetPasswordMail', ['token' => $token], function ($message) use ($request) {
       $message->to($request->email);
       $message->subject('Reset Password');

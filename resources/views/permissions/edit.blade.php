@@ -50,6 +50,7 @@ $configData = Helper::appClasses();
                   <th>Delete</th>
                 </tr>
               </thead>
+              {{-- {{ dd($permission) }} --}}
               <tbody class="table-border-bottom-0">
                 @foreach ($modules as $module)
                   @php

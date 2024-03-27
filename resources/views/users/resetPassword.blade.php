@@ -8,11 +8,12 @@
           <h3 class="role-title mb-2">Reset Password</h3>
         </div>
         <!-- Add role form -->
-        <form id="addRoleForm" class="row g-3" method="post">
+        {{-- {{ $user->id }} --}}
+        <form action="" id="resetPasswordForm" class="row g-3" method="post">
           @csrf
           <div class="col-12 mb-2">
             <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" tabindex="-1" />
+            <input type="email" name="email" id="email" class="form-control" tabindex="-1" />
           </div>
           <div class="col-12 mb-2">
             <label class="form-label">Reset Password</label>
@@ -32,4 +33,3 @@
     </div>
   </div>
 </div>
-<!--/ Add Role Modal -->
