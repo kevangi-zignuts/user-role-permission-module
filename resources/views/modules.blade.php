@@ -8,7 +8,22 @@ $configData = Helper::appClasses();
 
 @section('content')
 
+@section('vendor-style')
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/flatpickr/flatpickr.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
+@endsection
 
+@section('vendor-script')
+<script src="{{asset('assets/vendor/libs/cleavejs/cleave.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/cleavejs/cleave-phone.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/moment/moment.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/flatpickr/flatpickr.js')}}"></script>
+<script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
+@endsection
+
+@section('page-script')
+<script src="{{asset('assets/js/form-layouts.js')}}"></script>
+@endsection
 
 
 
@@ -56,7 +71,6 @@ $configData = Helper::appClasses();
           </tr>
         @endif
         @foreach ($modules as $module)
-          {{-- @if($module->parent_code === null) --}}
             <tr>
               <td class="clickable" data-toggle="collapse" data-target="#subModules_{{ $module->code }}_{{ $i }}" aria-expended="false" aria-controls="subModules_{{ $module->code }}_{{ $i }}"><button class="btn btn-default btn-xs"><i class="fa-solid fa-caret-down"></i></button></td>
               <td>{{ $module->module_name }}</td>
@@ -104,7 +118,6 @@ $configData = Helper::appClasses();
                   </table>
               </td>
             </tr>
-          {{-- @endif --}}
           @php
             $i++;
           @endphp

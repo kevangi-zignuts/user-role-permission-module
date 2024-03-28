@@ -13,14 +13,15 @@ class InvitationEmail extends Mailable
 {
   use Queueable, SerializesModels;
 
-  public $token, $temporaryPassword;
+  public $token, $temporaryPassword, $id;
   /**
    * Create a new message instance.
    */
-  public function __construct($token, $temporaryPassword)
+  public function __construct($token, $temporaryPassword, $id)
   {
     $this->token = $token;
     $this->temporaryPassword = $temporaryPassword;
+    $this->id = $id;
   }
 
   /**

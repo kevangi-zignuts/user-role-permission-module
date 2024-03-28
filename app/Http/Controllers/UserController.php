@@ -61,7 +61,7 @@ class UserController extends Controller
     $user->status = 'I';
     $user->save();
 
-    Mail::to($request->input('email'))->send(new InvitationEmail($token, $temporaryPassword));
+    Mail::to($request->input('email'))->send(new InvitationEmail($token, $temporaryPassword, $user->id));
 
     $roleIds = $request->input('roles', []);
 

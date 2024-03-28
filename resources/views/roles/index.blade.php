@@ -79,8 +79,8 @@ $configData = Helper::appClasses();
               <td>{{ $role->role_name }}</td>
               <td>{{ $role->description }}</td>
               <td>
-                <form action="{{ route('roles.updateIsActive', ['id' => $role->id]) }}" method="POST">
-                  @csrf
+                <form action="{{ route('roles.updateIsActive', ['id' => $role->id]) }}" method="get">
+                  {{-- @csrf --}}
                   <input type="hidden" name="is_active" value="">
                   <div class="form-check form-switch">
                       <input class="form-check-input" onchange="submit()" type="checkbox" role="switch" id="switchCheckDefault" {{ $role->is_active == 1 ? 'checked' : '' }}>
@@ -95,7 +95,7 @@ $configData = Helper::appClasses();
                     <a class="dropdown-item" href="{{ route('roles.edit', ['id' => $role->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
                     <form action="{{ route('roles.delete', ['id' => $role->id]) }}" method="post" dropdown-item>
                       @csrf
-                      <button type="submit"  class="btn text-danger" onclick="confirm('Are you sure you Want to delete?')"><i class="ti ti-trash me-1"></i> Delete</button>
+                      <button type="submit" class="btn text-danger" onclick="confirm('Are you sure you Want to delete?')"><i class="ti ti-trash me-1"></i> Delete</button>
                     </form>
                   </div>
                 </div>
@@ -107,6 +107,11 @@ $configData = Helper::appClasses();
     </div>
   </div>
 </div>
+
+
+
+
+
 
 
 @endsection

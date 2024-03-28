@@ -18,6 +18,8 @@ class LoginBasic extends Controller
 
   public function login(Request $request)
   {
+    // dd($request->all());
+    // dd($request->has('remember'));
     try {
       $validateUser = Validator::make($request->all(), [
         'email' => 'required|email',
@@ -30,10 +32,16 @@ class LoginBasic extends Controller
           ->with('error', $validateUser->errors());
       }
 
-      if (!Auth::attempt($request->only(['email', 'password']), $request->has('remember'))) {
+      if (!Auth::attempt($request->only(['email', 'password']))) {
         return redirect()
           ->back()
           ->with('error', 'Email & Password does not match with our record.');
+      }
+
+      if (Auth::attempt($request->only(['email', 'password']), $request->has('remember'))) {
+        // dd(session()->all());
+        // Authentication passed
+        return redirect()->intended('/dashboard');
       }
 
       $user = User::where('email', $request->email)->first();

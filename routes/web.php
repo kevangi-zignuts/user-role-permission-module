@@ -53,7 +53,8 @@ Route::middleware('auth')->group(function () use ($controller_path) {
     Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
     Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
     Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
-    Route::post('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
+    // Route::post('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
+    Route::get('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
   });
 
   Route::group(['prefix' => 'users'], function () {
