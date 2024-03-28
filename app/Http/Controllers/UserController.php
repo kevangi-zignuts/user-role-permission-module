@@ -174,29 +174,21 @@ class UserController extends Controller
   //   Session::remove($sessionName);
   // }
 
-  public function forceLogout($userId)
+  public function forceLogout(Request $request, $userId)
   {
-    // Get the user by their ID
-    $user = User::find($userId);
+    // Find the user by ID
+    $user = User::findOrFail($userId);
 
-    if ($user) {
-      // Invalidate user's session tokens
-      DB::table('sessions')
-        ->where('user_id', $user->id)
-        ->delete();
+    // Logout user from all devices
+    // Auth::logoutOtherDevices($user->password);
 
-      // Optionally, you can also logout the user from the current device
+    // If the user is logged in, logout from the current device
+    if (Auth::id() == $userId) {
       Auth::logout();
-
-      // Redirect or return a response as needed
-      return redirect()
-        ->route('login')
-        ->with('success', 'User logged out from all devices.');
-    } else {
-      // Handle case where user is not found
-      return redirect()
-        ->back()
-        ->with('error', 'User not found.');
     }
+
+    return redirect()
+      ->back()
+      ->with('success', 'Successfully logged out the user from all devices.');
   }
 }

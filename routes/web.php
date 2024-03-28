@@ -25,6 +25,7 @@ Route::post('/', $controller_path . '\authentications\LoginBasic@login')->name('
 Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name(
   'auth-register-basic'
 );
+
 Route::middleware('auth')->group(function () use ($controller_path) {
   // Main Page Route
   Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('pages-home');
@@ -68,16 +69,8 @@ Route::middleware('auth')->group(function () use ($controller_path) {
   });
 
   Route::get('/pages/misc-error', $controller_path . '\pages\MiscError@index')->name('pages-misc-error');
-
-  // Route::get(
-  //   '/forger-password-link',
-  //   $controller_path . '\authentications\ForgetPasswordController@howForgetPasswordForm'
-  // )->name('forgetPassword');
-  Route::post(
-    '/email/forgetPassword',
-    $controller_path . '\authentications\ForgetPasswordController@submitForgetPasswordForm'
-  )->name('email.forget.password');
 });
+
 Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForgetPasswordForm'])->name(
   'forgetPassword'
 );

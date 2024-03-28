@@ -30,7 +30,7 @@ class LoginBasic extends Controller
           ->with('error', $validateUser->errors());
       }
 
-      if (!Auth::attempt($request->only(['email', 'password']))) {
+      if (!Auth::attempt($request->only(['email', 'password']), $request->has('remember'))) {
         return redirect()
           ->back()
           ->with('error', 'Email & Password does not match with our record.');

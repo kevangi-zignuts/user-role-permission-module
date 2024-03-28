@@ -67,7 +67,7 @@ $customizerHidden = 'customizer-hide';
             <div class="mb-3">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="remember-me">
-                <label class="form-check-label" for="remember-me">
+                <label class="form-check-label" for="remember-me" name="remember">
                   Remember Me
                 </label>
               </div>
