@@ -3,11 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckUserTokens;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\authentications\LoginBasic;
+use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\authentications\ForgetPasswordController;
-use App\Http\Middleware\CheckUserTokens;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,14 +21,9 @@ use App\Http\Middleware\CheckUserTokens;
 |
 */
 $controller_path = 'App\Http\Controllers';
-Route::get('/', $controller_path . '\authentications\LoginBasic@index')->name('auth-login-basic');
-// Route::get('/login', $controller_path . '\authentications\LoginBasic@login')->name('auth-login');
+Route::get('/', $controller_path . '\authentications\LoginBasic@showForm')->name('auth-login-basic');
 Route::post('/', $controller_path . '\authentications\LoginBasic@login')->name('login');
-// Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name(
-//   'auth-register-basic'
-// );
-// Route::post('/register', $controller_path . '\authentications\RegisterBasic@store')->name('register');
-// Route::post('/store', [UserController::class, 'store'])->name('users.store');
+
 Route::middleware('auth', 'access')->group(function () use ($controller_path) {
   // Main Page Route
   Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('pages-home');
@@ -55,7 +51,6 @@ Route::middleware('auth', 'access')->group(function () use ($controller_path) {
     Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
     Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
     Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
-    // Route::post('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
     Route::get('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
   });
 
@@ -71,14 +66,10 @@ Route::middleware('auth', 'access')->group(function () use ($controller_path) {
     Route::post('/forced-logout', [UserController::class, 'forceLogout'])->name('users.forceLogout');
   });
 
-  Route::get('/pages/misc-error', $controller_path . '\pages\MiscError@index')->name('pages-misc-error');
+  Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')->name('auth.logout');
 });
 
-Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForgetPasswordForm'])->name(
-  'forgetPassword'
-);
-Route::post('/forget-password', [ForgetPasswordController::class, 'submitForgetPasswordForm'])->name(
-  'forgetPasswordForm'
-);
-Route::get('/reset-password-link/{id}', [ForgetPasswordController::class, 'resetPasswordForm'])->name('resetPassword');
-Route::post('/reset-password/{id}', [ForgetPasswordController::class, 'resetPassword'])->name('resetPasswordSubmit');
+Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForm'])->name('forgetPassword');
+Route::post('/forget-password', [ForgetPasswordController::class, 'submit'])->name('forgetPasswordForm');
+Route::get('/reset-password-link/{id}', [ResetPasswordController::class, 'showForm'])->name('resetPassword');
+Route::post('/reset-password/{id}', [ResetPasswordController::class, 'submit'])->name('resetPasswordSubmit');

@@ -22,8 +22,7 @@ return new class extends Migration {
       $table->tinyInteger('is_active')->default(1);
       $table->string('invitation_token', 128)->nullable();
       $table->enum('status', ['I', 'A', 'R']); // I=Invited, A=Accepted, R=Rejected
-      $table->rememberToken();
-      $table->string('reset_password_token')->nullable();
+      $table->string('remember_token', 256)->nullable();
       $table->timestamps();
       $table->softDeletes();
     });

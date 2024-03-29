@@ -68,35 +68,6 @@ class ModulesTableSeeder extends Seeder
         'created_by' => 1,
         'updated_by' => 1,
       ],
-      [
-        'code' => 'dash',
-        'module_name' => 'Dashboard',
-        'is_active' => 1,
-        'created_by' => 1,
-        'updated_by' => 1,
-      ],
-      [
-        'code' => 'mod',
-        'module_name' => 'Module Management',
-        'is_active' => 1,
-        'created_by' => 1,
-        'updated_by' => 1,
-      ],
-      [
-        'code' => 'per',
-        'module_name' => 'Permission Management',
-        'is_active' => 1,
-        'created_by' => 1,
-        'updated_by' => 1,
-      ],
-      [
-        'code' => 'role',
-        'module_name' => 'Role Management',
-        'is_active' => 1,
-        'created_by' => 1,
-        'updated_by' => 1,
-      ],
-      // Add more modules as needed
     ];
 
     // Insert data into the modules table

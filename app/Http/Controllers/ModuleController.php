@@ -7,12 +7,16 @@ use App\Models\Module;
 
 class ModuleController extends Controller
 {
+  /**
+   * show a Module's dashboard
+   */
   public function index(Request $request)
   {
     $filter = $request->query('filter', 'all');
 
     $query = Module::query();
 
+    // filter the module
     if ($filter !== 'all') {
       $query
         ->where('is_active', $request->filter)
@@ -25,6 +29,7 @@ class ModuleController extends Controller
     }
     $modules = $query->where('parent_code', null)->get();
 
+    // search the module
     $search = $request->input('search');
     if (!empty($search)) {
       $query
@@ -33,24 +38,17 @@ class ModuleController extends Controller
         })
         ->orWhere('module_name', 'like', '%' . $search . '%');
       $modules = $query->get();
-
-      // $modules = $query
-      //   ->where('module_name', 'like', '%' . $search . '%')
-      //   ->whereNull('parent_code')
-      //   ->with('submodules')
-      //   ->get();
-
-      // dd($module);
     }
-    // dd($filter);
 
-    return view('modules', ['modules' => $modules, 'filter' => $filter]);
+    return view('modules.index', ['modules' => $modules, 'filter' => $filter]);
   }
 
+  /**
+   * toggle button to change status of module
+   */
   public function updateIsActive(Request $request, $code)
   {
     $module = Module::where('code', $code)->firstOrFail();
-    // dd($module);
     $module->update(['is_active' => !$module->is_active]);
 
     return redirect()
@@ -58,13 +56,18 @@ class ModuleController extends Controller
       ->with('success', 'Module status updated successfully.');
   }
 
+  /**
+   * show a Form for edit the module details
+   */
   public function edit($code)
   {
     $module = Module::findOrFail($code);
-    // dd($module);
     return view('modules.edit', ['module' => $module, 'filter' => $filter]);
   }
 
+  /**
+   * update the update details
+   */
   public function update(Request $request, $code)
   {
     $module = Module::findOrFail($code);

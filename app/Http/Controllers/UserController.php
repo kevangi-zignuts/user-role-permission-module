@@ -18,22 +18,21 @@ use Illuminate\Support\Facades\Broadcast;
 
 class UserController extends Controller
 {
-  public function __construct()
-  {
-    $this->middleware('access');
-  }
+  /**
+   * show a User's dashboard
+   */
   public function index(Request $request)
   {
-    // dd(Auth::user()->tokens()->isEmpty());
-
     $filter = $request->query('filter', 'all');
     $query = User::query();
 
+    // filter the user
     if ($filter !== 'all') {
       $query->where('is_active', $request->filter)->get();
     }
     $users = $query->with('role')->get();
 
+    // search the user
     $search = $request->input('search');
     if (!empty($search)) {
       $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
@@ -41,15 +40,20 @@ class UserController extends Controller
     }
 
     return view('users.index', ['users' => $users, 'filter' => $filter]);
-    // return view('users.index');
   }
 
+  /**
+   * show a form for crate a new user
+   */
   public function create()
   {
     $roles = Role::where('is_active', 1)->get();
     return view('users.create', ['roles' => $roles]);
   }
 
+  /**
+   * store a data of new created user
+   */
   public function store(Request $request)
   {
     $request->validate([
@@ -82,6 +86,9 @@ class UserController extends Controller
       ->with('success', "User's data Inserted successfully!");
   }
 
+  /**
+   * toggle button to change status of user
+   */
   public function updateIsActive(Request $request, $id)
   {
     $user = User::findOrFail($id);
@@ -92,6 +99,9 @@ class UserController extends Controller
       ->with('success', 'User status updated successfully.');
   }
 
+  /**
+   * show a Form for edit the user details
+   */
   public function edit($id)
   {
     $user = User::with('role')->find($id);
@@ -99,6 +109,9 @@ class UserController extends Controller
     return view('users.edit', ['user' => $user, 'roles' => $roles]);
   }
 
+  /**
+   * update the user details
+   */
   public function update(Request $request, $id)
   {
     $request->validate([
@@ -116,6 +129,9 @@ class UserController extends Controller
       ->with('success', "User's data updated Successfully");
   }
 
+  /**
+   * delete the user
+   */
   public function delete($id)
   {
     $user = User::find($id);
@@ -130,6 +146,9 @@ class UserController extends Controller
       ->with('success', "User's data deleted successfully");
   }
 
+  /**
+   * admin reset the password of the user
+   */
   public function resetPassword(Request $request, $id)
   {
     $request->validate([
@@ -137,7 +156,6 @@ class UserController extends Controller
     ]);
 
     $user = User::findOrFail($id);
-    // dd($user);
     $password = Hash::make($request['password']);
     $user->update(['password' => $password]);
     // Mail::to($user->email)->send(new ResetPassword());
@@ -147,6 +165,9 @@ class UserController extends Controller
       ->with('success', "User's password updated successfully");
   }
 
+  /**
+   * admin forced logout any user
+   */
   public function forceLogout(Request $request)
   {
     User::findOrFail($request->input('user_id'))
@@ -157,31 +178,4 @@ class UserController extends Controller
       ->back()
       ->with('success', 'Successfully logged out the user from all devices.');
   }
-  // public function forceLogout(Request $request)
-  // {
-  //   try {
-  //     $userId = $request->input('user_id');
-
-  //     $user = User::findOrFail($userId);
-  //     $tokens = $user->tokens()->get();
-  //     // dd($tokens);
-
-  //     // Revoke all tokens associated with the user
-  //     $user->tokens()->delete();
-  //     // Optionally, you can also logout the user from Laravel's authentication system
-  //     // Auth::logout();
-
-  //     return redirect()
-  //       ->back()
-  //       ->with('success', 'Successfully logged out the user from all devices.');
-  //   } catch (\Throwable $th) {
-  //     return response()->json(
-  //       [
-  //         'status' => false,
-  //         'message' => $th->getMessage(),
-  //       ],
-  //       500
-  //     );
-  //   }
-  // }
 }

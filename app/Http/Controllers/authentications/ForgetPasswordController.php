@@ -14,12 +14,18 @@ use Illuminate\Support\Facades\Mail;
 
 class ForgetPasswordController extends Controller
 {
-  public function showForgetPasswordForm()
+  /**
+   * show a form for enter a email to send a resetpassword link
+   */
+  public function showForm()
   {
     return view('content.forgetPassword.linkForEmail');
   }
 
-  public function submitForgetPasswordForm(Request $request)
+  /**
+   * submit a form
+   */
+  public function submit(Request $request)
   {
     $request->validate([
       'email' => 'required|email|exists:users',
@@ -35,25 +41,5 @@ class ForgetPasswordController extends Controller
     Mail::to($user->email)->send(new ForgetPassword($user->id));
 
     return back()->with('message', 'We have e-mailed your password reset link!');
-  }
-
-  public function resetPasswordForm($id)
-  {
-    return view('content.forgetPassword.passwordResetForm', compact('id'));
-  }
-
-  public function resetPassword(Request $request, $id)
-  {
-    $request->validate([
-      'password' => 'required|confirmed',
-    ]);
-    $user = User::findOrFail($id);
-    $password = Hash::make($request['password']);
-    $user->update(['password' => $password]);
-    // Mail::to($user->email)->send(new ResetPassword());
-
-    return redirect()
-      ->route('login')
-      ->with('success', "User's password updated successfully");
   }
 }

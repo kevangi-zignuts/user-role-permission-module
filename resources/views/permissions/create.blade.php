@@ -4,7 +4,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Modules 2')
+@section('title', 'Create Module')
 
 @section('content')
 

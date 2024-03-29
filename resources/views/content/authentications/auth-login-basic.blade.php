@@ -51,7 +51,7 @@ $customizerHidden = 'customizer-hide';
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               {{-- {{ dd(old('email')) }} --}}
-              <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Enter your email or username" autofocus>
+              <input type="email" class="form-control" id="email" name="email" value="{{ isset($email) ? $email : old('email') }}" placeholder="Enter your email or username" autofocus>
             </div>
             <div class="mb-3 form-password-toggle">
               <div class="d-flex justify-content-between">
@@ -62,13 +62,13 @@ $customizerHidden = 'customizer-hide';
                   </a>
                 </div>
                 <div class="input-group input-group-merge">
-                  <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" autocomplete="current-password" />
+                  <input type="password" id="password" class="form-control" name="password" value="{{ isset($password) ? $password : old('password') }}" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" autocomplete="current-password" />
                   <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                 </div>
               </div>
               <div class="mb-3">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="remember-me" name="remember">
+                  <input class="form-check-input" type="checkbox" id="remember-me" name="remember" {{ $rememberToken ? 'checked' : '' }}>
                   <label class="form-check-label" for="remember-me">
                     Remember Me
                   </label>

@@ -8,16 +8,21 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+  /**
+   * show a Role's dashboard
+   */
   public function index(Request $request)
   {
     $filter = $request->query('filter', 'all');
     $query = Role::query();
 
+    // filter the role
     if ($filter !== 'all') {
       $query->where('is_active', $request->filter)->get();
     }
     $roles = $query->get();
 
+    // search the role
     $search = $request->input('search');
     if (!empty($search)) {
       $query->where('role_name', 'like', '%' . $search . '%');
@@ -27,12 +32,18 @@ class RoleController extends Controller
     return view('roles.index', ['roles' => $roles, 'filter' => $filter]);
   }
 
+  /**
+   * show a form for crate a new role
+   */
   public function create()
   {
     $permissions = Permission::where('is_active', 1)->get();
     return view('roles.create', ['permissions' => $permissions]);
   }
 
+  /**
+   * store a data of new created role
+   */
   public function store(Request $request)
   {
     $request->validate([
@@ -51,6 +62,9 @@ class RoleController extends Controller
       ->with('success', 'Roles updated successfully!');
   }
 
+  /**
+   * toggle button to change status of role
+   */
   public function updateIsActive(Request $request, $id)
   {
     $role = Role::findOrFail($id);
@@ -61,6 +75,9 @@ class RoleController extends Controller
       ->with('success', 'Role status updated successfully.');
   }
 
+  /**
+   * show a Form for edit the role details
+   */
   public function edit($id)
   {
     $role = Role::with('permission')->find($id);
@@ -68,6 +85,9 @@ class RoleController extends Controller
     return view('roles.edit', ['role' => $role, 'permissions' => $permissions]);
   }
 
+  /**
+   * update the role details
+   */
   public function update(Request $request, $id)
   {
     $request->validate([
@@ -85,6 +105,9 @@ class RoleController extends Controller
       ->with('success', 'Role updated Successfully');
   }
 
+  /**
+   * delete the role
+   */
   public function delete($id)
   {
     $role = Role::find($id);
