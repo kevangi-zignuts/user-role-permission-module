@@ -7,6 +7,7 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\ForgetPasswordController;
+use App\Http\Middleware\CheckUserTokens;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +23,12 @@ $controller_path = 'App\Http\Controllers';
 Route::get('/', $controller_path . '\authentications\LoginBasic@index')->name('auth-login-basic');
 // Route::get('/login', $controller_path . '\authentications\LoginBasic@login')->name('auth-login');
 Route::post('/', $controller_path . '\authentications\LoginBasic@login')->name('login');
-Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name(
-  'auth-register-basic'
-);
-
-Route::middleware('auth')->group(function () use ($controller_path) {
+// Route::get('/auth/register-basic', $controller_path . '\authentications\RegisterBasic@index')->name(
+//   'auth-register-basic'
+// );
+// Route::post('/register', $controller_path . '\authentications\RegisterBasic@store')->name('register');
+// Route::post('/store', [UserController::class, 'store'])->name('users.store');
+Route::middleware('auth', 'access')->group(function () use ($controller_path) {
   // Main Page Route
   Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('pages-home');
   Route::group(['prefix' => 'modules'], function () {
@@ -66,7 +68,7 @@ Route::middleware('auth')->group(function () use ($controller_path) {
     Route::post('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
     Route::post('/isActive/{id}', [UserController::class, 'updateIsActive'])->name('users.updateIsActive');
     Route::post('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('users.resetPassword');
-    Route::post('/forced-logout/{id}', [UserController::class, 'forceLogout'])->name('users.forceLogout');
+    Route::post('/forced-logout', [UserController::class, 'forceLogout'])->name('users.forceLogout');
   });
 
   Route::get('/pages/misc-error', $controller_path . '\pages\MiscError@index')->name('pages-misc-error');

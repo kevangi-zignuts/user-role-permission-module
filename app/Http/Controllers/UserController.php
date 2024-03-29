@@ -8,16 +8,24 @@ use App\Mail\ResetPassword;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\InvitationEmail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Broadcast;
 
 class UserController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('access');
+  }
   public function index(Request $request)
   {
+    // dd(Auth::user()->tokens()->isEmpty());
+
     $filter = $request->query('filter', 'all');
     $query = User::query();
 
@@ -61,7 +69,9 @@ class UserController extends Controller
     $user->status = 'I';
     $user->save();
 
-    Mail::to($request->input('email'))->send(new InvitationEmail($token, $temporaryPassword, $user->id));
+    // Mail::to($request->input('email'))->send(new InvitationEmail($token, $temporaryPassword, $user->id));
+
+    $token = $user->createToken($user->email)->plainTextToken;
 
     $roleIds = $request->input('roles', []);
 
@@ -130,65 +140,48 @@ class UserController extends Controller
     // dd($user);
     $password = Hash::make($request['password']);
     $user->update(['password' => $password]);
-    Mail::to($user->email)->send(new ResetPassword());
+    // Mail::to($user->email)->send(new ResetPassword());
 
     return redirect()
       ->route('users.index')
       ->with('success', "User's password updated successfully");
   }
 
-  // public function forceLogout(Request $request, $id)
-  // {
-  //   // Ensure $userId is a valid integer
-  //   if (!is_numeric($id)) {
-  //     return redirect()
-  //       ->back()
-  //       ->with('error', 'Invalid user ID.');
-  //   }
-
-  //   $user = User::find($id);
-
-  //   if (!$user) {
-  //     return redirect()
-  //       ->back()
-  //       ->with('error', 'User not found.');
-  //   }
-
-  //   // Regenerate session to force logout immediately
-  //   $this->invalidateUserSession($id);
-
-  //   return redirect()
-  //     ->back()
-  //     ->with('success', 'User has been forced to log out.');
-  // }
-
-  // protected function invalidateUserSession($userId)
-  // {
-  //   $sessionName = 'user_' . $userId . '_session';
-  //   $sessionId = Session::getId();
-
-  //   // Regenerate session ID to invalidate the current session
-  //   Session::regenerate();
-
-  //   // Delete the session data associated with the user
-  //   Session::remove($sessionName);
-  // }
-
-  public function forceLogout(Request $request, $userId)
+  public function forceLogout(Request $request)
   {
-    // Find the user by ID
-    $user = User::findOrFail($userId);
-
-    // Logout user from all devices
-    // Auth::logoutOtherDevices($user->password);
-
-    // If the user is logged in, logout from the current device
-    if (Auth::id() == $userId) {
-      Auth::logout();
-    }
+    User::findOrFail($request->input('user_id'))
+      ->tokens()
+      ->delete();
 
     return redirect()
       ->back()
       ->with('success', 'Successfully logged out the user from all devices.');
   }
+  // public function forceLogout(Request $request)
+  // {
+  //   try {
+  //     $userId = $request->input('user_id');
+
+  //     $user = User::findOrFail($userId);
+  //     $tokens = $user->tokens()->get();
+  //     // dd($tokens);
+
+  //     // Revoke all tokens associated with the user
+  //     $user->tokens()->delete();
+  //     // Optionally, you can also logout the user from Laravel's authentication system
+  //     // Auth::logout();
+
+  //     return redirect()
+  //       ->back()
+  //       ->with('success', 'Successfully logged out the user from all devices.');
+  //   } catch (\Throwable $th) {
+  //     return response()->json(
+  //       [
+  //         'status' => false,
+  //         'message' => $th->getMessage(),
+  //       ],
+  //       500
+  //     );
+  //   }
+  // }
 }

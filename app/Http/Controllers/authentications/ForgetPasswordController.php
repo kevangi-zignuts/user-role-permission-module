@@ -50,7 +50,7 @@ class ForgetPasswordController extends Controller
     $user = User::findOrFail($id);
     $password = Hash::make($request['password']);
     $user->update(['password' => $password]);
-    Mail::to($user->email)->send(new ResetPassword());
+    // Mail::to($user->email)->send(new ResetPassword());
 
     return redirect()
       ->route('login')
