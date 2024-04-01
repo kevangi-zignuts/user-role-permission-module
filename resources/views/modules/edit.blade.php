@@ -39,7 +39,10 @@ $customizerHidden = 'customizer-hide';
             @csrf
             <div class="mb-3">
               <label class="form-label">Module Name</label>
-              <input type="text" class="form-control" id="email" name="module_name" value="{{ $module->module_name }}" autofocus>
+              <input type="text" class="form-control" id="email" name="module_name" value="{{ $module->module_name }}" autofocus required>
+              @error('module_name')
+                <div class="alert alert-danger">{{ $message }}</div>
+              @enderror
             </div>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">Description</label>

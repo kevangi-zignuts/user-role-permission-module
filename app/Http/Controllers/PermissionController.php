@@ -51,21 +51,23 @@ class PermissionController extends Controller
     $request->validate([
       'permission_name' => 'required|string|max:255',
       'description' => 'nullable|string',
-      'modules' => 'required|array',
+      'modules' => 'array',
       'modules.*' => 'array|nullable',
     ]);
 
     $permission = Permission::create($request->only(['permission_name', 'description']));
-
-    foreach ($request->input('modules') as $moduleCode => $modules) {
-      $module = Module::where('code', $moduleCode)->first();
-      if ($module) {
-        $permission->module()->attach($module->code, [
-          'add_access' => isset($modules['add_access']),
-          'view_access' => isset($modules['view_access']),
-          'edit_access' => isset($modules['edit_access']),
-          'delete_access' => isset($modules['delete_access']),
-        ]);
+    // dd($request->input('modules'));
+    if ($request->has('modules')) {
+      foreach ($request->input('modules') as $moduleCode => $modules) {
+        $module = Module::where('code', $moduleCode)->first();
+        if ($module) {
+          $permission->module()->attach($module->code, [
+            'add_access' => isset($modules['add_access']),
+            'view_access' => isset($modules['view_access']),
+            'edit_access' => isset($modules['edit_access']),
+            'delete_access' => isset($modules['delete_access']),
+          ]);
+        }
       }
     }
 

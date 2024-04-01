@@ -43,6 +43,9 @@ $configData = Helper::appClasses();
             <div class="mb-3">
               <label class="form-label">Role Name</label>
               <input type="text" class="form-control" name="role_name" value="{{ $role->role_name }}" autofocus>
+              @error('role_name')
+                <div class="alert alert-danger">{{ $message }}</div>
+              @enderror
             </div>
             <div class="form-group mb-3">
               <label for="exampleFormControlTextarea1">Description</label>

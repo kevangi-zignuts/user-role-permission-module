@@ -13,7 +13,7 @@
           @csrf
           <div class="col-12 mb-2">
             <label class="form-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control" tabindex="-1" />
+            <input type="email" name="email" id="email" class="form-control" tabindex="-1" disabled/>
           </div>
           <div class="col-12 mb-2">
             <label class="form-label">Reset Password</label>

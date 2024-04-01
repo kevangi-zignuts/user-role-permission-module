@@ -35,7 +35,7 @@ $configData = Helper::appClasses();
 
 <div class="card">
   <div class="card-header d-flex justify-content-between m-5 mb-2">
-    <a href="{{ route('permissions.create') }}" class="btn btn-primary">Add a Permission</a>
+    <a href="{{ route('permissions.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i> Add a Permission</a>
     <div class="search-container ">
       <form action="{{ route('permissions.index') }}" method="GET">
         <div class="input-group">
@@ -58,22 +58,22 @@ $configData = Helper::appClasses();
   <div class="card-body">
     <div class="table-responsive text-nowrap">
 
-    <table class="table">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Description</th>
-          <th>Status</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        @if ($permissions->isEmpty())
-          <tr >
-            <td colspan="4" class="text-center text-danger h5">No data available</td>
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th>Status</th>
+            <th scope="col">Action</th>
           </tr>
-        @endif
-        @foreach ($permissions as $permission)
+        </thead>
+        <tbody>
+          @if ($permissions->isEmpty())
+            <tr>
+              <td colspan="4" class="text-center text-danger h5">No data available</td>
+            </tr>
+          @endif
+          @foreach ($permissions as $permission)
             <tr>
               <td>{{ $permission->permission_name }}</td>
               <td>{{ $permission->description }}</td>
@@ -82,26 +82,26 @@ $configData = Helper::appClasses();
                   @csrf
                   <input type="hidden" name="is_active" value="">
                   <div class="form-check form-switch">
-                      <input class="form-check-input" onchange="submit()" type="checkbox" role="switch" id="switchCheckDefault" {{ $permission->is_active == 1 ? 'checked' : '' }}>
+                    <input class="form-check-input" onchange="submit()" type="checkbox" role="switch" id="switchCheckDefault" {{ $permission->is_active == 1 ? 'checked' : '' }}>
                   </div>
                 </form>
               </td>
-              <td>
-                <div class="dropdown">
+              <td class="pt-0">
+                <div class="dropdown" style="position: absolute;">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ route('permissions.edit', ['id' => $permission->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
                     <form action="{{ route('permissions.delete', ['id' => $permission->id]) }}" method="post" dropdown-item>
                       @csrf
-                      <button type="submit"  class="btn text-danger" onclick="return confirm('Are you sure you want to Delete?')"><i class="ti ti-trash me-1"></i> Delete</button>
+                      <button type="submit" class="btn text-danger" onclick="return confirm('Are you sure you want to Delete?')"><i class="ti ti-trash me-1"></i> Delete</button>
                     </form>
                   </div>
                 </div>
               </td>
             </tr>
-        @endforeach
-      </tbody>
-    </table>
+          @endforeach
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

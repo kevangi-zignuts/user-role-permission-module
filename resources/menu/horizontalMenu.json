@@ -1,31 +1,31 @@
 {
   "menu": [
     {
-      "url": "/dashboard",
+      "url": "admin/dashboard",
       "name": "Home",
       "icon": "menu-icon tf-icons ti ti-smart-home",
       "slug": "pages-home"
     },
     {
-      "url": "/modules/index",
+      "url": "admin/modules/index",
       "icon": "menu-icon tf-icons ti ti-file",
       "name": "Modules",
       "slug": "pages-page-2"
     },
     {
-      "url": "/permissions/index",
+      "url": "admin/permissions/index",
       "name": "Permissions",
       "icon": "menu-icon tf-icons ti ti-alert-triangle",
       "slug": "permissions.index"
     },
     {
-      "url": "/roles/index",
+      "url": "/admin/roles/index",
       "name": "Roles",
       "icon": "menu-icon tf-icons ti ti-user",
       "slug": "roles.index"
     },
     {
-      "url": "/users/index",
+      "url": "admin/users/index",
       "name": "Users",
       "icon": "menu-icon tf-icons ti ti-user",
       "slug": "users.index"

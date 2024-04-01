@@ -23,21 +23,20 @@ $configData = Helper::appClasses();
 @section('page-script')
 <script src="{{asset('assets/js/app-access-roles.js')}}"></script>
 <script src="{{asset('assets/js/modal-add-role.js')}}"></script>
-{{-- <script src="{{asset('assets/js/reset-password.js')}}"></script> --}}
 @endsection
 
 @section('content')
 
 @if (session('success'))
-      <div class="alert alert-success" role="alert">
-          {{ session('success') }}
-      </div>
-    @endif
-    @if (session('error'))
-      <div class="alert alert-danger" role="alert">
-          {{ session('error') }}
-      </div>
-    @endif
+  <div class="alert alert-success" role="alert">
+    {{ session('success') }}
+  </div>
+@endif
+@if (session('error'))
+  <div class="alert alert-danger" role="alert">
+    {{ session('error') }}
+  </div>
+@endif
 
 <div class="card">
   <div class="card-header d-flex justify-content-between m-5 mb-2">
@@ -88,11 +87,10 @@ $configData = Helper::appClasses();
                   $count = 0;
                 @endphp
                 @foreach ($user->role as $role)
-                  @if ($count < 2)
+                  @if ($count++ < 2)
                     {{ $role->role_name . ", "}}
-                    {{ $count += 1 }}
                   @else
-                     + {{ $total - 2 }} more,
+                    {{ ' +' . $total - 2 }} more
                     @break;
                   @endif
                 @endforeach
@@ -107,7 +105,7 @@ $configData = Helper::appClasses();
                 </form>
               </td>
               <td>
-                <div class="dropdown">
+                <div class="dropdown" style="position: absolute">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ route('users.edit', ['id' => $user->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>
@@ -116,11 +114,10 @@ $configData = Helper::appClasses();
                       <button type="submit"  class="btn text-danger" ><i class="ti ti-trash me-1"></i> Delete</button>
                     </form>
                     <a href="#" data-route="{{ route('users.resetPassword', ['id' => $user->id]) }}"  data-email="{{ $user->email }}" class="dropdown-item add-new-role" data-bs-target="#addRoleModal" data-bs-toggle="modal" class="dropdown-item add-new-role"><i class="ti ti-key me-1"></i> Reset Password</a>
-                    {{-- <a href="{{ route('users.resetPasswordForm', ['id' => $user->id]) }}">Reset Password</a> --}}
                     <form method="post" action="{{ route('users.forceLogout') }}">
                       @csrf
                       <input type="hidden" name="user_id" value="{{ $user->id }}">
-                      <button type="submit" class="btn text-danger">Force Logout</button>
+                      <button type="submit" class="btn text-danger"><i class='ti ti-logout me-2'></i> Force Logout</button>
                     </form>
                   </div>
                 </div>

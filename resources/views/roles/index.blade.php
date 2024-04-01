@@ -41,7 +41,7 @@ $configData = Helper::appClasses();
       <form action="{{ route('roles.index') }}" method="GET">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Search Role..." name="search" value="">
-          <button class="btn  btn-primary" type="submit"><i class="fas fa-search"></i></button>
+          <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
         </div>
       </form>
     </div>
@@ -87,9 +87,8 @@ $configData = Helper::appClasses();
                   </div>
                 </form>
               </td>
-              <td>
-
-                <div class="dropdown">
+              <td class="pt-0">
+                <div class="dropdown" style="position: absolute">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ route('roles.edit', ['id' => $role->id]) }}"><i class="ti ti-pencil me-1"></i> Edit</a>

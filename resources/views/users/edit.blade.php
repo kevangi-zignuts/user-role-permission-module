@@ -44,6 +44,9 @@ $configData = Helper::appClasses();
               <div class="col-md-6">
                 <label class="form-label">First Name</label>
                 <input type="text" class="form-control" name="first_name" value="{{ $user->first_name }}" required/>
+                @error('first_name')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
               </div>
               <div class="col-md-6">
                 <label class="form-label">Last Name</label>
@@ -53,6 +56,9 @@ $configData = Helper::appClasses();
             <div class="mb-3">
               <label class="form-label">contact no</label>
               <input type="tel" class="form-control" name="contact_no" value="{{ $user->contact_no }}" autofocus>
+              @error('contact_no')
+                <div class="alert alert-danger">{{ $message }}</div>
+              @enderror
             </div>
             <div class="form-group mb-3">
               <label for="exampleFormControlTextarea1">Address</label>

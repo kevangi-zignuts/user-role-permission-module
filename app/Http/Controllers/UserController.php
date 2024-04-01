@@ -58,9 +58,9 @@ class UserController extends Controller
   {
     $request->validate([
       'first_name' => 'required|string|max:255',
-      'email' => 'email|required',
-      'contact_no' => 'numeric',
-      'roles' => 'array',
+      'email' => 'email|required|unique:users,email',
+      'contact_no' => 'numeric|nullable',
+      'roles' => 'array|nullable',
     ]);
     $email = $request->input('email');
     $token = md5(uniqid(rand(), true));
@@ -116,7 +116,7 @@ class UserController extends Controller
   {
     $request->validate([
       'first_name' => 'required|string|max:255',
-      'contact_no' => 'numeric',
+      'contact_no' => 'numeric|nullable',
       'roles' => 'array',
     ]);
 

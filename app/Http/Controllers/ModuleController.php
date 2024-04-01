@@ -62,7 +62,7 @@ class ModuleController extends Controller
   public function edit($code)
   {
     $module = Module::findOrFail($code);
-    return view('modules.edit', ['module' => $module, 'filter' => $filter]);
+    return view('modules.edit', ['module' => $module]);
   }
 
   /**
@@ -70,6 +70,9 @@ class ModuleController extends Controller
    */
   public function update(Request $request, $code)
   {
+    $request->validate([
+      'module_name' => 'required|string|max:255',
+    ]);
     $module = Module::findOrFail($code);
     $module->update($request->only(['module_name', 'description']));
     return redirect()
