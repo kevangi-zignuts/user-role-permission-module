@@ -50,8 +50,6 @@ class LoginBasic extends Controller
     ]);
   }
 
-  }
-
   /**
    * login the user
    */
