@@ -87,7 +87,7 @@ $configData = Helper::appClasses();
             </table>
 
             <div class="mb-3 mt-3">
-              <button class="btn btn-primary d-grid" type="submit" id="type-success">Update</button>
+              <button class="btn btn-primary d-grid" type="submit">Update</button>
             </div>
           </form>
         </div>

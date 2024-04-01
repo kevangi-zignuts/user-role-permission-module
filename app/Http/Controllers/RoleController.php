@@ -29,7 +29,7 @@ class RoleController extends Controller
       $roles = $query->get();
     }
 
-    return view('roles.index', ['roles' => $roles, 'filter' => $filter]);
+    return view('admin.roles.index', ['roles' => $roles, 'filter' => $filter]);
   }
 
   /**
@@ -38,7 +38,7 @@ class RoleController extends Controller
   public function create()
   {
     $permissions = Permission::where('is_active', 1)->get();
-    return view('roles.create', ['permissions' => $permissions]);
+    return view('admin.roles.create', ['permissions' => $permissions]);
   }
 
   /**
@@ -82,7 +82,7 @@ class RoleController extends Controller
   {
     $role = Role::with('permission')->find($id);
     $permissions = Permission::where('is_active', 1)->get();
-    return view('roles.edit', ['role' => $role, 'permissions' => $permissions]);
+    return view('admin.roles.edit', ['role' => $role, 'permissions' => $permissions]);
   }
 
   /**

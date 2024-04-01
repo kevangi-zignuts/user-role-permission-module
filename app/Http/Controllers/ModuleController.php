@@ -40,7 +40,7 @@ class ModuleController extends Controller
       $modules = $query->get();
     }
 
-    return view('modules.index', ['modules' => $modules, 'filter' => $filter]);
+    return view('admin.modules.index', ['modules' => $modules, 'filter' => $filter]);
   }
 
   /**
@@ -62,7 +62,7 @@ class ModuleController extends Controller
   public function edit($code)
   {
     $module = Module::findOrFail($code);
-    return view('modules.edit', ['module' => $module]);
+    return view('admin.modules.edit', ['module' => $module]);
   }
 
   /**

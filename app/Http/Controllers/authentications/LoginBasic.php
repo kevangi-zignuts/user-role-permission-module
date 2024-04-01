@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\authentications;
 
+use Throwable;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cookie;
-use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class LoginBasic extends Controller
 {
@@ -32,13 +35,19 @@ class LoginBasic extends Controller
           'rememberToken' => $rememberToken,
         ]);
       }
-    } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+    } catch (DecryptException $e) {
       // Handle decryption error
       Log::error('Decryption error: ' . $e->getMessage());
       // Redirect or display an error message
       return redirect()
         ->route('login')
         ->withErrors(['error' => 'Invalid remember token']);
+    } catch (Throwable $e) {
+      // Handle other errors
+      Log::error('Error: ' . $e->getMessage());
+      return redirect()
+        ->route('login')
+        ->withErrors(['error' => 'An unexpected error occurred']);
     }
 
     return view('content.authentications.auth-login-basic', [

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
    */
   public function run(): void
   {
+    // User Table Seeder
     $user = User::create([
       'first_name' => 'System Admin',
       'email' => 'admin@example.com',
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
       'status' => 'A',
     ]);
 
+    // Module Table Data
     $modules = [
       [
         'code' => 'con',
@@ -78,6 +80,7 @@ class DatabaseSeeder extends Seeder
       Module::create($module);
     }
 
+    // Role Table data
     $role = Role::create([
       'role_name' => 'Admin',
     ]);

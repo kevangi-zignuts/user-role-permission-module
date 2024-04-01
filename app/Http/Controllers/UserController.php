@@ -39,7 +39,7 @@ class UserController extends Controller
       $users = $query->get();
     }
 
-    return view('users.index', ['users' => $users, 'filter' => $filter]);
+    return view('admin.users.index', ['users' => $users, 'filter' => $filter]);
   }
 
   /**
@@ -48,7 +48,7 @@ class UserController extends Controller
   public function create()
   {
     $roles = Role::where('is_active', 1)->get();
-    return view('users.create', ['roles' => $roles]);
+    return view('admin.users.create', ['roles' => $roles]);
   }
 
   /**
@@ -106,7 +106,7 @@ class UserController extends Controller
   {
     $user = User::with('role')->find($id);
     $roles = Role::where('is_active', 1)->get();
-    return view('users.edit', ['user' => $user, 'roles' => $roles]);
+    return view('admin.users.edit', ['user' => $user, 'roles' => $roles]);
   }
 
   /**

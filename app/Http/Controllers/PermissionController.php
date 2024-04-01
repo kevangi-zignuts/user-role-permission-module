@@ -30,7 +30,7 @@ class PermissionController extends Controller
       $permissions = $query->get();
     }
 
-    return view('permissions.index', ['permissions' => $permissions, 'filter' => $filter]);
+    return view('admin.permissions.index', ['permissions' => $permissions, 'filter' => $filter]);
   }
 
   /**
@@ -41,7 +41,7 @@ class PermissionController extends Controller
     $modules = Module::where('parent_code', null)
       ->where('is_active', 1)
       ->get();
-    return view('permissions.create', ['modules' => $modules]);
+    return view('admin.permissions.create', ['modules' => $modules]);
   }
 
   /**
@@ -106,7 +106,7 @@ class PermissionController extends Controller
     $modules = Module::where('parent_code', null)
       ->where('is_active', 1)
       ->get();
-    return view('permissions.edit', ['permission' => $permission, 'modules' => $modules]);
+    return view('admin.permissions.edit', ['permission' => $permission, 'modules' => $modules]);
   }
 
   /**

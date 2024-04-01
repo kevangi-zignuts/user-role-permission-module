@@ -144,7 +144,7 @@
         </div>
     </div>
 </div>
-@include('users.resetPassword')
+@include('admin.users.resetPassword')
 
 
 <script>

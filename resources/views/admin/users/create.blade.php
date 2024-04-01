@@ -81,10 +81,6 @@ $configData = Helper::appClasses();
                 </select>
               </div>
             </div>
-            {{-- <div class="row">
-              <button type="submit" class="btn btn-primary d-grid" >Create</button>
-              <button type="submit" class="btn btn-primary d-grid" >Cancle</button>
-            </div> --}}
             <div class="row">
               <div class="mt-3">
                 <button type="submit" class="btn btn-primary me-2">Send Invitation</button>
