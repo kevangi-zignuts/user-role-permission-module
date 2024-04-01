@@ -38,7 +38,7 @@ $customizerHidden = 'customizer-hide';
           <form id="formAuthentication" class="mb-3" action="{{ route('modules.update', ['code' => $module->code]) }}" method="post">
             @csrf
             <div class="mb-3">
-              <label class="form-label">Module Name</label>
+              <label class="form-label">Module Name *</label>
               <input type="text" class="form-control" id="email" name="module_name" value="{{ $module->module_name }}" autofocus required>
               @error('module_name')
                 <div class="alert alert-danger">{{ $message }}</div>

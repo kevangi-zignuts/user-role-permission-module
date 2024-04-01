@@ -32,10 +32,10 @@ $configData = Helper::appClasses();
           <form id="formAuthentication" class="mb-3" action="{{ route('permissions.update', ['id' => $permission->id]) }}" method="post">
             @csrf
             <div class="mb-3">
-              <label class="form-label">Permission Name</label>
-              <input type="text" class="form-control" id="email" name="permission_name" value="{{ $permission->permission_name }}" autofocus>
+              <label class="form-label">Permission Name *</label>
+              <input type="text" class="form-control" id="email" name="permission_name" value="{{ $permission->permission_name }}" autofocus required>
               @error('permission_name')
-                <div class="alert alert-danger">{{ $message }}</div>
+                <div class="text-danger pt-2">{{ $message }}</div>
               @enderror
             </div>
             <div class="form-group mb-3">
@@ -87,7 +87,7 @@ $configData = Helper::appClasses();
             </table>
 
             <div class="mb-3 mt-3">
-              <button class="btn btn-primary d-grid" type="submit" id="type-success">Edit</button>
+              <button class="btn btn-primary d-grid" type="submit" id="type-success">Update</button>
             </div>
           </form>
         </div>

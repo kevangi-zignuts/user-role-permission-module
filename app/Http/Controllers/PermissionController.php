@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Module;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class PermissionController extends Controller
 {
@@ -48,32 +49,39 @@ class PermissionController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
-      'permission_name' => 'required|string|max:255',
-      'description' => 'nullable|string',
-      'modules' => 'array',
-      'modules.*' => 'array|nullable',
-    ]);
+    try {
+      $request->validate([
+        'permission_name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'modules' => 'array',
+        'modules.*' => 'array|nullable',
+      ]);
 
-    $permission = Permission::create($request->only(['permission_name', 'description']));
-    // dd($request->input('modules'));
-    if ($request->has('modules')) {
-      foreach ($request->input('modules') as $moduleCode => $modules) {
-        $module = Module::where('code', $moduleCode)->first();
-        if ($module) {
-          $permission->module()->attach($module->code, [
-            'add_access' => isset($modules['add_access']),
-            'view_access' => isset($modules['view_access']),
-            'edit_access' => isset($modules['edit_access']),
-            'delete_access' => isset($modules['delete_access']),
-          ]);
+      $permission = Permission::create($request->only(['permission_name', 'description']));
+
+      if ($request->has('modules')) {
+        foreach ($request->input('modules') as $moduleCode => $modules) {
+          $module = Module::where('code', $moduleCode)->first();
+          if ($module) {
+            $permission->module()->attach($module->code, [
+              'add_access' => isset($modules['add_access']),
+              'view_access' => isset($modules['view_access']),
+              'edit_access' => isset($modules['edit_access']),
+              'delete_access' => isset($modules['delete_access']),
+            ]);
+          }
         }
       }
-    }
 
-    return redirect()
-      ->route('permissions.index')
-      ->with('success', 'Permission created successfully.');
+      return redirect()
+        ->route('permissions.index')
+        ->with('success', 'Permission created successfully.');
+    } catch (ValidationException $e) {
+      return redirect()
+        ->back()
+        ->withErrors($e->validator->errors())
+        ->withInput();
+    }
   }
 
   /**
@@ -109,14 +117,18 @@ class PermissionController extends Controller
     $request->validate([
       'permission_name' => 'required|string|max:255',
       'description' => 'nullable|string',
-      'modules' => 'required|array',
+      'modules' => 'array',
       'modules.*' => 'array|nullable',
     ]);
 
     $permission = Permission::findOrFail($id);
     $permission->update($request->only(['permission_name', 'description']));
 
-    foreach ($request->input('modules') as $moduleCode => $modules) {
+    $selectedModules = $request->input('modules', []);
+
+    // Detach all existing modules
+    $permission->module()->detach();
+    foreach ($selectedModules as $moduleCode => $modules) {
       $module = Module::where('code', $moduleCode)->first();
       if ($module) {
         $pivotData = [
@@ -126,24 +138,14 @@ class PermissionController extends Controller
           'delete_access' => isset($modules['delete_access']),
         ];
 
-        // Check if the pivot record exists
-        $existingPivot = $permission
-          ->module()
-          ->wherePivot('module_code', $module->code)
-          ->first();
-
-        if ($existingPivot) {
-          // If the pivot record exists, update it
-          $permission->module()->updateExistingPivot($module->code, $pivotData);
-        } else {
-          // If the pivot record doesn't exist, add it
-          $permission->module()->attach($module->code, $pivotData);
-        }
+        // Attach the module with updated pivot data
+        $permission->module()->attach($module->code, $pivotData);
       }
     }
+
     return redirect()
       ->route('permissions.index')
-      ->with('success', 'Permission updated Successfully');
+      ->with('success', 'Permission updated successfully');
   }
 
   /**

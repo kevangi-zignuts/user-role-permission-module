@@ -42,10 +42,10 @@ $configData = Helper::appClasses();
             @csrf
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label">First Name</label>
+                <label class="form-label">First Name *</label>
                 <input type="text" class="form-control" name="first_name" required/>
                 @error('first_name')
-                <div class="alert alert-danger">{{ $message }}</div>
+                <div class="text-danger pt-2">{{ $message }}</div>
                 @enderror
               </div>
               <div class="col-md-6">
@@ -54,17 +54,17 @@ $configData = Helper::appClasses();
               </div>
             </div>
             <div class="mb-3">
-              <label class="form-label">Email</label>
+              <label class="form-label">Email *</label>
               <input type="email" class="form-control" name="email" autofocus required>
               @error('email')
-                <div class="alert alert-danger">{{ $message }}</div>
+                <div class="pt-2 text-danger">{{ $message }}</div>
               @enderror
             </div>
             <div class="mb-3">
               <label class="form-label">contact no</label>
               <input type="tel" class="form-control" name="contact_no" autofocus>
               @error('contact_no')
-                <div class="alert alert-danger">{{ $message }}</div>
+                <div class="text-danger pt-2">{{ $message }}</div>
               @enderror
             </div>
             <div class="form-group mb-3">

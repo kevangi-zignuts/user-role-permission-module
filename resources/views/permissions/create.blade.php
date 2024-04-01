@@ -19,11 +19,11 @@ $configData = Helper::appClasses();
           <form id="formAuthentication" class="mb-3" action="{{ route('permissions.store') }}" method="post">
             @csrf
             <div class="mb-3">
-              <label class="form-label">Permission Name</label>
-              <input type="text" class="form-control" name="permission_name" autofocus>
+              <label>Permission Name *</label>
+              <input type="text" class="form-control" name="permission_name" autofocus required>
               <div class="valid-feedback"> Looks good! </div>
-              @error('role_name')
-                <div class="alert alert-danger">{{ $message }}</div>
+              @error('permission_name')
+                <div class="text-danger pt-2">{{ $message }}</div>
               @enderror
             </div>
             <div class="form-group mb-3">

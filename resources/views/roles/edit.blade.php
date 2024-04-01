@@ -41,10 +41,10 @@ $configData = Helper::appClasses();
           <form action="{{ route('roles.update', ['id' => $role->id]) }}" method="post"  id="formAuthentication" class="mb-3">
             @csrf
             <div class="mb-3">
-              <label class="form-label">Role Name</label>
-              <input type="text" class="form-control" name="role_name" value="{{ $role->role_name }}" autofocus>
+              <label class="form-label">Role Name *</label>
+              <input type="text" class="form-control" name="role_name" value="{{ $role->role_name }}" autofocus required>
               @error('role_name')
-                <div class="alert alert-danger">{{ $message }}</div>
+                <div class="text-danger pt-2">{{ $message }}</div>
               @enderror
             </div>
             <div class="form-group mb-3">
