@@ -114,7 +114,7 @@ $configData = Helper::appClasses();
                       <button type="submit"  class="btn text-danger" ><i class="ti ti-trash me-1"></i> Delete</button>
                     </form>
                     <a href="#" data-route="{{ route('users.resetPassword', ['id' => $user->id]) }}"  data-email="{{ $user->email }}" class="dropdown-item add-new-role" data-bs-target="#addRoleModal" data-bs-toggle="modal" class="dropdown-item add-new-role"><i class="ti ti-key me-1"></i> Reset Password</a>
-                    <form method="post" action="{{ route('users.forceLogout') }}">
+                    <form method="post" action="{{ route('users.forceLogout') }}" dropdown-item>
                       @csrf
                       <input type="hidden" name="user_id" value="{{ $user->id }}">
                       <button type="submit" class="btn text-danger"><i class='ti ti-logout me-2'></i> Force Logout</button>
