@@ -2,32 +2,47 @@
 
 ## Overview
 
-The Laravel Education Management System has a Admin Side. Admin Can Add a teacher and Student. Admin also allocate subject to teachers and students. Admin also add institute and Teacher join institute. One Teacher associate with only one Institute but Institute has a many teachers
+This project is a user role management system developed using Laravel. It provides functionalities for user authentication, role management, module management, and permission management.
 
 ## Features
 
-DashBoard :-
+User Authentication :-
 
-- Here in the Dashboard Add User Button which is use for add Teacher and Student
-- In Dashboard there is an user index that show the user data and provide action button to view, edit and delete the user data.
+- Admins can securely log in using their registered email ID and password.
+- Remember Me feature for convenient access.
+- Forget Password option to recover forgotten passwords.
+- Password reset functionality via email.
 
-Subjects :-
+Dashboard :-
 
-- Here in the Student Page there is an input page to add subject
-- In Subject page there is an subject index that show subject name and in actions view teacher, view Student, delete Subject, edit Subject.
+- Upon successful login, admins are redirected to the dashboard.
+- Dashboard displays statistics such as total active modules, permissions, roles, and users.
 
-Teacher :-
+Modules Management :-
 
-- In the Teacher Page there is an teacher index that show teacher name and actions for add a institute, add a subject, view Subject, Delete and Edit Teacher details
+- Dynamic creation of parent-child relation modules.
+- Seeding modules with module codes for identification.
+- List view for all modules with search and filter options.
+- Edit functionality to update module name and description.
 
-Students :-
+Permissions Management :-
 
-- In the Student Page there is an student index that show student name and actions for add a subject, view Subject, Delete and Edit Student details
+- CRUD operations for permissions.
+- Permissions are assigned module-wise with options for All, Create, Edit, View, and Delete permissions.
+- List view for all permissions with search, filter, and pagination.
 
-Institution :-
+Role Management :-
 
-- Here in the Institution Page there is an input page to add institution
-- In Institution page there is an Institution index that show institution name and in actions add teacher, view Teacher, delete institute , edit institute.
+- CRUD operations for roles.
+- Multi-select permission dropdown for role creation and editing.
+- List view for all roles with search, filter, and pagination.
+
+User Management :-
+
+- Provides CRUD operations for users with features like searching, filtering, and pagination.
+- Allows admins to set new passwords, edit user details, and delete users.
+- Admins can reset user passwords, triggering an email notification to the user.
+- Includes a force logout feature to log out users from all devices upon admin action.
 
 ## Requirements
 
@@ -44,7 +59,7 @@ Step 1: \*\*Clone the Repository
 Clone the repository to your local machine using Git.
 
 ```bash
-$ git clone https://github.com/kevangi-zignuts/education-management-system.git
+$ git clone https://github.com/kevangi-zignuts/user-role-permission-module.git
 ```
 
 Step 2: Navigate to the Project Directory
@@ -52,7 +67,7 @@ Step 2: Navigate to the Project Directory
 Change your current directory to the project directory.
 
 ```bash
-$ cd education-management-system
+$ cd user-role-permission-module
 ```
 
 Step 3: Install Composer Dependencies
@@ -100,13 +115,23 @@ DB_USERNAME=your_database_username
 DB_PASSWORD=your_database_password
 ```
 
+```bash
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=your_username
+MAIL_PASSWORD=your_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your-email@example.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
 Step 8: Run Migrations and Seeders
 
 Run database migrations and seeders to create database tables and populate them with initial data.
 
 ```bash
-$ php artisan migrate
-$ php artisan migrate db:seed --class=UserSeeder
+$ php artisan migrate --seed
 ```
 
 Step 9:
