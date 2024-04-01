@@ -62,10 +62,10 @@ class UserController extends Controller
       'contact_no' => 'numeric|nullable',
       'roles' => 'array|nullable',
     ]);
+    dd('here');
     $email = $request->input('email');
     $token = md5(uniqid(rand(), true));
     $temporaryPassword = Str::random(10);
-
     $user = new User();
     $user->fill($request->only('first_name', 'last_name', 'email', 'contact_no', 'address'));
     $user->password = Hash::make($temporaryPassword);
@@ -73,7 +73,8 @@ class UserController extends Controller
     $user->status = 'I';
     $user->save();
 
-    // Mail::to($request->input('email'))->send(new InvitationEmail($token, $temporaryPassword, $user->id));
+    dd('here');
+    Mail::to($request->input('email'))->send(new InvitationEmail($token, $user->id, $user->first_name));
 
     $token = $user->createToken($user->email)->plainTextToken;
 
@@ -158,7 +159,7 @@ class UserController extends Controller
     $user = User::findOrFail($id);
     $password = Hash::make($request['password']);
     $user->update(['password' => $password]);
-    // Mail::to($user->email)->send(new ResetPassword());
+    Mail::to($user->email)->send(new ResetPassword($user->first_name));
 
     return redirect()
       ->route('users.index')

@@ -1,6 +1,5 @@
-{{-- Hello!!
-<p>Click <a href="{{ route('resetPassword', ['id' => $id]) }}">here</a> to register.</p>
-<!DOCTYPE html> --}}
+Hello!!
+Click on the link for password reset :- <a href="{{ route('resetPassword', ['id' => $id]) }}">Reset Password</a>
 <html>
 
 <head>
@@ -26,11 +25,11 @@
     <div class="container mx-auto mt-5">
         <div class="card mx-auto mx-100 p-3 shadow-lg mb-5 bg-white rounded">
             <div class="card-body text-left">
-                <p class="heading">Hello Sir/Ma'am {{ $name }},</p>
-                <p class="mb-4 mt-3"><b>Click below button to login the Website</b></p>
-                <div class="text-div mx-auto mw-100 justify-content-center">
-                  <a href="{{ route('resetPassword', ['id' => $id]) }}" class="btn btn-primary mx-auto">Login</a>
-                </div>
+                <p class="heading">hello {{ $name }}!</p>
+                <p class="mb-4 mt-3">Someone requested a link to change your password. Click the button below to proceed</p>
+                <a href="{{ route('resetPassword', ['id' => $id]) }}" class="btn btn-primary text-center">Change my password</a>
+                <p class="mb-4 mt-3">If you didn't request this, please ignore the email. Your password will stay safe and won't be changed.</p>
+                <p class="border-top pt-2">Sincerely,</p>
             </div>
         </div>
     </div>

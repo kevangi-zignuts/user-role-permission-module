@@ -18,9 +18,10 @@ class ForgetPassword extends Mailable
   /**
    * Create a new message instance.
    */
-  public function __construct($id)
+  public function __construct($id, $name)
   {
     $this->id = $id;
+    $this->name = $name;
   }
 
   /**
@@ -36,7 +37,7 @@ class ForgetPassword extends Mailable
    */
   public function content(): Content
   {
-    return new Content(view: 'content.forgetPassword.forgetPasswordMail');
+    return new Content(view: 'emails.forgetPassword');
   }
 
   /**
