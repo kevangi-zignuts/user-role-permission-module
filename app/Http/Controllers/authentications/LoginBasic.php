@@ -19,26 +19,37 @@ class LoginBasic extends Controller
   {
     $pageConfigs = ['myLayout' => 'blank'];
     $rememberToken = Cookie::get('remember_token');
-    $user = User::where('remember_token', hash('sha256', decrypt($rememberToken)))->first();
-    if ($rememberToken) {
-      $decryptedToken = decrypt($rememberToken);
-      // Separate email and hashed password
-      list($email, $password) = explode('|', $decryptedToken);
-      return view('content.authentications.auth-login-basic', [
-        'pageConfigs' => $pageConfigs,
-        'email' => $email,
-        'password' => $password,
-        'rememberToken' => $rememberToken,
-      ]);
+
+    try {
+      if ($rememberToken) {
+        $decryptedToken = decrypt($rememberToken);
+        // Separate email and hashed password
+        list($email, $password) = explode('|', $decryptedToken);
+        return view('content.authentications.auth-login-basic', [
+          'pageConfigs' => $pageConfigs,
+          'email' => $email,
+          'password' => $password,
+          'rememberToken' => $rememberToken,
+        ]);
+      }
+    } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+      // Handle decryption error
+      Log::error('Decryption error: ' . $e->getMessage());
+      // Redirect or display an error message
+      return redirect()
+        ->route('login')
+        ->withErrors(['error' => 'Invalid remember token']);
     }
 
     return view('content.authentications.auth-login-basic', [
       'pageConfigs' => $pageConfigs,
-      'email' => $email,
-      'password' => $password,
-      'rememberToken' => $rememberToken,
-      'user' => $user,
+      'email' => $email ?? null,
+      'password' => $password ?? null,
+      'rememberToken' => $rememberToken ?? null,
+      'user' => $user ?? null,
     ]);
+  }
+
   }
 
   /**
