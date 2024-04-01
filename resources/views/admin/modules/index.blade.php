@@ -66,7 +66,7 @@
             </form>
         </div>
         <div class="card-body">
-            <div class="table-responsive text-nowrap">
+            <div class="table-responsive text-nowrap p-2">
                 <table class="table">
                     <thead class="table-dark">
                         <tr>
@@ -156,7 +156,7 @@
                 </table>
             </div>
         </div>
-
+        {{ $modules->links('pagination::bootstrap-5') }}
     </div>
     </div>
 

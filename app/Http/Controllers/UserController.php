@@ -31,15 +31,14 @@ class UserController extends Controller
     if ($filter !== 'all') {
       $query->where('is_active', $request->filter)->get();
     }
-    $users = $query->with('role')->get();
 
     // search the user
     $search = $request->input('search');
     if (!empty($search)) {
       $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
-      $users = $query->get();
     }
 
+    $users = $query->with('role')->paginate(8);
     return view('admin.users.index', ['users' => $users, 'filter' => $filter]);
   }
 

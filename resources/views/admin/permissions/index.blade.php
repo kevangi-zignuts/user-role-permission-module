@@ -59,7 +59,7 @@
             </form>
         </div>
         <div class="card-body">
-            <div class="table-responsive text-nowrap">
+            <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
                     <thead class="table-dark">
@@ -114,8 +114,9 @@
                         @endforeach
                     </tbody>
                 </table>
+              </div>
+              {{ $permissions->links('pagination::bootstrap-5') }}
             </div>
-        </div>
-    </div>
+          </div>
 
 @endsection

@@ -21,15 +21,14 @@ class PermissionController extends Controller
     if ($filter !== 'all') {
       $query->where('is_active', $request->filter)->get();
     }
-    $permissions = $query->get();
 
     // search the permission
     $search = $request->input('search');
     if (!empty($search)) {
       $query->where('permission_name', 'like', '%' . $search . '%');
-      $permissions = $query->get();
     }
 
+    $permissions = $query->paginate(8);
     return view('admin.permissions.index', ['permissions' => $permissions, 'filter' => $filter]);
   }
 

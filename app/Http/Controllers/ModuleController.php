@@ -27,7 +27,7 @@ class ModuleController extends Controller
         ])
         ->get();
     }
-    $modules = $query->where('parent_code', null)->get();
+    $modules = $query->where('parent_code', null)->paginate(10);
 
     // search the module
     $search = $request->input('search');
@@ -37,7 +37,7 @@ class ModuleController extends Controller
           $q->where('module_name', 'like', '%' . $search . '%');
         })
         ->orWhere('module_name', 'like', '%' . $search . '%');
-      $modules = $query->get();
+      $modules = $query->paginate(10);
     }
 
     return view('admin.modules.index', ['modules' => $modules, 'filter' => $filter]);

@@ -64,7 +64,7 @@
             </form>
         </div>
         <div class="card-body">
-            <div class="table-responsive text-nowrap">
+            <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
                     <thead class="table-dark">
@@ -142,6 +142,7 @@
                 </tbody>
             </table>
         </div>
+        {{ $users->links('pagination::bootstrap-5') }}
     </div>
 </div>
 @include('admin.users.resetPassword')

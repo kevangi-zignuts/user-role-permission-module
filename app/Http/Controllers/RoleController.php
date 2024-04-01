@@ -20,15 +20,14 @@ class RoleController extends Controller
     if ($filter !== 'all') {
       $query->where('is_active', $request->filter)->get();
     }
-    $roles = $query->get();
 
     // search the role
     $search = $request->input('search');
     if (!empty($search)) {
       $query->where('role_name', 'like', '%' . $search . '%');
-      $roles = $query->get();
     }
 
+    $roles = $query->paginate(8);
     return view('admin.roles.index', ['roles' => $roles, 'filter' => $filter]);
   }
 

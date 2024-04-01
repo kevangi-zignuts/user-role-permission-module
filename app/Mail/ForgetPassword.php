@@ -13,7 +13,7 @@ class ForgetPassword extends Mailable
 {
   use Queueable, SerializesModels;
 
-  public $id;
+  public $id, $name;
 
   /**
    * Create a new message instance.
