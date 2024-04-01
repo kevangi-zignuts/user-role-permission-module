@@ -14,7 +14,7 @@ return new class extends Migration {
       $table->id();
       $table->string('first_name', 64);
       $table->string('last_name', 64)->nullable();
-      $table->string('email', 128)->unique();
+      $table->string('email', 128);
       $table->timestamp('email_verified_at')->nullable();
       $table->string('password', 64);
       $table->string('contact_no', 16)->nullable();

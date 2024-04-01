@@ -8,6 +8,7 @@ use App\Mail\ResetPassword;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\InvitationEmail;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -58,11 +59,17 @@ class UserController extends Controller
   {
     $request->validate([
       'first_name' => 'required|string|max:255',
-      'email' => 'email|required|unique:users,email',
+      'email' => [
+        'email',
+        'required',
+        Rule::unique('users')->where(function ($query) {
+          // Consider soft deleted records as non-unique
+          $query->whereNull('deleted_at');
+        }),
+      ],
       'contact_no' => 'numeric|nullable',
       'roles' => 'array|nullable',
     ]);
-    dd('here');
     $email = $request->input('email');
     $token = md5(uniqid(rand(), true));
     $temporaryPassword = Str::random(10);
@@ -73,7 +80,6 @@ class UserController extends Controller
     $user->status = 'I';
     $user->save();
 
-    dd('here');
     Mail::to($request->input('email'))->send(new InvitationEmail($token, $user->id, $user->first_name));
 
     $token = $user->createToken($user->email)->plainTextToken;

@@ -28,12 +28,12 @@
 @section('content')
 
     @if (session('success'))
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success" id="alert-success">
             {{ session('success') }}
         </div>
     @endif
     @if (session('error'))
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger" role="alert-error">
             {{ session('error') }}
         </div>
     @endif
@@ -108,7 +108,7 @@
                                     </div>
                                 </form>
                             </td>
-                            <td>
+                            <td class="pt-0">
                                 <div class="dropdown" style="position: absolute">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                         data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
@@ -162,7 +162,7 @@
                         var route = this.getAttribute('data-route');
                         if (route) {
                             form.setAttribute('action',
-                            route); // Set form action to the route URL
+                                route); // Set form action to the route URL
                         } else {
                             console.error('Data-route attribute not found on link.');
                         }

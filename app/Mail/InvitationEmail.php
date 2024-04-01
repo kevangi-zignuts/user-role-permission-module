@@ -13,7 +13,7 @@ class InvitationEmail extends Mailable
 {
   use Queueable, SerializesModels;
 
-  public $token, $id;
+  public $token, $id, $name;
   /**
    * Create a new message instance.
    */

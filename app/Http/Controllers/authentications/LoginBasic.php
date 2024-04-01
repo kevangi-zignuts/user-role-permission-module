@@ -55,7 +55,6 @@ class LoginBasic extends Controller
       'email' => $email ?? null,
       'password' => $password ?? null,
       'rememberToken' => $rememberToken ?? null,
-      'user' => $user ?? null,
     ]);
   }
 

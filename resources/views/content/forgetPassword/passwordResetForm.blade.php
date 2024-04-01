@@ -73,7 +73,7 @@ $configData = Helper::appClasses();
             Set new password
           </button>
           <div class="text-center">
-            <a href="{{url('auth/login-cover')}}">
+            <a href="{{ route('login') }}">
               <i class="ti ti-chevron-left scaleX-n1-rtl"></i>
               Back to login
             </a>
