@@ -18,7 +18,7 @@
 <script src="{{asset('assets/js/extended-ui-sweetalert2.js')}}"></script>
 @endsection --}}
 
-@section('title', 'Permission')
+@section('title', 'Role')
 
 @section('content')
 

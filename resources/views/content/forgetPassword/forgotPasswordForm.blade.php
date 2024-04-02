@@ -71,6 +71,9 @@
                             <label for="email" class="form-label">Email</label>
                             <input type="text" class="form-control" id="email" name="email"
                                 placeholder="Enter your email" autofocus>
+                            @error('email')
+                                <div class="pt-2 text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <button class="btn btn-primary d-grid w-100">Send Reset Link</button>
                     </form>

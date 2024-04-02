@@ -19,7 +19,7 @@ class ForgetPasswordController extends Controller
    */
   public function showForm()
   {
-    return view('content.forgetPassword.linkForEmail');
+    return view('content.forgetPassword.forgotPasswordForm');
   }
 
   /**

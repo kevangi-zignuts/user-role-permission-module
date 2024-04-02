@@ -31,8 +31,10 @@ Route::post('/forget-password', [ForgetPasswordController::class, 'submit'])->na
 Route::get('/reset-password-link/{id}', [ResetPasswordController::class, 'showForm'])->name('resetPassword');
 Route::post('/reset-password/{id}', [ResetPasswordController::class, 'submit'])->name('resetPasswordSubmit');
 
-Route::middleware('auth', 'access')->group(function () {
+Route::middleware('auth', 'role', 'access')->group(function () {
   // Main Page Route
+  $controller_path = 'App\Http\Controllers';
+  Route::get('/dashboard', $controller_path . '\pages\HomePage@userIndex')->name('user.dashboard');
   Route::group(['prefix' => 'admin'], function () {
     $controller_path = 'App\Http\Controllers';
     Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('admin.dashboard');
