@@ -68,6 +68,7 @@ class LoginBasic extends Controller
 
     if (Auth::attempt($credentials, $remember)) {
       $user = Auth::user();
+      $user->is_active = 1;
       $token = $user->createToken($request->input('email'))->plainTextToken;
       if ($remember) {
         $rememberToken = $request->input('email') . '|' . $request->input('password');
@@ -81,15 +82,26 @@ class LoginBasic extends Controller
 
         $cookie = Cookie::make($cookieName, $cookieValue, $cookieExpiration);
 
+        if ($user->email === 'admin@example.com') {
+          return redirect()
+            ->route('admin.dashboard')
+            ->with('success', 'You are logged in successfully')
+            ->withCookie($cookie);
+        }
         return redirect()
-          ->route('admin.dashboard')
+          ->route('user.dashboard')
           ->with('success', 'You are logged in successfully')
           ->withCookie($cookie);
       }
 
       // Redirect to authenticated area
+      if ($user->email === 'admin@example.com') {
+        return redirect()
+          ->route('admin.dashboard')
+          ->with('success', 'You are logged in successfully');
+      }
       return redirect()
-        ->route('admin.dashboard')
+        ->route('user.dashboard')
         ->with('success', 'You are logged in successfully');
     }
 
@@ -106,9 +118,12 @@ class LoginBasic extends Controller
   {
     if (Auth::check()) {
       // Delete the user's token
-      Auth::user()
-        ->tokens()
-        ->delete();
+
+      $user = Auth::user();
+      $user->tokens()->delete();
+
+      $user->is_active = 0;
+      $user->save();
 
       return redirect()
         ->route('login')
