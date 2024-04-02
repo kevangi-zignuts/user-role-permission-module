@@ -25,7 +25,6 @@ class HomePage extends Controller
   }
   public function userIndex()
   {
-    dd('here');
     return view('dashboard');
   }
 }
