@@ -27,9 +27,10 @@ $customizerHidden = 'customizer-hide';
 @endsection
 
 @section('content')
+
 <div class="container-xxl">
   <div class="authentication-wrapper authentication-basic container-p-y">
-    <div class="authentication-inner py-4">
+    <div class="authentication-inner py-4 mx-auto">
       <div class="card">
         <div class="card-body">
           <div class="app-brand justify-content-center mb-4 mt-2">
@@ -48,8 +49,12 @@ $customizerHidden = 'customizer-hide';
               <label for="exampleFormControlTextarea1">Description</label>
               <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description">{{ $module->description }}</textarea>
             </div>
-            <div class="mb-3 mt-3">
-              <button class="btn btn-primary d-grid w-100" type="submit">Update</button>
+
+            <div class="row">
+              <div class="mt-3">
+                <button type="submit" class="btn btn-primary me-2">Update</button>
+                <button type="button" class="btn btn-label-secondary"><a href="{{ route('modules.index') }}">Cancle</a></button>
+              </div>
             </div>
           </form>
         </div>
@@ -58,4 +63,5 @@ $customizerHidden = 'customizer-hide';
     </div>
   </div>
 </div>
+
 @endsection

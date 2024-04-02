@@ -18,7 +18,7 @@ class LoginBasic extends Controller
   /**
    * show a login form
    */
-  public function showForm()
+  public function loginForm()
   {
     $pageConfigs = ['myLayout' => 'blank'];
     $rememberToken = Cookie::get('remember_token');
@@ -82,14 +82,14 @@ class LoginBasic extends Controller
         $cookie = Cookie::make($cookieName, $cookieValue, $cookieExpiration);
 
         return redirect()
-          ->route('pages-home')
+          ->route('admin.dashboard')
           ->with('success', 'You are logged in successfully')
           ->withCookie($cookie);
       }
 
       // Redirect to authenticated area
       return redirect()
-        ->route('pages-home')
+        ->route('admin.dashboard')
         ->with('success', 'You are logged in successfully');
     }
 

@@ -26,6 +26,7 @@ class RoleController extends Controller
     if (!empty($search)) {
       $query->where('role_name', 'like', '%' . $search . '%');
     }
+    $query->where('role_name', '!=', 'Admin');
 
     $roles = $query->paginate(8);
     return view('admin.roles.index', ['roles' => $roles, 'filter' => $filter]);

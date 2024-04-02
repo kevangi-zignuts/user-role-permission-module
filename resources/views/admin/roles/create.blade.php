@@ -61,8 +61,11 @@ $configData = Helper::appClasses();
                 </select>
               </div>
             </div>
-            <div class="mb-3 mt-3">
-              <button type="submit" class="btn btn-primary d-grid" >Create</button>
+            <div class="row">
+              <div class="mt-3">
+                <button type="submit" class="btn btn-primary me-2">Create</button>
+                <button type="button" class="btn btn-label-secondary"><a href="{{ route('roles.index') }}">Cancle</a></button>
+              </div>
             </div>
           </form>
         </div>

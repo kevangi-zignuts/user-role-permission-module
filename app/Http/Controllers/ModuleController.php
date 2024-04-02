@@ -52,7 +52,7 @@ class ModuleController extends Controller
     $module->update(['is_active' => !$module->is_active]);
 
     return redirect()
-      ->route('pages-page-2')
+      ->route('modules.index')
       ->with('success', 'Module status updated successfully.');
   }
 
@@ -76,7 +76,7 @@ class ModuleController extends Controller
     $module = Module::findOrFail($code);
     $module->update($request->only(['module_name', 'description']));
     return redirect()
-      ->route('pages-page-2')
+      ->route('modules.index')
       ->with('success', 'Module data updated successfully');
   }
 }

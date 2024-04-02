@@ -45,7 +45,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between m-5 mb-2">
             <div class="search-container ">
-                <form action="{{ route('pages-page-2') }}" method="GET">
+                <form action="{{ route('modules.index') }}" method="GET">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search modules..." name="search"
                             value="">
@@ -53,7 +53,7 @@
                     </div>
                 </form>
             </div>
-            <form action="{{ route('pages-page-2') }}" method="GET">
+            <form action="{{ route('modules.index') }}" method="GET">
                 <div class="input-group ">
                     <select name="filter" class="form-select" id="inputGroupSelect04"
                         aria-label="Example select with button addon" equired>

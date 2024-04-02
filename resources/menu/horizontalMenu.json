@@ -4,13 +4,13 @@
       "url": "admin/dashboard",
       "name": "Home",
       "icon": "menu-icon tf-icons ti ti-smart-home",
-      "slug": "pages-home"
+      "slug": "admin.dashboard"
     },
     {
       "url": "admin/modules/index",
       "icon": "menu-icon tf-icons ti ti-file",
       "name": "Modules",
-      "slug": "pages-page-2"
+      "slug": "modules.index"
     },
     {
       "url": "admin/permissions/index",

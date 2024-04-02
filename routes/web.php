@@ -22,7 +22,7 @@ use App\Http\Controllers\authentications\ForgetPasswordController;
 */
 $controller_path = 'App\Http\Controllers';
 // login page Route
-Route::get('/', $controller_path . '\authentications\LoginBasic@showForm')->name('auth-login-basic');
+Route::get('/', $controller_path . '\authentications\LoginBasic@loginForm')->name('auth-login-basic');
 Route::post('/', $controller_path . '\authentications\LoginBasic@login')->name('login');
 // Forget Password Page Route
 Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForm'])->name('forgetPassword');
@@ -35,9 +35,9 @@ Route::middleware('auth', 'access')->group(function () {
   // Main Page Route
   Route::group(['prefix' => 'admin'], function () {
     $controller_path = 'App\Http\Controllers';
-    Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('pages-home');
+    Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('admin.dashboard');
     Route::group(['prefix' => 'modules'], function () {
-      Route::get('/index', [ModuleController::class, 'index'])->name('pages-page-2');
+      Route::get('/index', [ModuleController::class, 'index'])->name('modules.index');
       Route::get('/edit/{code}', [ModuleController::class, 'edit'])->name('modules.edit');
       Route::post('/update/{code}', [ModuleController::class, 'update'])->name('modules.update');
       Route::post('/isActive/{code}', [ModuleController::class, 'updateIsActive'])->name('modules.updateIsActive');

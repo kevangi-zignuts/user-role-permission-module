@@ -21,6 +21,6 @@ class HomePage extends Controller
     $permission_count = Permission::where('is_active', 1)->count();
     $role_count = Role::where('is_active', 1)->count();
     $user_count = User::where('is_active', 1)->count();
-    return view('content.pages.pages-home', compact('module_count', 'permission_count', 'role_count', 'user_count'));
+    return view('admin.dashboard', compact('module_count', 'permission_count', 'role_count', 'user_count'));
   }
 }

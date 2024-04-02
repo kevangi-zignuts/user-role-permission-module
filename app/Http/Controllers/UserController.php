@@ -35,9 +35,11 @@ class UserController extends Controller
     // search the user
     $search = $request->input('search');
     if (!empty($search)) {
-      $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
+      $query->where(function ($query) use ($search) {
+        $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
+      });
     }
-
+    $query->where('email', '!=', 'admin@example.com');
     $users = $query->with('role')->paginate(8);
     return view('admin.users.index', ['users' => $users, 'filter' => $filter]);
   }
