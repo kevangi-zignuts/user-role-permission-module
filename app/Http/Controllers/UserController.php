@@ -81,7 +81,7 @@ class UserController extends Controller
     $user->status = 'I';
     $user->save();
 
-    Mail::to($request->input('em  ail'))->send(new InvitationEmail($token, $user->id, $user->first_name));
+    Mail::to($request->input('email'))->send(new InvitationEmail($token, $user->id, $user->first_name));
 
     $token = $user->createToken($user->email)->plainTextToken;
 
