@@ -73,7 +73,7 @@ Route::middleware('auth', 'role', 'access')->group(function () {
       Route::post('/store', [UserController::class, 'store'])->name('users.store');
       Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
       Route::post('/update/{id}', [UserController::class, 'update'])->name('users.update');
-      Route::post('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
+      Route::get('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
       Route::post('/isActive/{id}', [UserController::class, 'updateIsActive'])->name('users.updateIsActive');
       Route::post('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('users.resetPassword');
       Route::post('/forced-logout', [UserController::class, 'forceLogout'])->name('users.forceLogout');

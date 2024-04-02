@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -149,9 +150,15 @@ class UserController extends Controller
         ->with('fail', 'We can not found data');
     }
     $user->delete();
-    return redirect()
-      ->route('users.index')
-      ->with('success', "User's data deleted successfully");
+
+    // return redirect()
+    //   ->route('users.index')
+    //   ->with('success', "User's data deleted successfully");
+
+    return Response::json([
+      'success' => true,
+      'message' => 'Successfully user deleted'
+    ], 200);
   }
 
   /**

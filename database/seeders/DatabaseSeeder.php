@@ -29,56 +29,75 @@ class DatabaseSeeder extends Seeder
       [
         'code' => 'con',
         'module_name' => 'Contact',
-        'created_by' => 1,
-        'updated_by' => 1,
+        'parent_code' => null,
+        'description' => null,
       ],
       [
         'code' => 'com',
         'module_name' => 'Company',
         'parent_code' => 'con', // submodule
-        'created_by' => 1,
-        'updated_by' => 1,
+        'description' => "submodule",
       ],
       [
         'code' => 'peo',
         'module_name' => 'People',
         'parent_code' => 'con', // submodule
-        'created_by' => 1,
-        'updated_by' => 1,
+        'description' => "submodule",
       ],
       [
         'code' => 'acc',
         'module_name' => 'Account',
-        'created_by' => 1,
-        'updated_by' => 1,
+        'parent_code' => null,
+        'description' => null,
       ],
       [
         'code' => 'note',
         'module_name' => 'Notes',
         'parent_code' => 'acc', // submodule
-        'created_by' => 1,
-        'updated_by' => 1,
+        'description' => "submodule",
       ],
       [
         'code' => 'act',
         'module_name' => 'Activity',
         'parent_code' => 'acc', // submodule
-        'created_by' => 1,
-        'updated_by' => 1,
+        'description' => null,
+
       ],
       [
         'code' => 'meet',
         'module_name' => 'Meetings',
         'parent_code' => 'acc', // submodule
-        'created_by' => 1,
-        'updated_by' => 1,
-      ],
+        'description' => null,
+
+      ]
     ];
 
     // Insert data into the modules table
     foreach ($modules as $module) {
-      Module::create($module);
+
+      // $result = Module::where('code', $module['code'])->first();
+
+      // if($result){
+      //   Module::where('code', $module['code'])->update([
+      //     'module_name' => $module['module_name'],
+      //     'parent_code' => $module['parent_code']
+      //   ]);
+      // }
+      // else{
+      //   Module::create($module);
+      // }
+
+      Module::updateOrCreate([
+        'code' => $module['code']
+      ],[
+          'module_name' => $module['module_name'],
+          'parent_code' => $module['parent_code']
+      ]);
     }
+
+    // $codes = array_column($modules,'code');
+
+    Module::whereNotIn('code', array_column($modules,'code'))->delete();
 
     // Role Table data
     $role = Role::create([
