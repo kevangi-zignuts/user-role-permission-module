@@ -3,9 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Role;
 use App\Models\User;
-use App\Models\Module;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,94 +14,37 @@ class DatabaseSeeder extends Seeder
    */
   public function run(): void
   {
-    // User Table Seeder
-    $user = User::create([
-      'first_name' => 'System Admin',
-      'email' => 'admin@example.com',
-      'password' => Hash::make('password'),
-      'status' => 'A',
-    ]);
-
-    // Module Table Data
-    $modules = [
+    $users = [
       [
-        'code' => 'con',
-        'module_name' => 'Contact',
-        'parent_code' => null,
-        'description' => null,
+        'first_name' => 'System Admin',
+        'last_name' => null,
+        'email' => 'admin@example.com',
+        'password' => Hash::make('password'),
+        'contact_no' => null,
+        'address' => null,
+        'is_active' => 1,
+        'invitation_token' => null,
+        'status' => 'A',
       ],
-      [
-        'code' => 'com',
-        'module_name' => 'Company',
-        'parent_code' => 'con', // submodule
-        'description' => "submodule",
-      ],
-      [
-        'code' => 'peo',
-        'module_name' => 'People',
-        'parent_code' => 'con', // submodule
-        'description' => "submodule",
-      ],
-      [
-        'code' => 'acc',
-        'module_name' => 'Account',
-        'parent_code' => null,
-        'description' => null,
-      ],
-      [
-        'code' => 'note',
-        'module_name' => 'Notes',
-        'parent_code' => 'acc', // submodule
-        'description' => "submodule",
-      ],
-      [
-        'code' => 'act',
-        'module_name' => 'Activity',
-        'parent_code' => 'acc', // submodule
-        'description' => null,
-
-      ],
-      [
-        'code' => 'meet',
-        'module_name' => 'Meetings',
-        'parent_code' => 'acc', // submodule
-        'description' => null,
-
-      ]
     ];
-
-    // Insert data into the modules table
-    foreach ($modules as $module) {
-
-      // $result = Module::where('code', $module['code'])->first();
-
-      // if($result){
-      //   Module::where('code', $module['code'])->update([
-      //     'module_name' => $module['module_name'],
-      //     'parent_code' => $module['parent_code']
-      //   ]);
-      // }
-      // else{
-      //   Module::create($module);
-      // }
-
-      Module::updateOrCreate([
-        'code' => $module['code']
-      ],[
-          'module_name' => $module['module_name'],
-          'parent_code' => $module['parent_code']
-      ]);
+    foreach ($users as $user) {
+      User::updateOrCreate(
+        [
+          'email' => $user['email'],
+        ],
+        [
+          'first_name' => $user['first_name'],
+          'last_name' => $user['last_name'],
+          'password' => $user['password'],
+          'contact_no' => $user['contact_no'],
+          'address' => $user['address'],
+          'is_active' => $user['is_active'],
+          'invitation_token' => $user['invitation_token'],
+          'status' => $user['status'],
+        ]
+      );
     }
 
-    // $codes = array_column($modules,'code');
-
-    Module::whereNotIn('code', array_column($modules,'code'))->delete();
-
-    // Role Table data
-    $role = Role::create([
-      'role_name' => 'Admin',
-    ]);
-
-    $user->role()->attach($role);
+    User::whereNotIn('email', array_column($users, 'email'))->delete();
   }
 }
