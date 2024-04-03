@@ -7,6 +7,8 @@ use App\Mail\ResetPassword;
 use Illuminate\Support\Str;
 use App\Mail\forgetPassword;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -35,10 +37,22 @@ class ForgetPasswordController extends Controller
 
     $token = Str::random(64);
 
+    $now = Carbon::now();
+    $tokenExpiry = $now->addSeconds(120);
+    DB::table('password_reset_tokens')->updateOrInsert(
+      [
+        'email' => $request->email,
+      ],
+      [
+        'token' => $token,
+        'token_expiry' => $tokenExpiry,
+        'created_at' => Carbon::now(),
+      ]
+    );
     // Store the reset password token in the users table
-    $user->update(['reset_password_token' => $token]);
+    // $user->update(['reset_password_token' => $token]);
 
-    Mail::to($user->email)->send(new ForgetPassword($user->id, $user->first_name));
+    Mail::to($user->email)->send(new ForgetPassword($token, $user->first_name));
 
     return back()->with('message', 'We have e-mailed your password reset link!');
   }

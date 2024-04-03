@@ -53,7 +53,7 @@ $configData = Helper::appClasses();
         <!-- /Logo -->
         <h3 class="mb-1 fw-bold">Reset Password 🔒</h3>
         <p class="mb-4">for <span class="fw-bold">john.doe@email.com</span></p>
-        <form id="formAuthentication" class="mb-3" action="{{ route('resetPasswordSubmitForm', ['token' => $token]) }}" method="post">
+        <form id="formAuthentication" class="mb-3" action="{{ route('resetPasswordSubmit', ['token' => $token]) }}" method="post">
           @csrf
           <div class="mb-3 form-password-toggle">
             <label class="form-label" for="password">New Password</label>

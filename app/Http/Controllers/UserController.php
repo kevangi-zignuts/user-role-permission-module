@@ -59,7 +59,7 @@ class UserController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
+    $validate = $request->validate([
       'first_name' => 'required|string|max:255',
       'email' => [
         'email',
@@ -72,6 +72,7 @@ class UserController extends Controller
       'contact_no' => 'numeric|nullable',
       'roles' => 'array|nullable',
     ]);
+    // dd($validate);
     $email = $request->input('email');
     $token = md5(uniqid(rand(), true));
     $temporaryPassword = Str::random(10);
@@ -82,7 +83,7 @@ class UserController extends Controller
     $user->status = 'I';
     $user->save();
 
-    Mail::to($request->input('email'))->send(new InvitationEmail($token, $user->id, $user->first_name));
+    Mail::to($request->input('email'))->send(new InvitationEmail($token, $user->first_name));
 
     $token = $user->createToken($user->email)->plainTextToken;
 
@@ -155,10 +156,13 @@ class UserController extends Controller
     //   ->route('users.index')
     //   ->with('success', "User's data deleted successfully");
 
-    return Response::json([
-      'success' => true,
-      'message' => 'Successfully user deleted'
-    ], 200);
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
   }
 
   /**
