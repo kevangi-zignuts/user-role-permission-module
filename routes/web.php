@@ -42,6 +42,7 @@ Route::middleware('auth', 'access')->group(function () {
   Route::group(['prefix' => 'admin'], function () {
     $controller_path = 'App\Http\Controllers';
     Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('admin.dashboard');
+
     Route::group(['prefix' => 'modules'], function () {
       Route::get('/index', [ModuleController::class, 'index'])->name('modules.index');
       Route::get('/edit/{code}', [ModuleController::class, 'edit'])->name('modules.edit');

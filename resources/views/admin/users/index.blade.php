@@ -99,14 +99,6 @@
                                 @endforeach
                             </td>
                             <td>
-                                {{-- <form action="{{ route('users.updateIsActive', ['id' => $user->id]) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="is_active" value="">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" onchange="submit()" type="checkbox"
-                                            role="switch" {{ $user->is_active == 1 ? 'checked' : '' }}>
-                                    </div>
-                                </form> --}}
                                 <div class="form-check form-switch">
                                     <input data-id="{{ $user->id }}" class="form-check-input toggle-class"
                                         type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
@@ -194,9 +186,7 @@
 
 @section('page-script')
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-{{-- <script src="{{ asset('assets/js/app-access-roles.js') }}"></script> --}}
 <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-
 <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
 
 <script>
@@ -250,17 +240,50 @@
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 <script>
-    $('.toggle-class').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var id = $(this).data('id');
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: "/admin/users/status/" + id,
-            success: function(data) {
-                console.log("data.success")
-            }
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleSwitches = document.querySelectorAll('.toggle-class');
+        toggleSwitches.forEach(function(toggleSwitch) {
+            toggleSwitch.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-primary me-3',
+                        cancelButton: 'btn btn-label-secondary'
+                    },
+                    buttonsStyling: false
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        var status = $(toggleSwitch).prop('checked') == true ? 1 : 0;
+                        var id = $(toggleSwitch).data('id');
+                        $.ajax({
+                            type: "GET",
+                            dataType: "json",
+                            url: "/admin/users/status/" + id,
+                            success: function(data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Status Updated!!',
+                                        text: data.message,
+                                        customClass: {
+                                            confirmButton: 'btn btn-success'
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        var currentState = $(toggleSwitch).prop('checked');
+                        $(toggleSwitch).prop('checked', !currentState);
+                    }
+                });
+            });
         });
-    })
+    });
 </script>
+
 @endsection

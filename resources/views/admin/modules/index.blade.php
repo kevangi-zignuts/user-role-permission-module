@@ -11,6 +11,8 @@
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -19,6 +21,7 @@
     <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endsection
 
 @section('content')
@@ -88,11 +91,11 @@
                                 <td>{{ $module->description }}</td>
                                 <td>
                                     <div class="form-check form-switch">
-                                      <input data-id="{{ $module->code }}" class="form-check-input toggle-class"
-                                          type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                          data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
-                                          {{ $module->is_active == 1 ? 'checked' : '' }}>
-                                  </div>
+                                        <input data-id="{{ $module->code }}" class="form-check-input toggle-class"
+                                            type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                            {{ $module->is_active == 1 ? 'checked' : '' }}>
+                                    </div>
                                 </td>
                                 <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
                                             class="fa-solid fa-pen-to-square"></i></a></td>
@@ -115,11 +118,13 @@
                                                     <td>{{ $submodule->description }}</td>
                                                     <td>
                                                         <div class="form-check form-switch">
-                                                          <input data-id="{{ $submodule->code }}" class="form-check-input toggle-class"
-                                                              type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                                              data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
-                                                              {{ $submodule->is_active == 1 ? 'checked' : '' }}>
-                                                      </div>
+                                                            <input data-id="{{ $submodule->code }}"
+                                                                class="form-check-input toggle-class" type="checkbox"
+                                                                role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                                                data-offstyle="info" data-toggle="toggle" data-on="Pending"
+                                                                data-off="Approved"
+                                                                {{ $submodule->is_active == 1 ? 'checked' : '' }}>
+                                                        </div>
                                                     </td>
                                                     <td><a
                                                             href="{{ route('modules.edit', ['code' => $submodule->code]) }}"><i
@@ -146,20 +151,52 @@
 
 @section('page-script')
     <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+    <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
     <script>
-        $('.toggle-class').change(function() {
-            var status = $(this).prop('checked') == true ? 1 : 0;
-            var code = $(this).data('id');
-            console.log(code);
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: "/admin/modules/status/" + code,
-                success: function(data) {
-                    console.log("data.success")
-                }
-            });
+        document.addEventListener("DOMContentLoaded", function() {
+            toggleSwitches = document.querySelectorAll('.toggle-class');
+            toggleSwitches.forEach(function(toggleSwitch) {
+                toggleSwitch.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var status = $(toggleSwitch).prop('checked') == true ? 1 : 0;
+                            var code = $(toggleSwitch).data('id');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: "/admin/modules/status/" + code,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        } else {
+                            var currentState = $(toggleSwitch).prop('checked');
+                            $(toggleSwitch).prop('checked', !currentState);
+                        }
+                    })
+                });
+            })
         })
     </script>
 @endsection

@@ -5,18 +5,14 @@
 @extends('layouts/layoutMaster')
 
 
-{{-- @section('vendor-style')
-<link rel="stylesheet" href="{{asset('assets/vendor/libs/animate-css/animate.css')}}" />
-<link rel="stylesheet" href="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.css')}}" />
+@section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endsection
 
 @section('vendor-script')
-<script src="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endsection
-
-@section('page-script')
-<script src="{{asset('assets/js/extended-ui-sweetalert2.js')}}"></script>
-@endsection --}}
 
 @section('title', 'Role')
 
@@ -36,7 +32,8 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between m-5 mb-2">
-            <a href="{{ route('roles.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add a
+            <a href="{{ route('roles.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
+                a
                 Role</a>
             <div class="search-container ">
                 <form action="{{ route('roles.index') }}" method="GET">
@@ -120,20 +117,53 @@
 
 
 @section('page-script')
+    <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
     <script>
-        $('.toggle-class').change(function() {
-            var status = $(this).prop('checked') == true ? 1 : 0;
-            var id = $(this).data('id');
-            $.ajax({
-                type: "GET",
-                dataType: "json",
-                url: "/admin/roles/status/" + id,
-                success: function(data) {
-                    console.log("data.success")
-                }
+        document.addEventListener("DOMContentLoaded", function() {
+            toggleSwitches = document.querySelectorAll('.toggle-class');
+            toggleSwitches.forEach(function(toggleSwitch) {
+                toggleSwitch.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var status = $(toggleSwitch).prop('checked') == true ? 1 : 0;
+                            var id = $(toggleSwitch).data('id');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: "/admin/roles/status/" + id,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        } else {
+                            var currentState = $(toggleSwitch).prop('checked');
+                            $(toggleSwitch).prop('checked', !currentState);
+                        }
+                    });
+                });
             });
-        })
+        });
     </script>
 
 @endsection
