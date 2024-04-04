@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 
 class RoleController extends Controller
 {
@@ -120,5 +122,18 @@ class RoleController extends Controller
     return redirect()
       ->route('roles.index')
       ->with('success', 'Role deleted successfully');
+  }
+
+  public function updateStatus(Request $request, $id)
+  {
+    $role = Role::findOrFail($id);
+    $role->update(['is_active' => !$role->is_active]);
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
   }
 }

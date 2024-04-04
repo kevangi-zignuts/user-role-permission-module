@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
 
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/animate-css/animate.css')}}" />
-<link rel="stylesheet" href="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.css')}}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -22,7 +22,7 @@
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
 
-    <script src="{{asset('assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endsection
 
 
@@ -99,14 +99,20 @@
                                 @endforeach
                             </td>
                             <td>
-                                <form action="{{ route('users.updateIsActive', ['id' => $user->id]) }}" method="POST">
+                                {{-- <form action="{{ route('users.updateIsActive', ['id' => $user->id]) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="is_active" value="">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" onchange="submit()" type="checkbox"
                                             role="switch" {{ $user->is_active == 1 ? 'checked' : '' }}>
                                     </div>
-                                </form>
+                                </form> --}}
+                                <div class="form-check form-switch">
+                                    <input data-id="{{ $user->id }}" class="form-check-input toggle-class"
+                                        type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                        data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                        {{ $user->is_active == 1 ? 'checked' : '' }}>
+                                </div>
                             </td>
                             <td class="pt-0">
                                 <div class="dropdown" style="position: absolute">
@@ -125,8 +131,9 @@
                                         {{-- <button type="button" class="btn btn-primary" class="confirm-color">
                                           Delete
                                         </button> --}}
-                                        <button data-id="{{ $user->id }}" type="button" class="btn btn-primary" id="confirm-color">
-                                          Delete
+                                        <button data-id="{{ $user->id }}" type="button" class="btn btn-primary"
+                                            id="confirm-color">
+                                            Delete
                                         </button>
                                         <a href="#"
                                             data-route="{{ route('users.resetPassword', ['id' => $user->id]) }}"
@@ -154,8 +161,6 @@
 </div>
 @include('admin.users.resetPassword')
 
-@endsection
-{{-- @section('page-script')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var links = document.querySelectorAll('a[data-bs-toggle="modal"]');
@@ -184,58 +189,78 @@
             });
         });
     });
-
 </script>
-@endsection --}}
+@endsection
 
 @section('page-script')
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-    {{-- <script src="{{ asset('assets/js/app-access-roles.js') }}"></script> --}}
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/app-access-roles.js') }}"></script> --}}
+<script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
 
-    <script src="{{asset('assets/js/extended-ui-sweetalert2.js')}}"></script>
+<script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
 
-    <script>
-      confirmColor = document.querySelector('#confirm-color')
-      confirmColor.onclick = function () {
+<script>
+    confirmColor = document.querySelector('#confirm-color')
+    confirmColor.onclick = function() {
 
         console.log($(this).data('id'));
 
         var userId = $(this).data('id');
 
         Swal.fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete it!',
-          customClass: {
-            confirmButton: 'btn btn-primary me-3',
-            cancelButton: 'btn btn-label-secondary'
-          },
-          buttonsStyling: false
-        }).then(function (result) {
-          if (result.value) {
-            $.ajax ({
-              type: 'GET',
-              dataType:"json",
-              url: "/admin/users/delete/"+userId,
-              succces: function(data){
-                  console.log('success',data);
-                  if(data.success){
-                    Swal.fire({
-                      icon: 'success',
-                      title: 'Deleted!',
-                      text: 'Your file has been deleted.',
-                      customClass: {
-                        confirmButton: 'btn btn-success'
-                      }
-                  });
-                }
-              }
-            });
-          }
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            customClass: {
+                confirmButton: 'btn btn-primary me-3',
+                cancelButton: 'btn btn-label-secondary'
+            },
+            buttonsStyling: false
+        }).then(function(result) {
+            if (result.value) {
+                $.ajax({
+                    type: 'GET',
+                    dataType: "json",
+                    url: "/admin/users/delete/" + userId,
+                    contentType: 'application/json; charset=utf-8',
+                    succces: function(data) {
+                        console.log('success', data);
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: 'Your file has been deleted.',
+                                customClass: {
+                                    confirmButton: 'btn btn-success'
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error occurred:', error);
+                        // console.log('Error occurred:', error);
+                    }
+                });
+            }
         });
     };
-    </script>
+</script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+<script>
+    $('.toggle-class').change(function() {
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var id = $(this).data('id');
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/admin/users/status/" + id,
+            success: function(data) {
+                console.log("data.success")
+            }
+        });
+    })
+</script>
 @endsection

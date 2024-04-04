@@ -38,6 +38,7 @@ Route::middleware('auth', 'access')->group(function () {
   // Main Page Route
   $controller_path = 'App\Http\Controllers';
   Route::get('/user/dashboard', $controller_path . '\pages\HomePage@userIndex')->name('user.dashboard');
+
   Route::group(['prefix' => 'admin'], function () {
     $controller_path = 'App\Http\Controllers';
     Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('admin.dashboard');
@@ -45,7 +46,8 @@ Route::middleware('auth', 'access')->group(function () {
       Route::get('/index', [ModuleController::class, 'index'])->name('modules.index');
       Route::get('/edit/{code}', [ModuleController::class, 'edit'])->name('modules.edit');
       Route::post('/update/{code}', [ModuleController::class, 'update'])->name('modules.update');
-      Route::post('/isActive/{code}', [ModuleController::class, 'updateIsActive'])->name('modules.updateIsActive');
+      // Route::post('/isActive/{code}', [ModuleController::class, 'updateIsActive'])->name('modules.updateIsActive');
+      Route::get('/status/{code}', [ModuleController::class, 'updateStatus']);
     });
 
     Route::group(['prefix' => 'permissions'], function () {
@@ -55,9 +57,13 @@ Route::middleware('auth', 'access')->group(function () {
       Route::get('/edit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
       Route::post('/update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
       Route::post('/delete/{id}', [PermissionController::class, 'delete'])->name('permissions.delete');
-      Route::post('/isActive/{id}', [PermissionController::class, 'updateIsActive'])->name(
-        'permissions.updateIsActive'
-      );
+      // Route::post('/isActive/{id}', [PermissionController::class, 'updateIsActive'])->name(
+      //   'permissions.updateIsActive'
+      // );
+      Route::get('/status/{id}', [PermissionController::class, 'updateStatus']);
+      // Route::get('/status/update', [PermissionController::class, 'updateStatus'])->name('update.status');
+      // Route::post('/toggle/{id}', [PermissionController::class, 'toggle'])->name('toggle');
+      // Route::get('/toggle/{id}', 'ToggleController@toggle')->name('toggle');
     });
 
     Route::group(['prefix' => 'roles'], function () {
@@ -67,7 +73,7 @@ Route::middleware('auth', 'access')->group(function () {
       Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
       Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
       Route::post('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
-      Route::get('/isActive/{id}', [RoleController::class, 'updateIsActive'])->name('roles.updateIsActive');
+      Route::get('/status/{id}', [RoleController::class, 'updateStatus']);
     });
 
     Route::group(['prefix' => 'users'], function () {
@@ -77,7 +83,8 @@ Route::middleware('auth', 'access')->group(function () {
       Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
       Route::post('/update/{id}', [UserController::class, 'update'])->name('users.update');
       Route::get('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
-      Route::post('/isActive/{id}', [UserController::class, 'updateIsActive'])->name('users.updateIsActive');
+      // Route::post('/isActive/{id}', [UserController::class, 'updateIsActive'])->name('users.updateIsActive');
+      Route::get('/status/{id}', [UserController::class, 'updateStatus']);
       Route::post('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('users.resetPassword');
       Route::post('/forced-logout', [UserController::class, 'forceLogout'])->name('users.forceLogout');
     });

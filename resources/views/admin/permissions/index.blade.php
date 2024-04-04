@@ -5,16 +5,14 @@
 @extends('layouts/layoutMaster')
 
 @section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endsection
 
 @section('vendor-script')
+    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
 @endsection
 
 @section('title', 'Permission')
@@ -67,6 +65,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th>Status</th>
+                            <th></th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -81,16 +80,12 @@
                                 <td>{{ $permission->permission_name }}</td>
                                 <td>{{ $permission->description }}</td>
                                 <td>
-                                    <form action="{{ route('permissions.updateIsActive', ['id' => $permission->id]) }}"
-                                        method="POST">
-                                        @csrf
-                                        <input type="hidden" name="is_active" value="">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" onchange="submit()" type="checkbox"
-                                                role="switch" id="switchCheckDefault"
-                                                {{ $permission->is_active == 1 ? 'checked' : '' }}>
-                                        </div>
-                                    </form>
+                                    <div class="form-check form-switch">
+                                        <input data-id="{{ $permission->id }}" class="form-check-input toggle-class"
+                                            type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                            {{ $permission->is_active == 1 ? 'checked' : '' }}>
+                                    </div>
                                 </td>
                                 <td class="pt-0">
                                     <div class="dropdown" style="position: absolute;">
@@ -114,9 +109,32 @@
                         @endforeach
                     </tbody>
                 </table>
-              </div>
-              {{ $permissions->links('pagination::bootstrap-5') }}
             </div>
-          </div>
+            {{ $permissions->links('pagination::bootstrap-5') }}
+        </div>
+    </div>
+    </div>
 
+@endsection
+
+
+@section('page-script')
+    <script src="{{ asset('assets/js/ui-toasts.js') }}"></script>
+    <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script>
+        $('.toggle-class').change(function() {
+            var status = $(this).prop('checked') == true ? 1 : 0;
+            var id = $(this).data('id');
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/admin/permissions/status/" + id,
+                success: function(data) {
+                    console.log("data.success")
+                }
+            });
+        })
+    </script>
 @endsection

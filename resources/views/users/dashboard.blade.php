@@ -27,6 +27,28 @@
 
 @section('content')
 
+    @if (session('success'))
+        <div class="alert alert-success" id="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert-error">
+            {{ session('error') }}
+        </div>
+    @endif
+    @php
+        $i = 1;
+    @endphp
+    <div class="card">
+        <div class="card-header d-flex justify-content-between m-5 mb-2">
+          <a href="{{ route('users.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Edit Details</a>
+        </div>
+        <div class="card-body">
+
+        </div>
+    </div>
+    </div>
 
 
 

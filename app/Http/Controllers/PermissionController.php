@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Module;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 
 class PermissionController extends Controller
@@ -162,5 +163,18 @@ class PermissionController extends Controller
     return redirect()
       ->route('permissions.index')
       ->with('success', 'Permission deleted successfully');
+  }
+
+  public function updateStatus(Request $request, $id)
+  {
+    $permission = Permission::findOrFail($id);
+    $permission->update(['is_active' => !$permission->is_active]);
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
   }
 }

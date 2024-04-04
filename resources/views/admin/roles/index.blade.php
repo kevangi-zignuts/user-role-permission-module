@@ -82,15 +82,12 @@
                                 <td>{{ $role->role_name }}</td>
                                 <td>{{ $role->description }}</td>
                                 <td>
-                                    <form action="{{ route('roles.updateIsActive', ['id' => $role->id]) }}" method="get">
-                                        {{-- @csrf --}}
-                                        <input type="hidden" name="is_active" value="">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" onchange="submit()" type="checkbox"
-                                                role="switch" id="switchCheckDefault"
-                                                {{ $role->is_active == 1 ? 'checked' : '' }}>
-                                        </div>
-                                    </form>
+                                    <div class="form-check form-switch">
+                                        <input data-id="{{ $role->id }}" class="form-check-input toggle-class"
+                                            type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                            {{ $role->is_active == 1 ? 'checked' : '' }}>
+                                    </div>
                                 </td>
                                 <td class="pt-0">
                                     <div class="dropdown" style="position: absolute">
@@ -118,5 +115,25 @@
             {{ $roles->links('pagination::bootstrap-5') }}
         </div>
     </div>
+
+@endsection
+
+
+@section('page-script')
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script>
+        $('.toggle-class').change(function() {
+            var status = $(this).prop('checked') == true ? 1 : 0;
+            var id = $(this).data('id');
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/admin/roles/status/" + id,
+                success: function(data) {
+                    console.log("data.success")
+                }
+            });
+        })
+    </script>
 
 @endsection

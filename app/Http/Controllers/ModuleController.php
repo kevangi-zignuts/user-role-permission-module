@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Module;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class ModuleController extends Controller
 {
@@ -78,5 +79,18 @@ class ModuleController extends Controller
     return redirect()
       ->route('modules.index')
       ->with('success', 'Module data updated successfully');
+  }
+
+  public function updateStatus(Request $request, $code)
+  {
+    $module = Module::where('code', $code)->firstOrFail();
+    $module->update(['is_active' => !$module->is_active]);
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
   }
 }

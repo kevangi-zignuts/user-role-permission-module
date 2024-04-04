@@ -21,12 +21,6 @@
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
 @endsection
 
-@section('page-script')
-    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
-@endsection
-
-
-
 @section('content')
 
     @if (session('success'))
@@ -70,7 +64,6 @@
                 <table class="table">
                     <thead class="table-dark">
                         <tr>
-                            {{-- <th></th> --}}
                             <th></th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
@@ -94,17 +87,12 @@
                                 <td>{{ $module->module_name }}</td>
                                 <td>{{ $module->description }}</td>
                                 <td>
-                                    <form action="{{ route('modules.updateIsActive', ['code' => $module->code]) }}"
-                                        method="POST">
-                                        @csrf
-                                        <input type="hidden" name="is_active"
-                                            value="{{ $module->is_active ? '0' : '1' }}">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" onchange="submit()" type="checkbox"
-                                                role="switch" id="switchCheckDefault"
-                                                {{ $module->is_active == 1 ? 'checked' : '' }}>
-                                        </div>
-                                    </form>
+                                    <div class="form-check form-switch">
+                                      <input data-id="{{ $module->code }}" class="form-check-input toggle-class"
+                                          type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                          data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                          {{ $module->is_active == 1 ? 'checked' : '' }}>
+                                  </div>
                                 </td>
                                 <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
                                             class="fa-solid fa-pen-to-square"></i></a></td>
@@ -126,18 +114,12 @@
                                                     <td>{{ $submodule->module_name }}</td>
                                                     <td>{{ $submodule->description }}</td>
                                                     <td>
-                                                        <form
-                                                            action="{{ route('modules.updateIsActive', ['code' => $submodule->code]) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="is_active"
-                                                                value="{{ $submodule->is_active ? '0' : '1' }}">
-                                                            <div class="form-check form-switch">
-                                                                <input class="form-check-input" onchange="submit()"
-                                                                    type="checkbox" role="switch" id="switchCheckDefault"
-                                                                    {{ $submodule->is_active == 1 ? 'checked' : '' }}>
-                                                            </div>
-                                                        </form>
+                                                        <div class="form-check form-switch">
+                                                          <input data-id="{{ $submodule->code }}" class="form-check-input toggle-class"
+                                                              type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                                              data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                                              {{ $submodule->is_active == 1 ? 'checked' : '' }}>
+                                                      </div>
                                                     </td>
                                                     <td><a
                                                             href="{{ route('modules.edit', ['code' => $submodule->code]) }}"><i
@@ -160,5 +142,24 @@
     </div>
     </div>
 
+@endsection
 
+@section('page-script')
+    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script>
+        $('.toggle-class').change(function() {
+            var status = $(this).prop('checked') == true ? 1 : 0;
+            var code = $(this).data('id');
+            console.log(code);
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/admin/modules/status/" + code,
+                success: function(data) {
+                    console.log("data.success")
+                }
+            });
+        })
+    </script>
 @endsection

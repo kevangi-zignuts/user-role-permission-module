@@ -197,4 +197,17 @@ class UserController extends Controller
       ->back()
       ->with('success', 'Successfully logged out the user from all devices.');
   }
+
+  public function updateStatus(Request $request, $id)
+  {
+    $user = User::findOrFail($id);
+    $user->update(['is_active' => !$user->is_active]);
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
+  }
 }

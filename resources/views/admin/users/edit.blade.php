@@ -48,6 +48,10 @@ $configData = Helper::appClasses();
                   <div class="text-danger pt-2">{{ $message }}</div>
                 @enderror
               </div>
+              <div class="mb-3">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-control" name="email" value="{{ $user->email }}" autofocus required disabled>
+              </div>
               <div class="col-md-6">
                 <label class="form-label">Last Name</label>
                 <input type="text" class="form-control phone-mask" name="last_name" value="{{ $user->last_name }}" />
