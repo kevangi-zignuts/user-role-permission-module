@@ -91,9 +91,10 @@ class UserController extends Controller
 
     $user->role()->sync($roleIds);
 
-    return redirect()
-      ->route('users.index')
-      ->with('success', "User's data Inserted successfully!");
+    return redirect()->route('users.index', [
+      'success' => true,
+      'message' => 'User Created successfully!',
+    ]);
   }
 
   /**
@@ -137,9 +138,13 @@ class UserController extends Controller
     $user->update($request->only(['first_name', 'last_name', 'contact_no', 'address']));
     $user->role()->sync($request->input('roles', []));
 
-    return redirect()
-      ->route('users.index')
-      ->with('success', "User's data updated Successfully");
+    // return redirect()
+    //   ->route('users.index')
+    //   ->with('success', "User's data updated Successfully");
+    return redirect()->route('users.index', [
+      'success' => true,
+      'message' => 'User Updated successfully!',
+    ]);
   }
 
   /**
@@ -182,10 +187,15 @@ class UserController extends Controller
     $password = Hash::make($request['password']);
     $user->update(['password' => $password]);
     Mail::to($user->email)->send(new ResetPassword($user->first_name));
+    $user->tokens()->delete();
 
-    return redirect()
-      ->route('users.index')
-      ->with('success', "User's password updated successfully");
+    // return redirect()
+    //   ->route('users.index')
+    //   ->with('success', "User's password updated successfully");
+    return redirect()->route('users.index', [
+      'success' => true,
+      'message' => 'Password Reset Successfully',
+    ]);
   }
 
   /**

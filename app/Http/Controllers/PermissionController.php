@@ -73,9 +73,13 @@ class PermissionController extends Controller
         }
       }
 
-      return redirect()
-        ->route('permissions.index')
-        ->with('success', 'Permission created successfully.');
+      // return redirect()
+      //   ->route('permissions.index')
+      //   ->with('success', 'Permission created successfully.');
+      return redirect()->route('permissions.index', [
+        'success' => true,
+        'message' => 'Permission created successfully!',
+      ]);
     } catch (ValidationException $e) {
       return redirect()
         ->back()
@@ -126,9 +130,7 @@ class PermissionController extends Controller
 
     $permission = Permission::findOrFail($id);
     $permission->update($request->only(['permission_name', 'description']));
-
     $selectedModules = $request->input('modules', []);
-
     // Detach all existing modules
     $permission->module()->detach();
     foreach ($selectedModules as $moduleCode => $modules) {
@@ -146,9 +148,13 @@ class PermissionController extends Controller
       }
     }
 
-    return redirect()
-      ->route('permissions.index')
-      ->with('success', 'Permission updated successfully');
+    return redirect()->route('permissions.index', [
+      'success' => true,
+      'message' => 'Permission updated successfully!',
+    ]);
+    // return redirect()
+    //   ->route('permissions.index')
+    //   ->with('success', 'Permission updated successfully');
   }
 
   /**

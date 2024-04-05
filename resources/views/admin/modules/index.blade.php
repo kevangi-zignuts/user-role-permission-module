@@ -82,11 +82,11 @@
                         @endif
                         @foreach ($modules as $module)
                             <tr>
-                                <td class="clickable" data-toggle="collapse"
-                                    data-target="#subModules_{{ $module->code }}_{{ $i }}"
-                                    aria-expended="false"
-                                    aria-controls="subModules_{{ $module->code }}_{{ $i }}"><button
-                                        class="btn btn-default btn-xs"><i class="fa-solid fa-caret-down"></i></button></td>
+                                <td class="clickable" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample_{{ $module->code }}" aria-expended="false"
+                                    aria-controls="collapseExample_{{ $module->code }}"><button
+                                        class="btn btn-default btn-xs"><i class="fa-solid fa-caret-down"></i></button>
+                                </td>
                                 <td>{{ $module->module_name }}</td>
                                 <td>{{ $module->description }}</td>
                                 <td>
@@ -100,7 +100,7 @@
                                 <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
                                             class="fa-solid fa-pen-to-square"></i></a></td>
                             </tr>
-                            <tr id="subModules_{{ $module->code }}_{{ $i }}" class="collapse">
+                            <tr class="collapse" id = "collapseExample_{{ $module->code }}">
                                 <td colspan="5">
                                     <table class="table">
                                         <thead class="table-light">
@@ -146,6 +146,18 @@
         {{ $modules->links('pagination::bootstrap-5') }}
     </div>
     </div>
+
+    <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
+        data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="ti ti-bell ti-xs me-2"></i>
+            <div class="me-auto fw-semibold">Success</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div
 
 @endsection
 
@@ -198,5 +210,34 @@
                 });
             })
         })
+    </script>
+
+
+    <!-- Script to handle toast display -->
+    <script>
+        $(document).ready(function() {
+            // Function to get URL parameter by name
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            };
+
+            // Check if success parameter exists and is true
+            var successParam = getUrlParameter('success');
+            if (successParam == '1') {
+                var messageParam = getUrlParameter('message');
+                var toastAnimationExample = document.querySelector('.toast-ex');
+                var selectedType = 'text-success';
+                var selectedAnimation = 'animate__tada';
+                toastAnimationExample.classList.add(selectedAnimation);
+                toastAnimationExample.querySelector('.ti').classList.add(selectedType);
+                var Message = document.querySelector('.toast-body');
+                Message.innerText = messageParam;
+                toastAnimation = new bootstrap.Toast(toastAnimationExample);
+                toastAnimation.show();
+            }
+        });
     </script>
 @endsection

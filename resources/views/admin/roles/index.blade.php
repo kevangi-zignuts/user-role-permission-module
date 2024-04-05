@@ -8,25 +8,30 @@
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
 @endsection
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
 @endsection
+
 
 @section('title', 'Role')
 
 @section('content')
 
-
-    @if (session('success'))
+    @if (session('message'))
         <div class="alert alert-success" id="alert-success">
-            {{ session('success') }}
+            {{ session('message') }}
         </div>
     @endif
+
     @if (session('error'))
         <div class="alert alert-danger" role="alert-error">
-            {{ session('error') }}
+            {{ session('message') }}
         </div>
     @endif
 
@@ -94,13 +99,6 @@
                                             <a class="dropdown-item"
                                                 href="{{ route('roles.edit', ['id' => $role->id]) }}"><i
                                                     class="ti ti-pencil me-1"></i> Edit</a>
-                                            {{-- <form action="{{ route('roles.delete', ['id' => $role->id]) }}" method="post"
-                                                dropdown-item>
-                                                @csrf
-                                                <button type="submit" class="btn text-danger"
-                                                    onclick="confirm('Are you sure you Want to delete?')"><i
-                                                        class="ti ti-trash me-1"></i> Delete</button>
-                                            </form> --}}
                                             <button data-id="{{ $role->id }}" class="btn text-danger delete-class"
                                                 type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         </div>
@@ -115,10 +113,25 @@
         </div>
     </div>
 
+    <!--/ Toast message -->
+    <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
+        data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="ti ti-bell ti-xs me-2"></i>
+            <div class="me-auto fw-semibold">Success</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+    <!--/ Toast message -->
+
+
 @endsection
 
-
 @section('page-script')
+    <script src="{{ asset('assets/js/ui-toasts.js') }}"></script>
     <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
     <script>
@@ -212,5 +225,35 @@
             });
         });
     </script>
+
+    <!-- Script to handle toast display -->
+    <script>
+        $(document).ready(function() {
+            // Function to get URL parameter by name
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            };
+
+            // Check if success parameter exists and is true
+            var successParam = getUrlParameter('success');
+            if (successParam == '1') {
+                var messageParam = getUrlParameter('message');
+                var toastAnimationExample = document.querySelector('.toast-ex');
+                var selectedType = 'text-success';
+                var selectedAnimation = 'animate__tada';
+                toastAnimationExample.classList.add(selectedAnimation);
+                toastAnimationExample.querySelector('.ti').classList.add(selectedType);
+                var Message = document.querySelector('.toast-body');
+                Message.innerText = messageParam;
+                toastAnimation = new bootstrap.Toast(toastAnimationExample);
+                toastAnimation.show();
+            }
+        });
+    </script>
+
+
 
 @endsection

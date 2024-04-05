@@ -94,15 +94,8 @@
                                             <a class="dropdown-item"
                                                 href="{{ route('permissions.edit', ['id' => $permission->id]) }}"><i
                                                     class="ti ti-pencil me-1"></i> Edit</a>
-                                            {{-- <form action="{{ route('permissions.delete', ['id' => $permission->id]) }}"
-                                                method="post" dropdown-item>
-                                                @csrf
-                                                <button type="submit" class="btn text-danger"
-                                                    onclick="return confirm('Are you sure you want to Delete?')"><i
-                                                        class="ti ti-trash me-1"></i> Delete</button>
-                                            </form> --}}
                                             <button data-id="{{ $permission->id }}" class="btn text-danger delete-class"
-                                              type="button"><i class="ti ti-trash me-1"></i> Delete</button>
+                                                type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         </div>
                                     </div>
                                 </td>
@@ -114,6 +107,18 @@
             {{ $permissions->links('pagination::bootstrap-5') }}
         </div>
     </div>
+    </div>
+
+    <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
+        data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="ti ti-bell ti-xs me-2"></i>
+            <div class="me-auto fw-semibold">Success</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
     </div>
 
 @endsection
@@ -162,7 +167,7 @@
                                     }
                                 }
                             });
-                        }else {
+                        } else {
                             var currentState = $(toggleSwitch).prop('checked');
                             $(toggleSwitch).prop('checked', !currentState);
                         }
@@ -173,48 +178,76 @@
     </script>
 
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-      deleteButtons = document.querySelectorAll('.delete-class');
-      deleteButtons.forEach(function(deleteButton) {
-          deleteButton.addEventListener('click', function() {
-              var row = this.closest('tr');
-              Swal.fire({
-                  title: 'Are you sure?',
-                  text: "You won't be able to revert this!",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: 'Yes, delete it!',
-                  customClass: {
-                      confirmButton: 'btn btn-primary me-3',
-                      cancelButton: 'btn btn-label-secondary'
-                  },
-                  buttonsStyling: false
-              }).then(function(result) {
-                  if (result.isConfirmed) {
-                      var id = $(deleteButton).data('id');
-                      $.ajax({
-                          type: "GET",
-                          dataType: "json",
-                          url: "/admin/permissions/delete/" + id,
-                          success: function(data) {
-                              if (data.success) {
-                                  row.remove();
-                                  Swal.fire({
-                                      icon: 'success',
-                                      title: 'Status Updated!!',
-                                      text: data.message,
-                                      customClass: {
-                                          confirmButton: 'btn btn-success'
-                                      }
-                                  });
-                              }
-                          }
-                      });
-                  }
-              });
-          })
-      });
-  });
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            deleteButtons = document.querySelectorAll('.delete-class');
+            deleteButtons.forEach(function(deleteButton) {
+                deleteButton.addEventListener('click', function() {
+                    var row = this.closest('tr');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var id = $(deleteButton).data('id');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: "/admin/permissions/delete/" + id,
+                                success: function(data) {
+                                    if (data.success) {
+                                        row.remove();
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                })
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Function to get URL parameter by name
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            };
+
+            // Check if success parameter exists and is true
+            var successParam = getUrlParameter('success');
+            if (successParam == '1') {
+                var messageParam = getUrlParameter('message');
+                var toastAnimationExample = document.querySelector('.toast-ex');
+                var selectedType = 'text-success';
+                var selectedAnimation = 'animate__tada';
+                toastAnimationExample.classList.add(selectedAnimation);
+                toastAnimationExample.querySelector('.ti').classList.add(selectedType);
+                var Message = document.querySelector('.toast-body');
+                Message.innerText = messageParam;
+                toastAnimation = new bootstrap.Toast(toastAnimationExample);
+                toastAnimation.show();
+            }
+        });
+    </script>
 @endsection

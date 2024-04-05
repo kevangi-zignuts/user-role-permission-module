@@ -115,15 +115,16 @@
                                             href="{{ route('users.edit', ['id' => $user->id]) }}"><i
                                                 class="ti ti-pencil me-1"></i> Edit</a>
                                         <button data-id="{{ $user->id }}" class="btn text-danger delete-class"
-                                          type="button"><i class="ti ti-trash me-1"></i> Delete</button>
+                                            type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         <a href="#"
                                             data-route="{{ route('users.resetPassword', ['id' => $user->id]) }}"
                                             data-email="{{ $user->email }}" class="dropdown-item add-new-role"
                                             data-bs-target="#addRoleModal" data-bs-toggle="modal"
                                             class="dropdown-item add-new-role"><i class="ti ti-key me-1"></i> Reset
                                             Password</a>
-                                            <button data-id="{{ $user->id }}" class="btn text-danger forced-logout-class"
-                                              type="button"><i class='ti ti-logout me-2'></i> Force Logout</button>
+                                        <button data-id="{{ $user->id }}"
+                                            class="btn text-danger forced-logout-class" type="button"><i
+                                                class='ti ti-logout me-2'></i> Force Logout</button>
                                         {{-- <form method="post" action="{{ route('users.forceLogout') }}" dropdown-item>
                                                   @csrf
                                                   <input type="hidden" name="user_id" value="{{ $user->id }}">
@@ -139,9 +140,23 @@
             </table>
         </div>
         {{ $users->links('pagination::bootstrap-5') }}
-
     </div>
 </div>
+
+<!--/ Toast message -->
+<div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
+data-bs-delay="2000">
+<div class="toast-header">
+    <i class="ti ti-bell ti-xs me-2"></i>
+    <div class="me-auto fw-semibold">Success</div>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+</div>
+<div class="toast-body">
+    Hello, world! This is a toast message.
+</div>
+</div>
+<!--/ Toast message -->
+
 @include('admin.users.resetPassword')
 
 <script>
@@ -275,46 +290,74 @@
 </script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-      forcedLogoutButtons = document.querySelectorAll('.forced-logout-class');
-      forcedLogoutButtons.forEach(function(forcedLogoutButton) {
-        forcedLogoutButton.addEventListener('click', function() {
-              Swal.fire({
-                  title: 'Are you sure?',
-                  text: "You won't be able to revert this!",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: 'Yes, delete it!',
-                  customClass: {
-                      confirmButton: 'btn btn-primary me-3',
-                      cancelButton: 'btn btn-label-secondary'
-                  },
-                  buttonsStyling: false
-              }).then(function(result) {
-                  if (result.isConfirmed) {
-                      var id = $(forcedLogoutButton).data('id');
-                      $.ajax({
-                          type: "GET",
-                          dataType: "json",
-                          url: "/admin/users/forced-logout/" + id,
-                          success: function(data) {
-                              if (data.success) {
-                                  Swal.fire({
-                                      icon: 'success',
-                                      title: 'Status Updated!!',
-                                      text: data.message,
-                                      customClass: {
-                                          confirmButton: 'btn btn-success'
-                                      }
-                                  });
-                              }
-                          }
-                      });
-                  }
-              });
-          })
-      });
-  });
+    document.addEventListener("DOMContentLoaded", function() {
+        forcedLogoutButtons = document.querySelectorAll('.forced-logout-class');
+        forcedLogoutButtons.forEach(function(forcedLogoutButton) {
+            forcedLogoutButton.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-primary me-3',
+                        cancelButton: 'btn btn-label-secondary'
+                    },
+                    buttonsStyling: false
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        var id = $(forcedLogoutButton).data('id');
+                        $.ajax({
+                            type: "GET",
+                            dataType: "json",
+                            url: "/admin/users/forced-logout/" + id,
+                            success: function(data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Status Updated!!',
+                                        text: data.message,
+                                        customClass: {
+                                            confirmButton: 'btn btn-success'
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            })
+        });
+    });
+</script>
+
+<!-- Script to handle toast display -->
+<script>
+    $(document).ready(function() {
+        // Function to get URL parameter by name
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        // Check if success parameter exists and is true
+        var successParam = getUrlParameter('success');
+        if (successParam == '1') {
+            var messageParam = getUrlParameter('message');
+            var toastAnimationExample = document.querySelector('.toast-ex');
+            var selectedType = 'text-success';
+            var selectedAnimation = 'animate__tada';
+            toastAnimationExample.classList.add(selectedAnimation);
+            toastAnimationExample.querySelector('.ti').classList.add(selectedType);
+            var Message = document.querySelector('.toast-body');
+            Message.innerText = messageParam;
+            toastAnimation = new bootstrap.Toast(toastAnimationExample);
+            toastAnimation.show();
+        }
+    });
 </script>
 
 @endsection
