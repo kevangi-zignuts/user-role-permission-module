@@ -87,14 +87,17 @@ class PermissionController extends Controller
   /**
    * toggle button to change status of permission
    */
-  public function updateIsActive(Request $request, $id)
+  public function updateStatus(Request $request, $id)
   {
     $permission = Permission::findOrFail($id);
     $permission->update(['is_active' => !$permission->is_active]);
-
-    return redirect()
-      ->route('permissions.index')
-      ->with('success', 'Permission status updated successfully.');
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
   }
 
   /**
@@ -160,15 +163,6 @@ class PermissionController extends Controller
         ->with('fail', 'We can not found data');
     }
     $permission->delete();
-    return redirect()
-      ->route('permissions.index')
-      ->with('success', 'Permission deleted successfully');
-  }
-
-  public function updateStatus(Request $request, $id)
-  {
-    $permission = Permission::findOrFail($id);
-    $permission->update(['is_active' => !$permission->is_active]);
     return Response::json(
       [
         'success' => true,

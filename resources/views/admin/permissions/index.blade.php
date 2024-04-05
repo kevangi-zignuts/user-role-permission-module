@@ -94,13 +94,15 @@
                                             <a class="dropdown-item"
                                                 href="{{ route('permissions.edit', ['id' => $permission->id]) }}"><i
                                                     class="ti ti-pencil me-1"></i> Edit</a>
-                                            <form action="{{ route('permissions.delete', ['id' => $permission->id]) }}"
+                                            {{-- <form action="{{ route('permissions.delete', ['id' => $permission->id]) }}"
                                                 method="post" dropdown-item>
                                                 @csrf
                                                 <button type="submit" class="btn text-danger"
                                                     onclick="return confirm('Are you sure you want to Delete?')"><i
                                                         class="ti ti-trash me-1"></i> Delete</button>
-                                            </form>
+                                            </form> --}}
+                                            <button data-id="{{ $permission->id }}" class="btn text-danger delete-class"
+                                              type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         </div>
                                     </div>
                                 </td>
@@ -169,4 +171,50 @@
             });
         });
     </script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      deleteButtons = document.querySelectorAll('.delete-class');
+      deleteButtons.forEach(function(deleteButton) {
+          deleteButton.addEventListener('click', function() {
+              var row = this.closest('tr');
+              Swal.fire({
+                  title: 'Are you sure?',
+                  text: "You won't be able to revert this!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Yes, delete it!',
+                  customClass: {
+                      confirmButton: 'btn btn-primary me-3',
+                      cancelButton: 'btn btn-label-secondary'
+                  },
+                  buttonsStyling: false
+              }).then(function(result) {
+                  if (result.isConfirmed) {
+                      var id = $(deleteButton).data('id');
+                      $.ajax({
+                          type: "GET",
+                          dataType: "json",
+                          url: "/admin/permissions/delete/" + id,
+                          success: function(data) {
+                              if (data.success) {
+                                  row.remove();
+                                  Swal.fire({
+                                      icon: 'success',
+                                      title: 'Status Updated!!',
+                                      text: data.message,
+                                      customClass: {
+                                          confirmButton: 'btn btn-success'
+                                      }
+                                  });
+                              }
+                          }
+                      });
+                  }
+              });
+          })
+      });
+  });
+</script>
 @endsection

@@ -114,31 +114,22 @@
                                         <a class="dropdown-item"
                                             href="{{ route('users.edit', ['id' => $user->id]) }}"><i
                                                 class="ti ti-pencil me-1"></i> Edit</a>
-                                        {{-- <form action="{{ route('users.delete', ['id' => $user->id]) }}" method="post"
-                                            dropdown-item>
-                                            @csrf
-                                            <button type="submit" class="btn text-danger"><i
-                                                    class="ti ti-trash me-1"></i> Delete</button>
-                                        </form> --}}
-                                        {{-- <button type="button" class="btn btn-primary" class="confirm-color">
-                                          Delete
-                                        </button> --}}
-                                        <button data-id="{{ $user->id }}" type="button" class="btn btn-primary"
-                                            id="confirm-color">
-                                            Delete
-                                        </button>
+                                        <button data-id="{{ $user->id }}" class="btn text-danger delete-class"
+                                          type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         <a href="#"
                                             data-route="{{ route('users.resetPassword', ['id' => $user->id]) }}"
                                             data-email="{{ $user->email }}" class="dropdown-item add-new-role"
                                             data-bs-target="#addRoleModal" data-bs-toggle="modal"
                                             class="dropdown-item add-new-role"><i class="ti ti-key me-1"></i> Reset
                                             Password</a>
-                                        <form method="post" action="{{ route('users.forceLogout') }}" dropdown-item>
-                                            @csrf
-                                            <input type="hidden" name="user_id" value="{{ $user->id }}">
-                                            <button type="submit" class="btn text-danger"><i
-                                                    class='ti ti-logout me-2'></i> Force Logout</button>
-                                        </form>
+                                            <button data-id="{{ $user->id }}" class="btn text-danger forced-logout-class"
+                                              type="button"><i class='ti ti-logout me-2'></i> Force Logout</button>
+                                        {{-- <form method="post" action="{{ route('users.forceLogout') }}" dropdown-item>
+                                                  @csrf
+                                                  <input type="hidden" name="user_id" value="{{ $user->id }}">
+                                                  <button type="submit" class="btn text-danger"><i
+                                                          class='ti ti-logout me-2'></i> Force Logout</button>
+                                              </form> --}}
                                     </div>
                                 </div>
                             </td>
@@ -189,54 +180,6 @@
 <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
 <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
 
-<script>
-    confirmColor = document.querySelector('#confirm-color')
-    confirmColor.onclick = function() {
-
-        console.log($(this).data('id'));
-
-        var userId = $(this).data('id');
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            customClass: {
-                confirmButton: 'btn btn-primary me-3',
-                cancelButton: 'btn btn-label-secondary'
-            },
-            buttonsStyling: false
-        }).then(function(result) {
-            if (result.value) {
-                $.ajax({
-                    type: 'GET',
-                    dataType: "json",
-                    url: "/admin/users/delete/" + userId,
-                    contentType: 'application/json; charset=utf-8',
-                    succces: function(data) {
-                        console.log('success', data);
-                        if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Deleted!',
-                                text: 'Your file has been deleted.',
-                                customClass: {
-                                    confirmButton: 'btn btn-success'
-                                }
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error occurred:', error);
-                        // console.log('Error occurred:', error);
-                    }
-                });
-            }
-        });
-    };
-</script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 <script>
@@ -284,6 +227,94 @@
             });
         });
     });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        deleteButtons = document.querySelectorAll('.delete-class');
+        deleteButtons.forEach(function(deleteButton) {
+            deleteButton.addEventListener('click', function() {
+                var row = this.closest('tr');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-primary me-3',
+                        cancelButton: 'btn btn-label-secondary'
+                    },
+                    buttonsStyling: false
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        var id = $(deleteButton).data('id');
+                        $.ajax({
+                            type: "GET",
+                            dataType: "json",
+                            url: "/admin/users/delete/" + id,
+                            success: function(data) {
+                                if (data.success) {
+                                    row.remove();
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Status Updated!!',
+                                        text: data.message,
+                                        customClass: {
+                                            confirmButton: 'btn btn-success'
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            })
+        });
+    });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      forcedLogoutButtons = document.querySelectorAll('.forced-logout-class');
+      forcedLogoutButtons.forEach(function(forcedLogoutButton) {
+        forcedLogoutButton.addEventListener('click', function() {
+              Swal.fire({
+                  title: 'Are you sure?',
+                  text: "You won't be able to revert this!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Yes, delete it!',
+                  customClass: {
+                      confirmButton: 'btn btn-primary me-3',
+                      cancelButton: 'btn btn-label-secondary'
+                  },
+                  buttonsStyling: false
+              }).then(function(result) {
+                  if (result.isConfirmed) {
+                      var id = $(forcedLogoutButton).data('id');
+                      $.ajax({
+                          type: "GET",
+                          dataType: "json",
+                          url: "/admin/users/forced-logout/" + id,
+                          success: function(data) {
+                              if (data.success) {
+                                  Swal.fire({
+                                      icon: 'success',
+                                      title: 'Status Updated!!',
+                                      text: data.message,
+                                      customClass: {
+                                          confirmButton: 'btn btn-success'
+                                      }
+                                  });
+                              }
+                          }
+                      });
+                  }
+              });
+          })
+      });
+  });
 </script>
 
 @endsection

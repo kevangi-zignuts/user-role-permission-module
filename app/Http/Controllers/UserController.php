@@ -99,14 +99,17 @@ class UserController extends Controller
   /**
    * toggle button to change status of user
    */
-  public function updateIsActive(Request $request, $id)
+  public function updateStatus(Request $request, $id)
   {
     $user = User::findOrFail($id);
     $user->update(['is_active' => !$user->is_active]);
-
-    return redirect()
-      ->route('users.index')
-      ->with('success', 'User status updated successfully.');
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
   }
 
   /**
@@ -150,6 +153,7 @@ class UserController extends Controller
         ->route('users.index')
         ->with('fail', 'We can not found data');
     }
+    $user->tokens()->delete();
     $user->delete();
 
     // return redirect()
@@ -187,21 +191,12 @@ class UserController extends Controller
   /**
    * admin forced logout any user
    */
-  public function forceLogout(Request $request)
+  public function forceLogout($id)
   {
-    User::findOrFail($request->input('user_id'))
+    User::findOrFail($id)
       ->tokens()
       ->delete();
 
-    return redirect()
-      ->back()
-      ->with('success', 'Successfully logged out the user from all devices.');
-  }
-
-  public function updateStatus(Request $request, $id)
-  {
-    $user = User::findOrFail($id);
-    $user->update(['is_active' => !$user->is_active]);
     return Response::json(
       [
         'success' => true,

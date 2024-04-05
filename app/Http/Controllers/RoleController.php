@@ -67,14 +67,17 @@ class RoleController extends Controller
   /**
    * toggle button to change status of role
    */
-  public function updateIsActive(Request $request, $id)
+  public function updateStatus(Request $request, $id)
   {
     $role = Role::findOrFail($id);
     $role->update(['is_active' => !$role->is_active]);
-
-    return redirect()
-      ->route('roles.index')
-      ->with('success', 'Role status updated successfully.');
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
   }
 
   /**
@@ -114,20 +117,18 @@ class RoleController extends Controller
   {
     $role = Role::find($id);
     if (!$role) {
-      return redirect()
-        ->route('roles.index')
-        ->with('fail', 'We can not found data');
+      return Response::json(
+        [
+          'success' => true,
+          'message' => 'Successfully user deleted',
+        ],
+        200
+      );
+      // return redirect()
+      //   ->route('roles.index')
+      //   ->with('fail', 'We can not found data');
     }
     $role->delete();
-    return redirect()
-      ->route('roles.index')
-      ->with('success', 'Role deleted successfully');
-  }
-
-  public function updateStatus(Request $request, $id)
-  {
-    $role = Role::findOrFail($id);
-    $role->update(['is_active' => !$role->is_active]);
     return Response::json(
       [
         'success' => true,

@@ -47,14 +47,17 @@ class ModuleController extends Controller
   /**
    * toggle button to change status of module
    */
-  public function updateIsActive(Request $request, $code)
+  public function updateStatus(Request $request, $code)
   {
     $module = Module::where('code', $code)->firstOrFail();
     $module->update(['is_active' => !$module->is_active]);
-
-    return redirect()
-      ->route('modules.index')
-      ->with('success', 'Module status updated successfully.');
+    return Response::json(
+      [
+        'success' => true,
+        'message' => 'Successfully user deleted',
+      ],
+      200
+    );
   }
 
   /**
@@ -79,18 +82,5 @@ class ModuleController extends Controller
     return redirect()
       ->route('modules.index')
       ->with('success', 'Module data updated successfully');
-  }
-
-  public function updateStatus(Request $request, $code)
-  {
-    $module = Module::where('code', $code)->firstOrFail();
-    $module->update(['is_active' => !$module->is_active]);
-    return Response::json(
-      [
-        'success' => true,
-        'message' => 'Successfully user deleted',
-      ],
-      200
-    );
   }
 }
