@@ -1,16 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NoteController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckUserTokens;
 use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\users\NoteController;
+use App\Http\Controllers\users\PeopleController;
+use App\Http\Controllers\users\CompanyController;
+use App\Http\Controllers\users\MeetingController;
+use App\Http\Controllers\users\DashboardController;
 use App\Http\Controllers\authentications\LoginBasic;
+use App\Http\Controllers\users\ActivityLogController;
 use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\authentications\ForgetPasswordController;
 
@@ -88,8 +90,11 @@ Route::middleware('auth', 'access')->group(function () {
   });
 
   Route::group(['prefix' => 'user'], function () {
-    $controller_path = 'App\Http\Controllers';
-    Route::get('/dashboard', $controller_path . '\pages\HomePage@userIndex')->name('user.dashboard');
+    // $controller_path = 'App\Http\Controllers';
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/edit', [DashboardController::class, 'edit'])->name('user.edit');
+    Route::post('/update', [DashboardController::class, 'update'])->name('user.update');
+    Route::post('/resetPassword', [DashboardController::class, 'resetPassword'])->name('user.resetPassword');
 
     Route::group(['prefix' => 'company'], function () {
       Route::get('/index', [CompanyController::class, 'index'])->name('company.index');
@@ -108,7 +113,7 @@ Route::middleware('auth', 'access')->group(function () {
     });
 
     Route::group(['prefix' => 'people'], function () {
-      Route::get('/index', [NoteController::class, 'index'])->name('people.index');
+      Route::get('/index', [PeopleController::class, 'index'])->name('people.index');
     });
   });
 });

@@ -23,8 +23,4 @@ class HomePage extends Controller
     $user_count = User::where('is_active', 1)->count();
     return view('admin.dashboard', compact('module_count', 'permission_count', 'role_count', 'user_count'));
   }
-  public function userIndex()
-  {
-    return view('users.dashboard');
-  }
 }
