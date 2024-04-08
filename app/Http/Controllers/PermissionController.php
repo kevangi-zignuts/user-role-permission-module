@@ -119,24 +119,9 @@ class PermissionController extends Controller
     $permission = Permission::findOrFail($id);
     $permission->update($request->only(['permission_name', 'description']));
     $selectedModules = $request->input('modules', []);
-    // dd($selectedModules);
     // Detach all existing modules
     $permission->module()->detach();
     $permission->module()->attach($selectedModules);
-    // foreach ($selectedModules as $moduleCode => $modules) {
-    //   $module = Module::where('code', $moduleCode)->first();
-    //   if ($module) {
-    //     $pivotData = [
-    //       'add_access' => isset($modules['add_access']),
-    //       'view_access' => isset($modules['view_access']),
-    //       'edit_access' => isset($modules['edit_access']),
-    //       'delete_access' => isset($modules['delete_access']),
-    //     ];
-
-    //     // Attach the module with updated pivot data
-    //     $permission->module()->attach($module->code, $pivotData);
-    //   }
-    // }
 
     return redirect()->route('permissions.index', [
       'success' => true,
