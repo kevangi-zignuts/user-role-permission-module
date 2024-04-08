@@ -89,7 +89,7 @@ Route::middleware('auth', 'access')->group(function () {
 
   Route::group(['prefix' => 'user'], function () {
     $controller_path = 'App\Http\Controllers';
-    Route::get('/user/dashboard', $controller_path . '\pages\HomePage@userIndex')->name('user.dashboard');
+    Route::get('/dashboard', $controller_path . '\pages\HomePage@userIndex')->name('user.dashboard');
 
     Route::group(['prefix' => 'company'], function () {
       Route::get('/index', [CompanyController::class, 'index'])->name('company.index');
