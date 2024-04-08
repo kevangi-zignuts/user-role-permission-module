@@ -23,9 +23,9 @@
 
 @section('content')
 
-    @if (session('message'))
+    @if (session('success'))
         <div class="alert alert-success" id="alert-success">
-            {{ session('message') }}
+            {{ session('success') }}
         </div>
     @endif
 

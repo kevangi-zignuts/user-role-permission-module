@@ -125,12 +125,6 @@
                                         <button data-id="{{ $user->id }}"
                                             class="btn text-danger forced-logout-class" type="button"><i
                                                 class='ti ti-logout me-2'></i> Force Logout</button>
-                                        {{-- <form method="post" action="{{ route('users.forceLogout') }}" dropdown-item>
-                                                  @csrf
-                                                  <input type="hidden" name="user_id" value="{{ $user->id }}">
-                                                  <button type="submit" class="btn text-danger"><i
-                                                          class='ti ti-logout me-2'></i> Force Logout</button>
-                                              </form> --}}
                                     </div>
                                 </div>
                             </td>

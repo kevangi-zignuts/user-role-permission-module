@@ -45,18 +45,41 @@ $configData = Helper::appClasses();
                 @foreach ($modules as $module)
                 <tr>
                   <td><strong>{{ $module->module_name }}</strong></td>
-                  <td><input class="form-check-input" name="modules[{{ $module->code }}][add_access]" type="checkbox" id="add_{{ $module->code }}"></td>
-                  <td><input class="form-check-input" name="modules[{{ $module->code }}][view_access]" type="checkbox" id="view_{{ $module->code }}"></td>
-                  <td><input class="form-check-input" name="modules[{{ $module->code }}][edit_access]" type="checkbox" id="edit_{{ $module->code }}"></td>
-                  <td><input class="form-check-input" name="modules[{{ $module->code }}][delete_access]" type="checkbox" id="delete_{{ $module->code }}"></td>
+                  <td>
+                    <input type="hidden" name="modules[{{ $module->code }}][add_access]" value="0">
+                    <input class="form-check-input" name="modules[{{ $module->code }}][add_access]" type="checkbox" value="1">
+                  </td>
+                  <td>
+                    <input type="hidden" name="modules[{{ $module->code }}][view_access]" value="0">
+                    <input class="form-check-input" name="modules[{{ $module->code }}][view_access]" type="checkbox" value="1">
+                  </td>
+                  <td>
+                    <input type="hidden" name="modules[{{ $module->code }}][edit_access]" value="0">
+                    <input class="form-check-input" name="modules[{{ $module->code }}][edit_access]" type="checkbox" value="1">
+                  </td>
+                  <td>
+                    <input type="hidden" name="modules[{{ $module->code }}][edit_access]" value="0">
+                    <input class="form-check-input" name="modules[{{ $module->code }}][delete_access]" type="checkbox" value="1">
+                  </td>
                 </tr>
                 @foreach ($module->submodules as $submodule)
                   <tr>
                     <td class="p-5 pb-0 pt-0">{{ $submodule->module_name }}</td>
-                    <td><input class="form-check-input" name="modules[{{ $submodule->code }}][add_access]" type="checkbox" id="add_{{ $submodule->code }}"></td>
-                    <td><input class="form-check-input" name="modules[{{ $submodule->code }}][view_access]" type="checkbox" id="view_{{ $submodule->code }}"></td>
-                    <td><input class="form-check-input" name="modules[{{ $submodule->code }}][edit_access]" type="checkbox" id="edit_{{ $submodule->code }}"></td>
-                    <td><input class="form-check-input" name="modules[{{ $submodule->code }}][delete_access]" type="checkbox" id="delete_{{ $submodule->code }}"></td>
+                    <td>
+                      <input type="hidden" name="modules[{{ $submodule->code }}][add_access]" value="0">
+                      <input class="form-check-input" name="modules[{{ $submodule->code }}][add_access]" type="checkbox" value="1"></td>
+                    <td>
+                      <input type="hidden" name="modules[{{ $submodule->code }}][view_access]" value="0">
+                      <input class="form-check-input" name="modules[{{ $submodule->code }}][view_access]" type="checkbox" value="1">
+                    </td>
+                    <td>
+                      <input type="hidden" name="modules[{{ $submodule->code }}][edit_access]" value="0">
+                      <input class="form-check-input" name="modules[{{ $submodule->code }}][edit_access]" type="checkbox" value="1">
+                    </td>
+                    <td>
+                      <input type="hidden" name="modules[{{ $module->code }}][edit_access]" value="0">
+                      <input class="form-check-input" name="modules[{{ $submodule->code }}][delete_access]" type="checkbox" value="1">
+                    </td>
                   </tr>
                   @endforeach
                 @endforeach

@@ -63,14 +63,23 @@ $configData = Helper::appClasses();
                   @endphp
                   <tr>
                     <td><strong>{{ $module->module_name }}</strong></td>
-                    <td><input class="form-check-input" name="modules[{{ $module->code }}][add_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->add_access == '1' ? 'checked' : '' }}></td>
-                    <td><input class="form-check-input" name="modules[{{ $module->code }}][view_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->view_access == '1' ? 'checked' : '' }}></td>
-                    <td><input class="form-check-input" name="modules[{{ $module->code }}][edit_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->edit_access == '1' ? 'checked' : '' }}></td>
-                    <td><input class="form-check-input" name="modules[{{ $module->code }}][delete_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->delete_access == '1' ? 'checked' : '' }}></td>
-                    {{-- <td><input class="form-check-input" name="modules[{{ $module->code }}][add_access]" type="checkbox" id="flexCheckChecked" {{ isset($pivotData) && $pivotData->add_access == '1' ? 'checked' : '' }}></td>
-                    <td><input class="form-check-input" name="modules[{{ $module->code }}][view_access]" type="checkbox" id="flexCheckChecked" {{ isset($pivotData) && $pivotData->view_access == '1' ? 'checked' : '' }}></td>
-                    <td><input class="form-check-input" name="modules[{{ $module->code }}][edit_access]" type="checkbox" id="flexCheckChecked" {{ isset($pivotData) && $pivotData->edit_access == '1' ? 'checked' : '' }}></td>
-                    <td><input class="form-check-input" name="modules[{{ $module->code }}][delete_access]" type="checkbox" id="flexCheckChecked" {{ isset($pivotData) && $pivotData->delete_access == '1' ? 'checked' : '' }}></td> --}}
+                    <td>
+                      <input type="hidden" name="modules[{{ $module->code }}][add_access]" value="0">
+                      <input class="form-check-input" name="modules[{{ $module->code }}][add_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->add_access == '1' ? 'checked' : '' }} value="1">
+                    </td>
+                    <td>
+                      <input type="hidden" name="modules[{{ $module->code }}][view_access]" value="0">
+                      <input class="form-check-input" name="modules[{{ $module->code }}][view_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->view_access == '1' ? 'checked' : '' }} value="1">
+                    </td>
+                    <td>
+                      <input type="hidden" name="modules[{{ $module->code }}][edit_access]" value="0">
+                      <input class="form-check-input" name="modules[{{ $module->code }}][edit_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->edit_access == '1' ? 'checked' : '' }} value="1">
+                    </td>
+                    <td>
+                      <input type="hidden" name="modules[{{ $module->code }}][delete_access]" value="0">
+                      <input class="form-check-input" name="modules[{{ $module->code }}][delete_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->delete_access == '1' ? 'checked' : '' }} value="1">
+                    </td>
+
                   </tr>
                   @foreach ($module->submodules as $submodule)
                     @php
@@ -80,10 +89,22 @@ $configData = Helper::appClasses();
                     @endphp
                     <tr>
                       <td class="p-5 pb-0 pt-0">{{ $submodule->module_name }}</td>
-                      <td><input class="form-check-input" name="modules[{{ $submodule->code }}][add_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->add_access == '1' ? 'checked' : '' }}></td>
-                      <td><input class="form-check-input" name="modules[{{ $submodule->code }}][view_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->view_access == '1' ? 'checked' : '' }}></td>
-                      <td><input class="form-check-input" name="modules[{{ $submodule->code }}][edit_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->edit_access == '1' ? 'checked' : '' }}></td>
-                      <td><input class="form-check-input" name="modules[{{ $submodule->code }}][delete_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->delete_access == '1' ? 'checked' : '' }}></td>
+                      <td>
+                        <input type="hidden" name="modules[{{ $submodule->code }}][add_access]" value="0">
+                        <input class="form-check-input" name="modules[{{ $submodule->code }}][add_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->add_access == '1' ? 'checked' : '' }} value="1">
+                      </td>
+                      <td>
+                        <input type="hidden" name="modules[{{ $submodule->code }}][view_access]" value="0">
+                        <input class="form-check-input" name="modules[{{ $submodule->code }}][view_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->view_access == '1' ? 'checked' : '' }} value="1">
+                      </td>
+                      <td>
+                        <input type="hidden" name="modules[{{ $submodule->code }}][edit_access]" value="0">
+                        <input class="form-check-input" name="modules[{{ $submodule->code }}][edit_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->edit_access == '1' ? 'checked' : '' }} value="1">
+                      </td>
+                      <td>
+                        <input type="hidden" name="modules[{{ $submodule->code }}][delete_access]" value="0">
+                        <input class="form-check-input" name="modules[{{ $submodule->code }}][delete_access]" type="checkbox" id="flexCheckChecked" {{ optional($pivotData)->delete_access == '1' ? 'checked' : '' }} value="1">
+                      </td>
                     </tr>
                   @endforeach
                 @endforeach

@@ -111,10 +111,7 @@ class RoleController extends Controller
 
     // return redirect()
     //   ->route('roles.index')
-    //   ->with([
-    //     'success' => true,
-    //     'message' => 'Role updated successfully',
-    //   ]);
+    //   ->with('success', 'Role updated successfully');
     return redirect()->route('roles.index', [
       'success' => true,
       'message' => 'Role updated successfully',
