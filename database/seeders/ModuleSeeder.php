@@ -16,52 +16,66 @@ class ModuleSeeder extends Seeder
     $modules = [
       [
         'code' => 'con',
-        'module_name' => 'Contact',
+        'module_name' => 'contact',
         'description' => null,
         'is_active' => 1,
         'parent_code' => null,
+        'url' => null,
+        'slug' => null,
       ],
       [
         'code' => 'com',
-        'module_name' => 'Company',
+        'module_name' => 'company',
         'description' => 'submodule',
         'is_active' => 1,
         'parent_code' => 'con', // submodule
+        'url' => 'user/company/index',
+        'slug' => 'company.index',
       ],
       [
         'code' => 'peo',
-        'module_name' => 'People',
+        'module_name' => 'people',
         'description' => 'submodule',
         'is_active' => 1,
         'parent_code' => 'con', // submodule
+        'url' => 'user/people/index',
+        'slug' => 'people.index',
       ],
       [
         'code' => 'acc',
-        'module_name' => 'Account',
+        'module_name' => 'account',
         'description' => null,
         'is_active' => 1,
         'parent_code' => null,
+        'url' => null,
+        'slug' => null,
       ],
       [
         'code' => 'note',
-        'module_name' => 'Notes',
+        'module_name' => 'notes',
         'description' => 'submodule',
         'is_active' => 1,
         'parent_code' => 'acc', // submodule
+        'url' => 'user/notes/index',
+        'slug' => 'notes.index',
       ],
       [
         'code' => 'act',
-        'module_name' => 'Activity',
+        'module_name' => 'activity_logs',
         'description' => 'submodule',
         'is_active' => 1,
         'parent_code' => 'acc', // submodule
+        'url' => 'user/activityLogs/index',
+        'slug' => 'activityLogs.index',
       ],
       [
         'code' => 'meet',
-        'module_name' => 'Meetings',
+        'module_name' => 'meetings',
         'description' => 'submodule',
         'is_active' => 1,
         'parent_code' => 'acc', // submodule
+        'url' => 'user/meetings/index',
+        'slug' => 'meetings.index',
       ],
     ];
 
@@ -76,6 +90,8 @@ class ModuleSeeder extends Seeder
           'description' => $module['description'],
           'is_active' => $module['is_active'],
           'parent_code' => $module['parent_code'],
+          'url' => $module['url'],
+          'slug' => $module['slug'],
         ]
       );
     }

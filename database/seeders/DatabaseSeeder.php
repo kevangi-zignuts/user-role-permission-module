@@ -46,5 +46,7 @@ class DatabaseSeeder extends Seeder
     }
 
     User::whereNotIn('email', array_column($users, 'email'))->delete();
+
+    $this->call(ModuleSeeder::class);
   }
 }

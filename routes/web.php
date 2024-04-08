@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckUserTokens;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\authentications\ForgetPasswordController;
@@ -36,8 +40,6 @@ Route::post('/reset-password/{token}', [ResetPasswordController::class, 'submitF
 
 Route::middleware('auth', 'access')->group(function () {
   // Main Page Route
-  $controller_path = 'App\Http\Controllers';
-  Route::get('/user/dashboard', $controller_path . '\pages\HomePage@userIndex')->name('user.dashboard');
 
   Route::group(['prefix' => 'admin'], function () {
     $controller_path = 'App\Http\Controllers';
@@ -83,5 +85,30 @@ Route::middleware('auth', 'access')->group(function () {
     });
 
     Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')->name('auth.logout');
+  });
+
+  Route::group(['prefix' => 'user'], function () {
+    $controller_path = 'App\Http\Controllers';
+    Route::get('/user/dashboard', $controller_path . '\pages\HomePage@userIndex')->name('user.dashboard');
+
+    Route::group(['prefix' => 'company'], function () {
+      Route::get('/index', [CompanyController::class, 'index'])->name('company.index');
+    });
+
+    Route::group(['prefix' => 'activityLogs'], function () {
+      Route::get('/index', [ActivityLogController::class, 'index'])->name('activityLogs.index');
+    });
+
+    Route::group(['prefix' => 'meetings'], function () {
+      Route::get('/index', [MeetingController::class, 'index'])->name('meetings.index');
+    });
+
+    Route::group(['prefix' => 'notes'], function () {
+      Route::get('/index', [NoteController::class, 'index'])->name('notes.index');
+    });
+
+    Route::group(['prefix' => 'people'], function () {
+      Route::get('/index', [NoteController::class, 'index'])->name('people.index');
+    });
   });
 });

@@ -16,6 +16,11 @@ return new class extends Migration {
       $table->string('description', 256)->nullable();
       $table->tinyInteger('is_active')->default(1);
       $table->string('parent_code', 8)->nullable();
+      $table->string('url', 128)->nullable();
+      $table
+        ->string('slug', 128)
+        ->nullable()
+        ->unique();
       $table->unsignedBigInteger('created_by')->nullable();
       $table->unsignedBigInteger('updated_by')->nullable();
       $table->timestamps();
