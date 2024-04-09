@@ -90,7 +90,6 @@ Route::middleware('auth', 'access')->group(function () {
   });
 
   Route::group(['prefix' => 'user'], function () {
-    // $controller_path = 'App\Http\Controllers';
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/edit', [DashboardController::class, 'edit'])->name('user.edit');
     Route::post('/update', [DashboardController::class, 'update'])->name('user.update');

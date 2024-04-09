@@ -58,4 +58,26 @@ class User extends Authenticatable
       ->where('role_name', 'Admin')
       ->exists();
   }
+
+  // User.php
+  public function getModulesWithPermissions()
+  {
+    $modules = collect();
+
+    foreach ($this->role as $role) {
+      foreach ($role->permission as $permission) {
+        // $modules = $modules->merge($permission->module);
+        $modules = $modules->merge(
+          $permission->module->filter(function ($module) {
+            return $module->pivot->add_access ||
+              $module->pivot->edit_access ||
+              $module->pivot->delete_access ||
+              $module->pivot->view_access;
+          })
+        );
+      }
+    }
+    // dd($modules);
+    return $modules->unique('code');
+  }
 }
