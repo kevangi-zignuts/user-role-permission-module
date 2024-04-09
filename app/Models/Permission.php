@@ -50,14 +50,4 @@ class Permission extends Model
   {
     return $role->permissions->contains($this->id);
   }
-
-  // public function hasAccess($module, $permission)
-  // {
-  //   // Check if the permission exists for the given module
-  //   if ($this->module->contains($module)) {
-  //     return (bool) $this->module->find($module)->pivot->{$permission . '_access'};
-  //   }
-
-  //   return false;
-  // }
 }

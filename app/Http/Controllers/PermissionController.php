@@ -41,6 +41,7 @@ class PermissionController extends Controller
     $modules = Module::where('parent_code', null)
       ->where('is_active', 1)
       ->get();
+    // dd($modules);
     return view('admin.permissions.create', ['modules' => $modules]);
   }
 

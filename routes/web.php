@@ -113,6 +113,12 @@ Route::middleware('auth', 'access')->group(function () {
 
     Route::group(['prefix' => 'people'], function () {
       Route::get('/index', [PeopleController::class, 'index'])->name('people.index');
+      Route::get('/create', [PeopleController::class, 'create'])->name('people.create');
+      Route::post('/store', [PeopleController::class, 'store'])->name('people.store');
+      Route::get('/status/{id}', [PeopleController::class, 'updateStatus']);
+      Route::get('/edit/{id}', [PeopleController::class, 'edit'])->name('people.edit');
+      Route::post('/update/{id}', [PeopleController::class, 'update'])->name('people.update');
+      Route::get('/delete/{id}', [PeopleController::class, 'delete'])->name('people.delete');
     });
   });
 });
