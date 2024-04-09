@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\users;
 
+use App\Models\User;
 use App\Models\People;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +17,22 @@ class PeopleController extends Controller
    */
   public function index(Request $request)
   {
+    $user = User::findOrFail(Auth::id());
+    $modules = $user->getModulesWithPermissions();
+    $currentModule = null;
+    foreach ($modules as $module) {
+      if ($module->module_name == 'people') {
+        $currentModule = $module;
+      }
+    }
+    $currentModulePermissions = $currentModule->pivot;
+    $access = [
+      'add' => $currentModule->pivot->add_access,
+      'view' => $currentModule->pivot->view_access,
+      'edit' => $currentModule->pivot->edit_access,
+      'delete' => $currentModule->pivot->delete_access,
+    ];
+    // dd($access);
     $filter = $request->query('filter', 'all');
     $query = People::query();
 
@@ -30,7 +47,7 @@ class PeopleController extends Controller
       $query->where('name', 'like', '%' . $search . '%');
     }
     $peoples = $query->paginate(8);
-    return view('users.people.index', ['peoples' => $peoples, 'filter' => $filter]);
+    return view('users.people.index', ['peoples' => $peoples, 'filter' => $filter, 'access' => $access]);
   }
 
   /**

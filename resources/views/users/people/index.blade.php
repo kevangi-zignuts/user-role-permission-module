@@ -31,8 +31,11 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between m-5 mb-2">
-            <a href="{{ route('people.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
-                a People</a>
+            @if ($access['add'])
+                <a href="{{ route('people.create') }}" class="btn btn-primary"><i
+                        class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
+                    a People</a>
+            @endif
             <div class="search-container ">
                 <form action="{{ route('people.index') }}" method="GET">
                     <div class="input-group">
@@ -64,7 +67,9 @@
                             <th scope="col">Designation</th>
                             <th scope="col">Address</th>
                             <th>Status</th>
-                            <th scope="col">Action</th>
+                            @if ($access['edit'] || $access['delete'])
+                                <th scope="col">Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -86,18 +91,27 @@
                                             {{ $people->is_active == 1 ? 'checked' : '' }}>
                                     </div>
                                 </td>
-                                <td class="pt-0">
-                                    <div class="dropdown" style="position: absolute">
-                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                            data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('people.edit', ['id' => $people->id]) }}"><i class="ti ti-pencil me-1"></i>
-                                                Edit</a>
-                                            <button data-id="{{ $people->id }}" class="btn text-danger delete-class" type="button"><i
-                                                    class="ti ti-trash me-1"></i> Delete</button>
+                                @if ($access['edit'] || $access['delete'])
+                                    <td class="pt-0">
+                                        <div class="dropdown" style="position: absolute">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
+                                            <div class="dropdown-menu">
+                                                @if ($access['edit'])
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('people.edit', ['id' => $people->id]) }}"><i
+                                                            class="ti ti-pencil me-1"></i>
+                                                        Edit</a>
+                                                @endif
+                                                @if ($access['delete'])
+                                                    <button data-id="{{ $people->id }}"
+                                                        class="btn text-danger delete-class" type="button"><i
+                                                            class="ti ti-trash me-1"></i> Delete</button>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>
@@ -108,19 +122,19 @@
     </div>
 
 
-<!--/ Toast message -->
-<div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
-data-bs-delay="2000">
-<div class="toast-header">
-    <i class="ti ti-bell ti-xs me-2"></i>
-    <div class="me-auto fw-semibold">Success</div>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-</div>
-<div class="toast-body">
-    Hello, world! This is a toast message.
-</div>
-</div>
-<!--/ Toast message -->
+    <!--/ Toast message -->
+    <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
+        data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="ti ti-bell ti-xs me-2"></i>
+            <div class="me-auto fw-semibold">Success</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+    <!--/ Toast message -->
 
 @endsection
 
@@ -134,7 +148,7 @@ data-bs-delay="2000">
         document.addEventListener("DOMContentLoaded", function() {
             toggleSwitches = document.querySelectorAll('.toggle-class');
             toggleSwitches.forEach(function(toggleSwitch) {
-              toggleSwitch.addEventListener('click', function() {
+                toggleSwitch.addEventListener('click', function() {
                     Swal.fire({
                         title: 'Are you sure?',
                         text: "You won't be able to revert this!",
@@ -148,8 +162,8 @@ data-bs-delay="2000">
                         buttonsStyling: false
                     }).then(function(result) {
                         if (result.isConfirmed) {
-                          var status = $(toggleSwitch).prop('checked') == true ? 1 : 0;
-                          var id = $(toggleSwitch).data('id');
+                            var status = $(toggleSwitch).prop('checked') == true ? 1 : 0;
+                            var id = $(toggleSwitch).data('id');
                             $.ajax({
                                 type: "GET",
                                 dataType: "json",
@@ -179,78 +193,78 @@ data-bs-delay="2000">
 
 
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-      deleteButtons = document.querySelectorAll('.delete-class');
-      deleteButtons.forEach(function(deleteButton) {
-          deleteButton.addEventListener('click', function() {
-              var row = this.closest('tr');
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            deleteButtons = document.querySelectorAll('.delete-class');
+            deleteButtons.forEach(function(deleteButton) {
+                deleteButton.addEventListener('click', function() {
+                    var row = this.closest('tr');
 
-              Swal.fire({
-                  title: 'Are you sure?',
-                  text: "You won't be able to revert this!",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: 'Yes, delete it!',
-                  customClass: {
-                      confirmButton: 'btn btn-primary me-3',
-                      cancelButton: 'btn btn-label-secondary'
-                  },
-                  buttonsStyling: false
-              }).then(function(result) {
-                  if (result.isConfirmed) {
-                      var id = $(deleteButton).data('id');
-                      $.ajax({
-                          type: "GET",
-                          dataType: "json",
-                          url: "/user/people/delete/" + id,
-                          success: function(data) {
-                              if (data.success) {
-                                  row.remove();
-                                  Swal.fire({
-                                      icon: 'success',
-                                      title: 'Status Updated!!',
-                                      text: data.message,
-                                      customClass: {
-                                          confirmButton: 'btn btn-success'
-                                      }
-                                  });
-                              }
-                          }
-                      });
-                  }
-              });
-          })
-      });
-  });
-</script>
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var id = $(deleteButton).data('id');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: "/user/people/delete/" + id,
+                                success: function(data) {
+                                    if (data.success) {
+                                        row.remove();
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                })
+            });
+        });
+    </script>
 
-<!-- Script to handle toast display -->
-<script>
-  $(document).ready(function() {
-      // Function to get URL parameter by name
-      function getUrlParameter(name) {
-          name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-          var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-          var results = regex.exec(location.search);
-          return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-      };
+    <!-- Script to handle toast display -->
+    <script>
+        $(document).ready(function() {
+            // Function to get URL parameter by name
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            };
 
-      // Check if success parameter exists and is true
-      var successParam = getUrlParameter('success');
-      if (successParam == '1') {
-          var messageParam = getUrlParameter('message');
-          var toastAnimationExample = document.querySelector('.toast-ex');
-          var selectedType = 'text-success';
-          var selectedAnimation = 'animate__tada';
-          toastAnimationExample.classList.add(selectedAnimation);
-          toastAnimationExample.querySelector('.ti').classList.add(selectedType);
-          var Message = document.querySelector('.toast-body');
-          Message.innerText = messageParam;
-          toastAnimation = new bootstrap.Toast(toastAnimationExample);
-          toastAnimation.show();
-      }
-  });
-</script>
+            // Check if success parameter exists and is true
+            var successParam = getUrlParameter('success');
+            if (successParam == '1') {
+                var messageParam = getUrlParameter('message');
+                var toastAnimationExample = document.querySelector('.toast-ex');
+                var selectedType = 'text-success';
+                var selectedAnimation = 'animate__tada';
+                toastAnimationExample.classList.add(selectedAnimation);
+                toastAnimationExample.querySelector('.ti').classList.add(selectedType);
+                var Message = document.querySelector('.toast-body');
+                Message.innerText = messageParam;
+                toastAnimation = new bootstrap.Toast(toastAnimationExample);
+                toastAnimation.show();
+            }
+        });
+    </script>
 
 @endsection

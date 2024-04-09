@@ -69,10 +69,7 @@ class User extends Authenticatable
         // $modules = $modules->merge($permission->module);
         $modules = $modules->merge(
           $permission->module->filter(function ($module) {
-            return $module->pivot->add_access ||
-              $module->pivot->edit_access ||
-              $module->pivot->delete_access ||
-              $module->pivot->view_access;
+            return $module->pivot->add_access || $module->pivot->view_access;
           })
         );
       }
