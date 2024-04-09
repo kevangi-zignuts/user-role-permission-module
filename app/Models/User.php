@@ -63,9 +63,9 @@ class User extends Authenticatable
   public function getModulesWithPermissions()
   {
     $modules = collect();
-
     foreach ($this->role as $role) {
       foreach ($role->permission as $permission) {
+        // dd($permission->module);
         // $modules = $modules->merge($permission->module);
         $modules = $modules->merge(
           $permission->module->filter(function ($module) {
@@ -76,5 +76,26 @@ class User extends Authenticatable
     }
     // dd($modules);
     return $modules->unique('code');
+  }
+  public function getModuleWithPermissions()
+  {
+    $modules = collect();
+    foreach ($this->role as $role) {
+      foreach ($role->permission as $permission) {
+        $modules = $modules->merge($permission->module);
+        // dd($modules);
+        $modules = $modules->merge(
+          $permission->module->filter(function ($module) {
+            return $module->pivot->add_access ||
+              $module->pivot->view_access ||
+              $module->pivot->edit_access ||
+              $module->pivot->delete_access;
+          })
+        );
+      }
+    }
+    // dd($modules, $modules->unique('code'));
+    return $modules;
+    // return $modules->unique('code');
   }
 }

@@ -16,10 +16,23 @@ return new class extends Migration {
       $table->string('owner_name', 64);
       $table->string('industry', 64);
       $table->unsignedBigInteger('user_id');
+      $table->unsignedBigInteger('created_by')->nullable();
+      $table->unsignedBigInteger('updated_by')->nullable();
       $table->timestamps();
+      $table->softDeletes();
 
       $table
         ->foreign('user_id')
+        ->references('id')
+        ->on('users')
+        ->onDelete('cascade');
+      $table
+        ->foreign('created_by')
+        ->references('id')
+        ->on('users')
+        ->onDelete('cascade');
+      $table
+        ->foreign('updated_by')
         ->references('id')
         ->on('users')
         ->onDelete('cascade');

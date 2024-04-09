@@ -97,6 +97,8 @@ Route::middleware('auth', 'access')->group(function () {
 
     Route::group(['prefix' => 'company'], function () {
       Route::get('/index', [CompanyController::class, 'index'])->name('company.index');
+      Route::get('/create', [CompanyController::class, 'create'])->name('company.create');
+      Route::post('/store', [CompanyController::class, 'store'])->name('company.store');
     });
 
     Route::group(['prefix' => 'activityLogs'], function () {
