@@ -109,6 +109,12 @@ Route::middleware('auth', 'access')->group(function () {
 
     Route::group(['prefix' => 'activityLogs'], function () {
       Route::get('/index', [ActivityLogController::class, 'index'])->name('activityLogs.index');
+      Route::get('/create', [ActivityLogController::class, 'create'])->name('activityLogs.create');
+      Route::post('/store', [ActivityLogController::class, 'store'])->name('activityLogs.store');
+      Route::get('/status/{id}', [ActivityLogController::class, 'updateStatus']);
+      Route::get('/edit/{id}', [ActivityLogController::class, 'edit'])->name('activityLogs.edit');
+      Route::post('/update/{id}', [ActivityLogController::class, 'update'])->name('activityLogs.update');
+      Route::get('/delete/{id}', [ActivityLogController::class, 'delete'])->name('activityLogs.delete');
     });
 
     Route::group(['prefix' => 'meetings'], function () {
