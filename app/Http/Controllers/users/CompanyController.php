@@ -7,6 +7,7 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class CompanyController extends Controller
 {
@@ -89,5 +90,58 @@ class CompanyController extends Controller
       'success' => true,
       'message' => 'Company added successfully!',
     ]);
+  }
+
+  /**
+   * show a Form for edit the people details
+   */
+  public function edit($id)
+  {
+    $company = Company::findOrFail($id);
+    return view('users.company.edit', ['company' => $company]);
+  }
+
+  /**
+   * update the people's details
+   */
+  public function update(Request $request, $id)
+  {
+    $request->validate([
+      'company_name' => 'required|string|max:255',
+      'owner_name' => 'required|string|max:255',
+      'industry' => 'required|string|max:255',
+    ]);
+
+    $company = Company::findOrFail($id);
+    $company->update($request->only(['company_name', 'owner_name', 'industry']));
+
+    // return redirect()
+    //   ->route('roles.index')
+    //   ->with('success', 'Role updated successfully');
+    return redirect()->route('company.index', [
+      'success' => true,
+      'message' => 'Company Details updated successfully',
+    ]);
+  }
+
+  /**
+   * delete the people data
+   */
+  public function delete($id)
+  {
+    $company = Company::find($id);
+    if (!$company) {
+      // return redirect()
+      //   ->route('roles.index')
+      //   ->with('fail', 'We can not found data');
+    }
+    $company->delete();
+    return Response::json(
+      [
+        'success' => true,
+        'message' => "Successfully company's data deleted",
+      ],
+      200
+    );
   }
 }

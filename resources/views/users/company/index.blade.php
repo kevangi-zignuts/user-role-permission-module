@@ -4,12 +4,14 @@
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'User Dashboard')
+@section('title', 'Company Dashboard')
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -18,11 +20,7 @@
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endsection
 
 @section('content')
@@ -35,7 +33,7 @@
                     a Company</a>
             @endif
             <div class="search-container ">
-                <form action="{{ route('people.index') }}" method="GET">
+                <form action="{{ route('company.index') }}" method="GET">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search Role..." name="search"
                             value="">
@@ -77,7 +75,7 @@
                                             <div class="dropdown-menu">
                                                 @if ($access['edit'])
                                                     <a class="dropdown-item"
-                                                        href="{{ route('people.edit', ['id' => $company->id]) }}"><i
+                                                        href="{{ route('company.edit', ['id' => $company->id]) }}"><i
                                                             class="ti ti-pencil me-1"></i>
                                                         Edit</a>
                                                 @endif
@@ -118,5 +116,59 @@
 
 
 
+
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
+    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          deleteButtons = document.querySelectorAll('.delete-class');
+          deleteButtons.forEach(function(deleteButton) {
+              deleteButton.addEventListener('click', function() {
+                  var row = this.closest('tr');
+
+                  Swal.fire({
+                      title: 'Are you sure?',
+                      text: "You won't be able to revert this!",
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Yes, delete it!',
+                      customClass: {
+                          confirmButton: 'btn btn-primary me-3',
+                          cancelButton: 'btn btn-label-secondary'
+                      },
+                      buttonsStyling: false
+                  }).then(function(result) {
+                      if (result.isConfirmed) {
+                          var id = $(deleteButton).data('id');
+                          $.ajax({
+                              type: "GET",
+                              dataType: "json",
+                              url: "/user/company/delete/" + id,
+                              success: function(data) {
+                                  if (data.success) {
+                                      row.remove();
+                                      Swal.fire({
+                                          icon: 'success',
+                                          title: 'Status Updated!!',
+                                          text: data.message,
+                                          customClass: {
+                                              confirmButton: 'btn btn-success'
+                                          }
+                                      });
+                                  }
+                              }
+                          });
+                      }
+                  });
+              })
+          });
+      });
+  </script>
 
 @endsection

@@ -99,6 +99,9 @@ Route::middleware('auth', 'access')->group(function () {
       Route::get('/index', [CompanyController::class, 'index'])->name('company.index');
       Route::get('/create', [CompanyController::class, 'create'])->name('company.create');
       Route::post('/store', [CompanyController::class, 'store'])->name('company.store');
+      Route::get('/edit/{id}', [CompanyController::class, 'edit'])->name('company.edit');
+      Route::post('/update/{id}', [CompanyController::class, 'update'])->name('company.update');
+      Route::get('/delete/{id}', [CompanyController::class, 'delete'])->name('company.delete');
     });
 
     Route::group(['prefix' => 'activityLogs'], function () {

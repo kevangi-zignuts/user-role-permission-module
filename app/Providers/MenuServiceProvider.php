@@ -23,13 +23,11 @@ class MenuServiceProvider extends ServiceProvider
   {
     view()->composer(['admin.*', 'content.*'], function ($view) {
       $menu = $this->getAdminMenu();
-      // dd($menu);
       $view->with('menuData', $menu);
     });
 
     view()->composer(['users.*'], function ($view) {
       $menu = $this->getUserMenu();
-      // dd($this->getUserMenu());
       $view->with('menuData', $menu);
     });
   }
