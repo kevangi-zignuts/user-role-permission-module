@@ -40,7 +40,7 @@ Route::post('/invite/reset-password/{token}', [ResetPasswordController::class, '
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'resetPasswordForm'])->name('resetPasswordForm');
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'submitForm'])->name('resetPasswordSubmitForm');
 
-Route::middleware('auth', 'access')->group(function () {
+Route::middleware('auth', 'access', 'adminCheck')->group(function () {
   // Main Page Route
 
   Route::group(['prefix' => 'admin'], function () {
@@ -85,10 +85,13 @@ Route::middleware('auth', 'access')->group(function () {
       Route::post('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('users.resetPassword');
       Route::get('/forced-logout/{id}', [UserController::class, 'forceLogout'])->name('users.forceLogout');
     });
-
-    Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')->name('auth.logout');
   });
+});
+Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')
+  ->name('auth.logout')
+  ->middleware('auth', 'access');
 
+Route::middleware('auth', 'access')->group(function () {
   Route::group(['prefix' => 'user'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/edit', [DashboardController::class, 'edit'])->name('user.edit');
@@ -114,6 +117,11 @@ Route::middleware('auth', 'access')->group(function () {
 
     Route::group(['prefix' => 'notes'], function () {
       Route::get('/index', [NoteController::class, 'index'])->name('notes.index');
+      Route::get('/create', [NoteController::class, 'create'])->name('notes.create');
+      Route::post('/store', [NoteController::class, 'store'])->name('notes.store');
+      Route::get('/edit/{id}', [NoteController::class, 'edit'])->name('notes.edit');
+      Route::post('/update/{id}', [NoteController::class, 'update'])->name('notes.update');
+      Route::get('/delete/{id}', [NoteController::class, 'delete'])->name('notes.delete');
     });
 
     Route::group(['prefix' => 'people'], function () {

@@ -52,7 +52,7 @@ class CompanyController extends Controller
     // search the user
     $search = $request->input('search');
     if (!empty($search)) {
-      $query->where('name', 'like', '%' . $search . '%');
+      $query->where('company_name', 'like', '%' . $search . '%');
     }
     $companies = $query->paginate(8);
     return view('users.company.index', ['companies' => $companies, 'access' => $access]);
