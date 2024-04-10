@@ -113,6 +113,12 @@ Route::middleware('auth', 'access')->group(function () {
 
     Route::group(['prefix' => 'meetings'], function () {
       Route::get('/index', [MeetingController::class, 'index'])->name('meetings.index');
+      Route::get('/create', [MeetingController::class, 'create'])->name('meetings.create');
+      Route::post('/store', [MeetingController::class, 'store'])->name('meetings.store');
+      Route::get('/status/{id}', [MeetingController::class, 'updateStatus']);
+      Route::get('/edit/{id}', [MeetingController::class, 'edit'])->name('meetings.edit');
+      Route::post('/update/{id}', [MeetingController::class, 'update'])->name('meetings.update');
+      Route::get('/delete/{id}', [MeetingController::class, 'delete'])->name('meetings.delete');
     });
 
     Route::group(['prefix' => 'notes'], function () {

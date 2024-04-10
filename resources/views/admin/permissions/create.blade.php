@@ -67,7 +67,7 @@
                                                     value="1">
                                             </td>
                                             <td>
-                                                <input type="hidden" name="modules[{{ $module->code }}][edit_access]"
+                                                <input type="hidden" name="modules[{{ $module->code }}][delete_access]"
                                                     value="0">
                                                 <input class="form-check-input"
                                                     name="modules[{{ $module->code }}][delete_access]" type="checkbox"
@@ -104,7 +104,7 @@
                                                     </td>
                                                     <td>
                                                         <input type="hidden"
-                                                            name="modules[{{ $module->code }}][edit_access]"
+                                                            name="modules[{{ $submodule->code }}][delete_access]"
                                                             value="0">
                                                         <input class="form-check-input"
                                                             name="modules[{{ $submodule->code }}][delete_access]"
