@@ -142,6 +142,7 @@ class MenuServiceProvider extends ServiceProvider
 
     // Format the menu
     $menu = [];
+    // dd($staticMenuData);
     foreach ($staticMenuData as $staticMenuItem) {
       $menu[] = (object) ['menu' => $staticMenuItem];
     }

@@ -66,7 +66,6 @@
                         @endphp
 
                         {{-- main menu --}}
-
                         <li class="menu-item {{ $activeClass }}">
 
                             <a href="{{ isset($menu['url']) ? url($menu['url']) : 'javascript:void(0);' }}"

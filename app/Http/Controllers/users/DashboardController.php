@@ -25,7 +25,6 @@ class DashboardController extends Controller
     $hashedPasswordFromDB = $user->password;
     $currentPassword = $request['current_password'];
     if (Hash::check($currentPassword, $hashedPasswordFromDB)) {
-      // Passwords match
       $password = Hash::make($request['password']);
       $user->update(['password' => $password]);
       $user->tokens()->delete();

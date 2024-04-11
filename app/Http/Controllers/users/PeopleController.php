@@ -17,58 +17,13 @@ class PeopleController extends Controller
    */
   public function index(Request $request)
   {
-    $user = User::findOrFail(Auth::id());
-    $modules = $user->getModuleWithPermissions();
-    // dd($modules);
-    $currentModules = [];
-    foreach ($modules as $module) {
-      if ($module->module_name == 'people') {
-        $currentModules[] = $module;
-      }
-    }
     $access = [
-      'add' => 0,
-      'view' => 0,
-      'edit' => 0,
-      'delete' => 0,
+      'add' => Auth::user()->hasPermission('peo', 'add_access'),
+      'view' => Auth::user()->hasPermission('peo', 'view_access'),
+      'edit' => Auth::user()->hasPermission('peo', 'edit_access'),
+      'delete' => Auth::user()->hasPermission('peo', 'delete_access'),
     ];
-    foreach ($currentModules as $currentModule) {
-      if ($currentModule->pivot->add_access == '1') {
-        $access['add'] = 1;
-      }
-      if ($currentModule->pivot->view_access == '1') {
-        $access['view'] = 1;
-      }
-      if ($currentModule->pivot->edit_access == '1') {
-        $access['edit'] = 1;
-      }
-      if ($currentModule->pivot->delete_access == '1') {
-        $access['delete'] = 1;
-      }
-      // dd($currentModules);
-    }
-    // foreach ($currentModules as $$currentModule) {
-    //   if ($currentModule->pivot->add_access == '1') {
-    //     $access['add'] = 1;
-    //   }
-    //   if ($currentModule->pivot->view_access == '1') {
-    //     $access['view'] = 1;
-    //   }
-    //   if ($currentModule->pivot->edit_access == '1') {
-    //     $access['edit'] = 1;
-    //   }
-    //   if ($currentModule->pivot->delete_access == '1') {
-    //     $access['delete'] = 1;
-    //   }
-    // }
-    // $currentModulePermissions = $currentModule->pivot;
-    // $access = [
-    //   'add' => $currentModule->pivot->add_access,
-    //   'view' => $currentModule->pivot->view_access,
-    //   'edit' => $currentModule->pivot->edit_access,
-    //   'delete' => $currentModule->pivot->delete_access,
-    // ];
-    // dd($access);
+
     $filter = $request->query('filter', 'all');
     $query = People::query();
 

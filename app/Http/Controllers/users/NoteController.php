@@ -16,35 +16,13 @@ class NoteController extends Controller
    */
   public function index(Request $request)
   {
-    $user = User::findOrFail(Auth::id());
-    $modules = $user->getModuleWithPermissions();
-    $currentModules = [];
-    foreach ($modules as $module) {
-      if ($module->module_name == 'notes') {
-        $currentModules[] = $module;
-      }
-    }
     $access = [
-      'add' => 0,
-      'view' => 0,
-      'edit' => 0,
-      'delete' => 0,
+      'add' => Auth::user()->hasPermission('note', 'add_access'),
+      'view' => Auth::user()->hasPermission('note', 'view_access'),
+      'edit' => Auth::user()->hasPermission('note', 'edit_access'),
+      'delete' => Auth::user()->hasPermission('note', 'delete_access'),
     ];
-    foreach ($currentModules as $currentModule) {
-      if ($currentModule->pivot->add_access == '1') {
-        $access['add'] = 1;
-      }
-      if ($currentModule->pivot->view_access == '1') {
-        $access['view'] = 1;
-      }
-      if ($currentModule->pivot->edit_access == '1') {
-        $access['edit'] = 1;
-      }
-      if ($currentModule->pivot->delete_access == '1') {
-        $access['delete'] = 1;
-      }
-      // dd($currentModules);
-    }
+
     $filter = $request->query('filter', 'all');
     $query = Note::query();
 

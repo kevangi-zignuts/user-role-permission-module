@@ -113,7 +113,7 @@
                                                     );
                                                     $pivotData = $moduleData ? $moduleData->pivot : null;
                                                 @endphp
-                                                <tr>
+                                                <tr class="submodule">
                                                     <td class="p-5 pb-0 pt-0">{{ $submodule->module_name }}</td>
                                                     <td>
                                                         <input type="hidden"
@@ -178,4 +178,46 @@
     </div>
 
 
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            $('input[type="checkbox"]').change(function() {
+                var $checkbox = $(this);
+                var module = $checkbox.attr('name');
+                var module_access = module.substring(module.lastIndexOf("[") + 1, module
+                    .lastIndexOf("]"));
+                var isSubmodule = $checkbox.closest('tr').hasClass(
+                    'submodule'); // Check if it's a submodule
+                // console.log(isSubmodule);
+
+                if (isSubmodule) {
+                    // Find the main module checkbox
+                    var $mainModuleRow = $checkbox.closest('tr').prevAll('tr:not(.submodule)').first();
+
+                    var nameAttribute = $mainModuleRow.find('input[type="checkbox"]').attr('name');
+
+                    var moduleCode = nameAttribute.substring(nameAttribute.indexOf("[") + 1, nameAttribute
+                        .indexOf("]"));
+
+                    var mainModuleCheckbox = document.querySelector('input[name="modules[' +
+                        moduleCode +
+                        '][view_access]"][type="checkbox"]');
+
+                    if (mainModuleCheckbox && !mainModuleCheckbox.checked) {
+                        mainModuleCheckbox.checked = true;
+                    }
+
+                    if (module_access !== 'view_access') {
+                        mainModuleCheckbox = document.querySelector('input[name="modules[' +
+                            moduleCode +
+                            '][' + module_access + ']"][type="checkbox"]');
+                        if (mainModuleCheckbox && !mainModuleCheckbox.checked) {
+                            mainModuleCheckbox.checked = true;
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

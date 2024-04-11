@@ -58,11 +58,9 @@ class User extends Authenticatable
     $modules = collect();
     foreach ($this->role as $role) {
       foreach ($role->permission as $permission) {
-        // dd($permission->module);
-        // $modules = $modules->merge($permission->module);
         $modules = $modules->merge(
           $permission->module->filter(function ($module) {
-            return $module->pivot->add_access || $module->pivot->view_access;
+            return $module->pivot->view_access;
           })
         );
       }
@@ -70,43 +68,6 @@ class User extends Authenticatable
     // dd($modules);
     return $modules->unique('code');
   }
-  public function getModuleWithPermissions()
-  {
-    $modules = collect();
-    foreach ($this->role as $role) {
-      foreach ($role->permission as $permission) {
-        $modules = $modules->merge($permission->module);
-        // dd($modules);
-        $modules = $modules->merge(
-          $permission->module->filter(function ($module) {
-            return $module->pivot->add_access ||
-              $module->pivot->view_access ||
-              $module->pivot->edit_access ||
-              $module->pivot->delete_access;
-          })
-        );
-      }
-    }
-    // dd($modules, $modules->unique('code'));
-    return $modules;
-    // return $modules->unique('code');
-  }
-
-  // public function hasPermission($moduleCode, $accessType)
-  // {
-  //   $permission = $this->role()
-  //     ->whereHas('permission.module', function ($query) use ($moduleCode, $accessType) {
-  //       $query->where('module_code', $moduleCode)->where($accessType, true);
-  //     })
-  //     ->exists();
-
-  //   // Check if any of the user's roles have permissions for the specified module and access type
-  //   return $this->role()
-  //     ->whereHas('permission.module', function ($query) use ($moduleCode, $accessType) {
-  //       $query->where('module_code', $moduleCode)->where($accessType, true);
-  //     })
-  //     ->exists();
-  // }
 
   public function hasPermission($moduleCode, $accessType)
   {

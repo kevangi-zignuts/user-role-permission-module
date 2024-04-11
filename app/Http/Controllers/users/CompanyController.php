@@ -16,36 +16,12 @@ class CompanyController extends Controller
    */
   public function index(Request $request)
   {
-    $user = User::findOrFail(Auth::id());
-    $modules = $user->getModuleWithPermissions();
-    // dd($modules);
-    $currentModules = [];
-    foreach ($modules as $module) {
-      if ($module->module_name == 'company') {
-        $currentModules[] = $module;
-      }
-    }
     $access = [
-      'add' => 0,
-      'view' => 0,
-      'edit' => 0,
-      'delete' => 0,
+      'add' => Auth::user()->hasPermission('com', 'add_access'),
+      'view' => Auth::user()->hasPermission('com', 'view_access'),
+      'edit' => Auth::user()->hasPermission('com', 'edit_access'),
+      'delete' => Auth::user()->hasPermission('com', 'delete_access'),
     ];
-    foreach ($currentModules as $currentModule) {
-      if ($currentModule->pivot->add_access == '1') {
-        $access['add'] = 1;
-      }
-      if ($currentModule->pivot->view_access == '1') {
-        $access['view'] = 1;
-      }
-      if ($currentModule->pivot->edit_access == '1') {
-        $access['edit'] = 1;
-      }
-      if ($currentModule->pivot->delete_access == '1') {
-        $access['delete'] = 1;
-      }
-      // dd($currentModules);
-    }
 
     $query = Company::query();
 
