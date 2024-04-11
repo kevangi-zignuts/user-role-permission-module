@@ -99,51 +99,97 @@ Route::middleware('auth', 'access')->group(function () {
     Route::post('/resetPassword', [DashboardController::class, 'resetPassword'])->name('user.resetPassword');
 
     Route::group(['prefix' => 'company'], function () {
-      Route::get('/index', [CompanyController::class, 'index'])->name('company.index');
-      Route::get('/create', [CompanyController::class, 'create'])->name('company.create');
+      Route::get('/index', [CompanyController::class, 'index'])
+        ->name('company.index')
+        ->middleware('permission:' . 'com' . ',view_access');
+      Route::get('/create', [CompanyController::class, 'create'])
+        ->name('company.create')
+        ->middleware('permission:' . 'com' . ',add_access');
       Route::post('/store', [CompanyController::class, 'store'])->name('company.store');
-      Route::get('/edit/{id}', [CompanyController::class, 'edit'])->name('company.edit');
+      Route::get('/edit/{id}', [CompanyController::class, 'edit'])
+        ->name('company.edit')
+        ->middleware('permission:' . 'com' . ',edit_access');
       Route::post('/update/{id}', [CompanyController::class, 'update'])->name('company.update');
-      Route::get('/delete/{id}', [CompanyController::class, 'delete'])->name('company.delete');
+      Route::get('/delete/{id}', [CompanyController::class, 'delete'])
+        ->name('company.delete')
+        ->middleware('permission:' . 'com' . ',delete_access');
     });
 
     Route::group(['prefix' => 'activityLogs'], function () {
-      Route::get('/index', [ActivityLogController::class, 'index'])->name('activityLogs.index');
-      Route::get('/create', [ActivityLogController::class, 'create'])->name('activityLogs.create');
+      Route::get('/index', [ActivityLogController::class, 'index'])
+        ->name('activityLogs.index')
+        ->middleware('permission:' . 'act' . ',view_access');
+      Route::get('/create', [ActivityLogController::class, 'create'])
+        ->name('activityLogs.create')
+        ->middleware('permission:' . 'act' . ',add_access');
       Route::post('/store', [ActivityLogController::class, 'store'])->name('activityLogs.store');
-      Route::get('/status/{id}', [ActivityLogController::class, 'updateStatus']);
-      Route::get('/edit/{id}', [ActivityLogController::class, 'edit'])->name('activityLogs.edit');
+      Route::get('/status/{id}', [ActivityLogController::class, 'updateStatus'])->middleware(
+        'permission:' . 'act' . ',view_access'
+      );
+      Route::get('/edit/{id}', [ActivityLogController::class, 'edit'])
+        ->name('activityLogs.edit')
+        ->middleware('permission:' . 'act' . ',edit_access');
       Route::post('/update/{id}', [ActivityLogController::class, 'update'])->name('activityLogs.update');
-      Route::get('/delete/{id}', [ActivityLogController::class, 'delete'])->name('activityLogs.delete');
+      Route::get('/delete/{id}', [ActivityLogController::class, 'delete'])
+        ->name('activityLogs.delete')
+        ->middleware('permission:' . 'act' . ',delete_access');
     });
 
     Route::group(['prefix' => 'meetings'], function () {
-      Route::get('/index', [MeetingController::class, 'index'])->name('meetings.index');
-      Route::get('/create', [MeetingController::class, 'create'])->name('meetings.create');
+      Route::get('/index', [MeetingController::class, 'index'])
+        ->name('meetings.index')
+        ->middleware('permission:' . 'meet' . ',view_access');
+      Route::get('/create', [MeetingController::class, 'create'])
+        ->name('meetings.create')
+        ->middleware('permission:' . 'meet' . ',add_access');
       Route::post('/store', [MeetingController::class, 'store'])->name('meetings.store');
-      Route::get('/status/{id}', [MeetingController::class, 'updateStatus']);
-      Route::get('/edit/{id}', [MeetingController::class, 'edit'])->name('meetings.edit');
+      Route::get('/status/{id}', [MeetingController::class, 'updateStatus'])->middleware(
+        'permission:' . 'meet' . ',view_access'
+      );
+      Route::get('/edit/{id}', [MeetingController::class, 'edit'])
+        ->name('meetings.edit')
+        ->middleware('permission:' . 'meet' . ',edit_access');
       Route::post('/update/{id}', [MeetingController::class, 'update'])->name('meetings.update');
-      Route::get('/delete/{id}', [MeetingController::class, 'delete'])->name('meetings.delete');
+      Route::get('/delete/{id}', [MeetingController::class, 'delete'])
+        ->name('meetings.delete')
+        ->middleware('permission:' . 'meet' . ',delete_access');
     });
 
     Route::group(['prefix' => 'notes'], function () {
-      Route::get('/index', [NoteController::class, 'index'])->name('notes.index');
-      Route::get('/create', [NoteController::class, 'create'])->name('notes.create');
+      Route::get('/index', [NoteController::class, 'index'])
+        ->name('notes.index')
+        ->middleware('permission:' . 'note' . ',view_access');
+      Route::get('/create', [NoteController::class, 'create'])
+        ->name('notes.create')
+        ->middleware('permission:' . 'note' . ',add_access');
       Route::post('/store', [NoteController::class, 'store'])->name('notes.store');
-      Route::get('/edit/{id}', [NoteController::class, 'edit'])->name('notes.edit');
+      Route::get('/edit/{id}', [NoteController::class, 'edit'])
+        ->name('notes.edit')
+        ->middleware('permission:' . 'note' . ',edit_access');
       Route::post('/update/{id}', [NoteController::class, 'update'])->name('notes.update');
-      Route::get('/delete/{id}', [NoteController::class, 'delete'])->name('notes.delete');
+      Route::get('/delete/{id}', [NoteController::class, 'delete'])
+        ->name('notes.delete')
+        ->middleware('permission:' . 'note' . ',delete_access');
     });
 
     Route::group(['prefix' => 'people'], function () {
-      Route::get('/index', [PeopleController::class, 'index'])->name('people.index');
-      Route::get('/create', [PeopleController::class, 'create'])->name('people.create');
+      Route::get('/index', [PeopleController::class, 'index'])
+        ->name('people.index')
+        ->middleware('permission:' . 'peo' . ',view_access');
+      Route::get('/create', [PeopleController::class, 'create'])
+        ->name('people.create')
+        ->middleware('permission:' . 'peo' . ',add_access');
       Route::post('/store', [PeopleController::class, 'store'])->name('people.store');
-      Route::get('/status/{id}', [PeopleController::class, 'updateStatus']);
-      Route::get('/edit/{id}', [PeopleController::class, 'edit'])->name('people.edit');
+      Route::get('/status/{id}', [PeopleController::class, 'updateStatus'])->middleware(
+        'permission:' . 'peo' . ',view_access'
+      );
+      Route::get('/edit/{id}', [PeopleController::class, 'edit'])
+        ->name('people.edit')
+        ->middleware('permission:' . 'peo' . ',edit_access');
       Route::post('/update/{id}', [PeopleController::class, 'update'])->name('people.update');
-      Route::get('/delete/{id}', [PeopleController::class, 'delete'])->name('people.delete');
+      Route::get('/delete/{id}', [PeopleController::class, 'delete'])
+        ->name('people.delete')
+        ->middleware('permission:' . 'peo' . ',delete_access');
     });
   });
 });

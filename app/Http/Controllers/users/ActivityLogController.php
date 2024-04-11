@@ -16,6 +16,48 @@ class ActivityLogController extends Controller
    */
   public function index(Request $request)
   {
+    // $user = User::with([
+    //   'role.permission.module' => function ($query) {
+    //     $query
+    //       ->wherePivot('add_access', true)
+    //       ->orWherePivot('view_access', true)
+    //       ->orWherePivot('edit_access', true)
+    //       ->orWherePivot('delete_access', true);
+    //   },
+    // ])->find(Auth::id());
+
+    // dd($user);
+
+    // $userModules = $user->role->flatMap->permission
+    //   ->flatMap(function ($permission) {
+    //     return $permission->module ?? [];
+    //   })
+    //   ->unique('pivot.module_code');
+
+    // dd($userModules);
+
+    // $modulesWithPermission = $userModules->mapWithKeys(function ($module) {
+    //   return [
+    //     $module->pivot->module_code => [
+    //       'module_name' => $module->module_name,
+    //       'permissions' => [
+    //         [
+    //           'permission_name' => $module->pivot->permission_name,
+    //           'add_access' => $module->pivot->add_access,
+    //           'view_access' => $module->pivot->view_access,
+    //           'edit_access' => $module->pivot->edit_access,
+    //           'delete_access' => $module->pivot->delete_access,
+    //         ],
+    //       ],
+    //     ],
+    //   ];
+    // });
+
+    // $user = Auth::user(); // Retrieve the authenticated user
+    // $result = $user->hasPermission('acc', 'delete_access');
+    // dd($result);
+
+    // code start
     $user = User::findOrFail(Auth::id());
     $modules = $user->getModuleWithPermissions();
 
@@ -46,6 +88,7 @@ class ActivityLogController extends Controller
       }
     }
 
+    // dd($access);
     $filter = $request->query('filter', 'all');
     $query = ActivityLog::query();
 

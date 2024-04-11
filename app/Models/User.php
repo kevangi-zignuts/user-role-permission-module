@@ -52,13 +52,6 @@ class User extends Authenticatable
     return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
   }
 
-  public function isAdmin()
-  {
-    return $this->role()
-      ->where('role_name', 'Admin')
-      ->exists();
-  }
-
   // User.php
   public function getModulesWithPermissions()
   {
@@ -97,5 +90,41 @@ class User extends Authenticatable
     // dd($modules, $modules->unique('code'));
     return $modules;
     // return $modules->unique('code');
+  }
+
+  // public function hasPermission($moduleCode, $accessType)
+  // {
+  //   $permission = $this->role()
+  //     ->whereHas('permission.module', function ($query) use ($moduleCode, $accessType) {
+  //       $query->where('module_code', $moduleCode)->where($accessType, true);
+  //     })
+  //     ->exists();
+
+  //   // Check if any of the user's roles have permissions for the specified module and access type
+  //   return $this->role()
+  //     ->whereHas('permission.module', function ($query) use ($moduleCode, $accessType) {
+  //       $query->where('module_code', $moduleCode)->where($accessType, true);
+  //     })
+  //     ->exists();
+  // }
+
+  public function hasPermission($moduleCode, $accessType)
+  {
+    // Get all roles of the user
+    $roles = $this->role()
+      ->with('permission.module')
+      ->get();
+
+    foreach ($roles as $role) {
+      foreach ($role->permission as $permission) {
+        foreach ($permission->module as $module) {
+          if ($module->code === $moduleCode && $module->pivot->$accessType) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false; // User does not have permission for the specified module and access type
   }
 }
