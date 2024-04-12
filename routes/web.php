@@ -88,7 +88,7 @@ Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')
   ->name('auth.logout')
   ->middleware('auth', 'access');
 
-Route::middleware('auth', 'access')->group(function () {
+Route::middleware('auth', 'access', 'isUser')->group(function () {
   Route::group(['prefix' => 'user'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/edit', [DashboardController::class, 'edit'])->name('user.edit');

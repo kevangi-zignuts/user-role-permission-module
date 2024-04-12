@@ -52,22 +52,6 @@ class User extends Authenticatable
     return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
   }
 
-  // User.php
-  public function getModulesWithPermissions()
-  {
-    $modules = collect();
-    foreach ($this->role as $role) {
-      foreach ($role->permission as $permission) {
-        $modules = $modules->merge(
-          $permission->module->filter(function ($module) {
-            return $module->pivot->view_access;
-          })
-        );
-      }
-    }
-    return $modules->unique('code');
-  }
-
   public function hasPermission($moduleCode, $accessType)
   {
     // Get all roles of the user

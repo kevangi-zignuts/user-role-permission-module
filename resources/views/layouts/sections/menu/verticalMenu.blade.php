@@ -26,7 +26,7 @@
 
     <ul class="menu-inner py-1">
         @if (!empty($menuData))
-            {{-- @dd($menuData) --}}
+            {{-- @dd($menuData[0]->menu) --}}
             @foreach ($menuData[0]->menu as $menu)
                 {{-- adding active and open class if child is active --}}
                 {{-- menu headers --}}
@@ -75,7 +75,7 @@
                                 @isset($menu['icon'])
                                     <i class="{{ $menu['icon'] }}"></i>
                                 @endisset
-                                <div>{{ isset($menu['name']) ? __($menu['name']) : '' }}</div>
+                                <div>{{ isset($menu['module_name']) ? __($menu['module_name']) : '' }}</div>
                                 @isset($menu['badge'])
                                     <div class="badge bg-label-{{ $menu['badge'][0] }} rounded-pill ms-auto">
                                         {{ $menu['badge'][1] }}

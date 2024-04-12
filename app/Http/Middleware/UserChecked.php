@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminChecked
+class UserChecked
 {
   /**
    * Handle an incoming request.
@@ -17,11 +17,11 @@ class AdminChecked
   public function handle(Request $request, Closure $next): Response
   {
     if (Auth::check()) {
-      if (Auth::user()->email === 'admin@example.com') {
+      if (Auth::user()->email !== 'admin@example.com') {
         return $next($request);
       }
       return redirect()
-        ->route('user.dashboard')
+        ->route('admin.dashboard')
         ->with('error', 'Trying to access unauthorized part');
     }
     return redirect()

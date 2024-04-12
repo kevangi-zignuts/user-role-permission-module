@@ -40,15 +40,7 @@ class MenuServiceProvider extends ServiceProvider
     $horizontalMenuJson = file_get_contents(base_path('resources/menu/horizontalMenu.json'));
     $horizontalMenuData = json_decode($horizontalMenuJson, true);
 
-    $menu = [];
-    foreach ($verticalMenuData as $verticalMenuItem) {
-      $menu[] = (object) ['menu' => $verticalMenuItem];
-    }
-
-    foreach ($horizontalMenuData as $horizontalMenuItem) {
-      $menu[] = (object) ['menu' => $horizontalMenuItem];
-    }
-
+    $menu = [(object) $verticalMenuData, (object) $horizontalMenuData];
     return $menu;
   }
 
@@ -56,9 +48,8 @@ class MenuServiceProvider extends ServiceProvider
   {
     // Retrieve the currently authenticated user
     $user = Auth::user();
-    // dd(!$user->role);
 
-    // If user is not authenticated or has no roles, return an empty array
+    // If user has no roles, return an empty array
     if (!$user || !$user->role) {
       return [];
     }
@@ -67,75 +58,26 @@ class MenuServiceProvider extends ServiceProvider
     $staticMenuJson = file_get_contents(base_path('resources/menu/userVerticalMenu.json'));
     $staticMenuData = json_decode($staticMenuJson, true);
 
-    // Retrieve modules with permissions for the user
-    $modules = $user->getModulesWithPermissions();
-
-    // dd($modules);
-
-    // Filter dynamic menu items based on user permissions
-    // $dynamicMenuItems = collect($modules)
-    //   ->map(function ($module) use ($modules) {
-    //     $submoduleNames = [];
-    //     foreach ($module['submodules'] as $submodule) {
-    //       if ($modules->contains('code', $submodule['code'])) {
-    //         $submoduleNames[] = [
-    //           'code' => $submodule['code'],
-    //           'name' => $submodule['module_name'],
-    //           'url' => $submodule['url'],
-    //           'slug' => $submodule['slug'],
-    //           'parent_code' => $submodule['parent_code'],
-    //         ];
-    //       }
-    //     }
-    //     return [
-    //       'code' => $module['code'],
-    //       'name' => $module['module_name'],
-    //       'url' => $module['url'],
-    //       'slug' => $module['slug'],
-    //       'parent_code' => $module['parent_code'],
-    //       'submenu' => $submoduleNames,
-    //     ];
-    //   })
-    //   ->toArray();
-    $dynamicMenuItems = collect($modules)
-      ->map(function ($module) use ($modules) {
-        $submoduleNames = [];
-        foreach ($module['submodules'] as $submodule) {
-          if ($modules->contains('code', $submodule['code'])) {
-            $submoduleNames[] = [
-              'code' => $submodule['code'],
-              'name' => $submodule['module_name'],
-              'url' => $submodule['url'],
-              'slug' => $submodule['slug'],
-              'parent_code' => $submodule['parent_code'],
-            ];
+    $modules = Module::all();
+    $menus = [];
+    foreach ($modules as $module) {
+      if ($module->parent_code === null && $user->hasPermission($module->code, 'view_access')) {
+        $submodules = $module->submodules()->get();
+        $moduleArray = $module->toArray();
+        $submodulesArray = [];
+        foreach ($submodules as $submodule) {
+          if ($user->hasPermission($submodule->code, 'view_access')) {
+            $submodulesArray[] = $submodule->toArray();
           }
         }
-        // Only include submenu if there are any
-        if (!empty($submoduleNames)) {
-          return [
-            'code' => $module['code'],
-            'name' => $module['module_name'],
-            'url' => $module['url'],
-            'slug' => $module['slug'],
-            'parent_code' => $module['parent_code'],
-            'submenu' => $submoduleNames,
-          ];
-        }
-        // If there are no submodules, return null
-        return null;
-      })
-      ->filter() // Remove null values from the resulting collection
-      ->toArray();
-
-    // Merge static and dynamic menu items
-    $staticMenuData['menu'] = array_merge($staticMenuData['menu'], $dynamicMenuItems);
-
-    // Format the menu
-    $menu = [];
-    foreach ($staticMenuData as $staticMenuItem) {
-      $menu[] = (object) ['menu' => $staticMenuItem];
+        $moduleArray['submenu'] = $submodulesArray;
+        $menus[] = $moduleArray;
+      }
     }
+
+    $staticMenuData['menu'] = array_merge($staticMenuData['menu'], $menus);
+    // Format the menu
+    $menu = [(object) $staticMenuData];
     return $menu;
   }
 }
