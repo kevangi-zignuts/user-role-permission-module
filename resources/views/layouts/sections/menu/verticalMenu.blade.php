@@ -30,7 +30,7 @@
             @foreach ($menuData[0]->menu as $menu)
                 {{-- adding active and open class if child is active --}}
                 {{-- menu headers --}}
-                @if (!isset($menu['parent_code']))
+                {{-- @if (!isset($menu['parent_code'])) --}}
                     @if (isset($menu->menuHeader))
                         <li class="menu-header small text-uppercase">
                             <span class="menu-header-text">{{ $menu->menuHeader }}</span>
@@ -88,7 +88,7 @@
                             @endisset
                         </li>
                     @endif
-                @endif
+                {{-- @endif --}}
             @endforeach
         @endif
     </ul>

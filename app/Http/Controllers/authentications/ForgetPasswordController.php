@@ -29,7 +29,6 @@ class ForgetPasswordController extends Controller
    */
   public function submit(Request $request)
   {
-    dd('here');
     $request->validate([
       'email' => 'required|email|exists:users',
     ]);
@@ -50,11 +49,11 @@ class ForgetPasswordController extends Controller
         'created_at' => Carbon::now(),
       ]
     );
-    // Store the reset password token in the users table
-    // $user->update(['reset_password_token' => $token]);
 
     Mail::to($user->email)->send(new ForgetPassword($token, $user->first_name));
 
-    return back()->with('message', 'We have e-mailed your password reset link!');
+    return redirect()
+      ->route('auth-login-basic')
+      ->with('message', 'We have e-mailed your password reset link!');
   }
 }

@@ -52,45 +52,6 @@ class MenuServiceProvider extends ServiceProvider
     return $menu;
   }
 
-  // protected function getUserMenu()
-  // {
-  //   // Retrieve static menu items from JSON file
-  //   $staticMenuJson = file_get_contents(base_path('resources/menu/userVerticalMenu.json'));
-  //   $staticMenuData = json_decode($staticMenuJson, true);
-
-  //   $dynamicMenuItems = Module::with('submodules')
-  //     ->whereNull('parent_code')
-  //     ->get()
-  //     ->map(function ($module) {
-  //       $submoduleNames = [];
-  //       foreach ($module['submodules'] as $submodule) {
-  //         $submoduleNames[] = [
-  //           'code' => $submodule['code'],
-  //           'name' => $submodule['module_name'],
-  //           'url' => $submodule['url'],
-  //           'slug' => $submodule['slug'],
-  //         ];
-  //       }
-  //       return [
-  //         'code' => $module['code'],
-  //         'name' => $module['module_name'],
-  //         'url' => $module['url'],
-  //         'slug' => $module['slug'],
-  //         'submenu' => $submoduleNames,
-  //       ];
-  //     })
-  //     ->toArray();
-
-  //   $staticMenuData['menu'] = array_merge($staticMenuData['menu'], $dynamicMenuItems);
-
-  //   $menu = [];
-  //   foreach ($staticMenuData as $staticMenuItem) {
-  //     $menu[] = (object) ['menu' => $staticMenuItem];
-  //   }
-  //   // dd($menu);
-  //   return $menu;
-  // }
-
   protected function getUserMenu()
   {
     // Retrieve the currently authenticated user
@@ -112,6 +73,30 @@ class MenuServiceProvider extends ServiceProvider
     // dd($modules);
 
     // Filter dynamic menu items based on user permissions
+    // $dynamicMenuItems = collect($modules)
+    //   ->map(function ($module) use ($modules) {
+    //     $submoduleNames = [];
+    //     foreach ($module['submodules'] as $submodule) {
+    //       if ($modules->contains('code', $submodule['code'])) {
+    //         $submoduleNames[] = [
+    //           'code' => $submodule['code'],
+    //           'name' => $submodule['module_name'],
+    //           'url' => $submodule['url'],
+    //           'slug' => $submodule['slug'],
+    //           'parent_code' => $submodule['parent_code'],
+    //         ];
+    //       }
+    //     }
+    //     return [
+    //       'code' => $module['code'],
+    //       'name' => $module['module_name'],
+    //       'url' => $module['url'],
+    //       'slug' => $module['slug'],
+    //       'parent_code' => $module['parent_code'],
+    //       'submenu' => $submoduleNames,
+    //     ];
+    //   })
+    //   ->toArray();
     $dynamicMenuItems = collect($modules)
       ->map(function ($module) use ($modules) {
         $submoduleNames = [];
@@ -126,15 +111,21 @@ class MenuServiceProvider extends ServiceProvider
             ];
           }
         }
-        return [
-          'code' => $module['code'],
-          'name' => $module['module_name'],
-          'url' => $module['url'],
-          'slug' => $module['slug'],
-          'parent_code' => $module['parent_code'],
-          'submenu' => $submoduleNames,
-        ];
+        // Only include submenu if there are any
+        if (!empty($submoduleNames)) {
+          return [
+            'code' => $module['code'],
+            'name' => $module['module_name'],
+            'url' => $module['url'],
+            'slug' => $module['slug'],
+            'parent_code' => $module['parent_code'],
+            'submenu' => $submoduleNames,
+          ];
+        }
+        // If there are no submodules, return null
+        return null;
       })
+      ->filter() // Remove null values from the resulting collection
       ->toArray();
 
     // Merge static and dynamic menu items
@@ -142,11 +133,9 @@ class MenuServiceProvider extends ServiceProvider
 
     // Format the menu
     $menu = [];
-    // dd($staticMenuData);
     foreach ($staticMenuData as $staticMenuItem) {
       $menu[] = (object) ['menu' => $staticMenuItem];
     }
-    // dd($menu);
     return $menu;
   }
 }

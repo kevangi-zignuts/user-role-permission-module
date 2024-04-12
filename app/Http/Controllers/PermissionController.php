@@ -60,7 +60,6 @@ class PermissionController extends Controller
 
       $permission = Permission::create($request->only(['permission_name', 'description']));
       $modules = $request->input('modules', []);
-      // dd($modules);
       $permission->module()->attach($modules);
 
       // return redirect()

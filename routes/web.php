@@ -33,12 +33,9 @@ Route::post('/', $controller_path . '\authentications\LoginBasic@login')->name('
 // Forget Password Page Route
 Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForm'])->name('forgetPassword');
 Route::post('/forget-password', [ForgetPasswordController::class, 'submit'])->name('forgetPasswordForm');
-// Reset Password Page Route when user invite
-Route::get('/invite/reset-password-link/{token}', [ResetPasswordController::class, 'showForm'])->name('resetPassword');
-Route::post('/invite/reset-password/{token}', [ResetPasswordController::class, 'submit'])->name('resetPasswordSubmit');
-// Reset Password Page Route when user forgot password
-Route::get('/reset-password/{token}', [ResetPasswordController::class, 'resetPasswordForm'])->name('resetPasswordForm');
-Route::post('/reset-password/{token}', [ResetPasswordController::class, 'submitForm'])->name('resetPasswordSubmitForm');
+// Reset Password Page Route
+Route::get('/reset-password-link/{token}', [ResetPasswordController::class, 'showForm'])->name('resetPassword');
+Route::post('/reset-password/{token}', [ResetPasswordController::class, 'submit'])->name('resetPasswordSubmit');
 
 Route::middleware('auth', 'access', 'adminCheck')->group(function () {
   // Main Page Route

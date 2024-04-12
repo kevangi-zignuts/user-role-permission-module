@@ -65,7 +65,6 @@ class User extends Authenticatable
         );
       }
     }
-    // dd($modules);
     return $modules->unique('code');
   }
 
