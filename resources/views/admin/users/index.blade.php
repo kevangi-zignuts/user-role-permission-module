@@ -117,8 +117,8 @@
                                         <button data-id="{{ $user->id }}" class="btn text-danger delete-class"
                                             type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         <a href="#"
-                                            data-route="{{ route('users.resetPassword', ['id' => $user->id]) }}"
-                                            data-email="{{ $user->email }}" class="dropdown-item add-new-role"
+                                            data-route="{{ route('users.resetPassword') }}"
+                                            data-email="{{ $user->email }}" data-id="{{ $user->id }}" class="dropdown-item add-new-role"
                                             data-bs-target="#addRoleModal" data-bs-toggle="modal"
                                             class="dropdown-item add-new-role"><i class="ti ti-key me-1"></i> Reset
                                             Password</a>
@@ -160,11 +160,15 @@ data-bs-delay="2000">
             link.addEventListener('click', function(event) {
                 event.preventDefault(); // Prevent the default action of the link
                 var email = this.getAttribute('data-email');
+                var id = this.getAttribute('data-id');
                 var form = document.getElementById('resetPasswordForm');
                 if (form) {
                     var emailInput = document.getElementById('email');
-                    if (emailInput) {
+                    var UserId = document.getElementById('id');
+                    if (emailInput && id) {
                         emailInput.value = email;
+                        UserId.value = id;
+                        console.log(UserId);
                         var route = this.getAttribute('data-route');
                         if (route) {
                             form.setAttribute('action',

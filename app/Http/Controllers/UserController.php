@@ -177,13 +177,12 @@ class UserController extends Controller
   /**
    * admin reset the password of the user
    */
-  public function resetPassword(Request $request, $id)
+  public function resetPassword(Request $request)
   {
     $request->validate([
       'password' => 'required|confirmed',
     ]);
-
-    $user = User::findOrFail($id);
+    $user = User::findOrFail($request['userId']);
     $password = Hash::make($request['password']);
     $user->update(['password' => $password]);
     Mail::to($user->email)->send(new ResetPassword($user->first_name));

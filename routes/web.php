@@ -79,7 +79,7 @@ Route::middleware('auth', 'access', 'adminCheck')->group(function () {
       Route::post('/update/{id}', [UserController::class, 'update'])->name('users.update');
       Route::get('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
       Route::get('/status/{id}', [UserController::class, 'updateStatus']);
-      Route::post('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('users.resetPassword');
+      Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
       Route::get('/forced-logout/{id}', [UserController::class, 'forceLogout'])->name('users.forceLogout');
     });
   });

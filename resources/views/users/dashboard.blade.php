@@ -31,7 +31,7 @@
         <div class="card-header d-flex justify-content-between m-5 mb-2">
             <a class="btn btn-primary" href="{{ route('user.edit') }}"><i class="ti ti-pencil me-1"></i> Edit</a>
 
-            <a href="#" data-route="{{ route('user.resetPassword') }}" class="btn btn-primary add-new-role"
+            <a href="#" data-route="{{ route('user.resetPassword') }}" data-id="{{ Auth::id() }}" class="btn btn-primary add-new-role"
                 data-bs-target="#addRoleModal" data-bs-toggle="modal" class="dropdown-item add-new-role"><i
                     class="ti ti-key me-1"></i> Reset
                 Password</a>
@@ -71,7 +71,6 @@
 
 
 
-    {{-- @include('users.resetPassword') --}}
     @include('admin.users.resetPassword')
 
     <script>
@@ -81,9 +80,12 @@
                 link.addEventListener('click', function(event) {
                     event.preventDefault(); // Prevent the default action of the link
                     var form = document.getElementById('resetPasswordForm');
+                    var id = this.getAttribute('data-id');
                     if (form) {
                         var route = this.getAttribute('data-route');
-                        if (route) {
+                        var UserId = document.getElementById('id');
+                        if (UserId && route) {
+                            UserId.value = id;
                             form.setAttribute('action',
                                 route); // Set form action to the route URL
                         } else {

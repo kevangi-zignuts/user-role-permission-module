@@ -23,6 +23,7 @@
                             <input type="password" name="current_password" class="form-control" tabindex="-1" />
                         </div>
                     @endif
+                    <input type="hidden" name="userId" id="id">
                     <div class="col-12 mb-2">
                         <label class="form-label">Reset Password</label>
                         <input type="password" name="password" class="form-control" tabindex="-1" />

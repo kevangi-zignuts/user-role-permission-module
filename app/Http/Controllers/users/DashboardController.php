@@ -20,8 +20,7 @@ class DashboardController extends Controller
     $request->validate([
       'password' => 'required|confirmed',
     ]);
-
-    $user = User::findOrFail(auth()->id());
+    $user = User::findOrFail($request['userId']);
     $hashedPasswordFromDB = $user->password;
     $currentPassword = $request['current_password'];
     if (Hash::check($currentPassword, $hashedPasswordFromDB)) {
