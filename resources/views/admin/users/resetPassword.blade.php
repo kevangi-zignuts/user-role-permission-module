@@ -11,11 +11,18 @@
                 {{-- {{ $user->id }} --}}
                 <form action="" id="resetPasswordForm" class="row g-3" method="post">
                     @csrf
-                    <div class="col-12 mb-2">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" id="email" class="form-control" tabindex="-1"
-                            disabled />
-                    </div>
+                    @if (Auth()->user()->email === 'admin@example.com')
+                        <div class="col-12 mb-2">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" id="email" class="form-control" tabindex="-1"
+                                disabled />
+                        </div>
+                    @else
+                        <div class="col-12 mb-2">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" name="current_password" class="form-control" tabindex="-1" />
+                        </div>
+                    @endif
                     <div class="col-12 mb-2">
                         <label class="form-label">Reset Password</label>
                         <input type="password" name="password" class="form-control" tabindex="-1" />
