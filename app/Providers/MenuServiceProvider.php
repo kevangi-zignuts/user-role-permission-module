@@ -70,8 +70,10 @@ class MenuServiceProvider extends ServiceProvider
             $submodulesArray[] = $submodule->toArray();
           }
         }
-        $moduleArray['submenu'] = $submodulesArray;
-        $menus[] = $moduleArray;
+        if (!empty($submodulesArray)) {
+          $moduleArray['submenu'] = $submodulesArray;
+          $menus[] = $moduleArray;
+        }
       }
     }
 

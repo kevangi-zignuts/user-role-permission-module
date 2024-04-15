@@ -22,20 +22,22 @@ class MeetingController extends Controller
       'edit' => Auth::user()->hasPermission('meet', 'edit_access'),
       'delete' => Auth::user()->hasPermission('meet', 'delete_access'),
     ];
-    // dd($access);
+
     $filter = $request->query('filter', 'all');
+    $search = $request->input('search');
     $query = Meeting::query();
 
-    // filter the meeting
-    if ($filter !== 'all') {
+    if ($filter != 'all' && !empty($search)) {
+      $query
+        ->where('is_active', $request->filter)
+        ->where('title', 'like', '%' . $search . '%')
+        ->get();
+    } elseif ($filter != 'all' && empty($search)) {
       $query->where('is_active', $request->filter)->get();
+    } else {
+      $query->where('title', 'like', '%' . $search . '%')->get();
     }
 
-    // search the meeting
-    $search = $request->input('search');
-    if (!empty($search)) {
-      $query->where('title', 'like', '%' . $search . '%');
-    }
     $meetings = $query->paginate(8);
 
     return view('users.meetings.index', ['meetings' => $meetings, 'filter' => $filter, 'access' => $access]);

@@ -37,29 +37,31 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between m-5 mb-2">
-            <a href="{{ route('roles.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
-                a
-                Role</a>
-            <div class="search-container ">
-                <form action="{{ route('roles.index') }}" method="GET">
+            <div class="link">
+                <a href="{{ route('roles.create') }}" class="btn btn-primary"><i
+                        class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
+                    a
+                    Role</a>
+                <a href="{{ route('roles.index') }}" class="btn btn-secondary"><i
+                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+            </div>
+            <div class="search-filter">
+                <form action="{{ route('roles.index') }}" method="GET" class="d-flex">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search Role..." name="search"
                             value="">
-                        <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                     </div>
+                    <div class="input-group ">
+                        <select name="filter" class="form-select" id="inputGroupSelect04"
+                            aria-label="Example select with button addon" equired>
+                            <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Role</option>
+                            <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Role</option>
+                            <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Role</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-outline-primary" type="submit">Filter</button>
                 </form>
             </div>
-            <form action="{{ route('roles.index') }}" method="GET">
-                <div class="input-group ">
-                    <select name="filter" class="form-select" id="inputGroupSelect04"
-                        aria-label="Example select with button addon" equired>
-                        <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Role</option>
-                        <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Role</option>
-                        <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Role</option>
-                    </select>
-                    <button class="btn btn-outline-primary" type="submit">Filter</button>
-                </div>
-            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
@@ -144,7 +146,7 @@
                         text: "You won't be able to revert this!",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'Yes, delete it!',
+                        confirmButtonText: 'Yes, change it!',
                         customClass: {
                             confirmButton: 'btn btn-primary me-3',
                             cancelButton: 'btn btn-label-secondary'
@@ -210,7 +212,7 @@
                                         row.remove();
                                         Swal.fire({
                                             icon: 'success',
-                                            title: 'Status Updated!!',
+                                            title: 'Data Deleted!!',
                                             text: data.message,
                                             customClass: {
                                                 confirmButton: 'btn btn-success'

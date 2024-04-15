@@ -25,17 +25,18 @@ class PeopleController extends Controller
     ];
 
     $filter = $request->query('filter', 'all');
+    $search = $request->input('search');
     $query = People::query();
 
-    // filter the user
-    if ($filter !== 'all') {
+    if ($filter != 'all' && !empty($search)) {
+      $query
+        ->where('is_active', $request->filter)
+        ->where('name', 'like', '%' . $search . '%')
+        ->get();
+    } elseif ($filter != 'all' && empty($search)) {
       $query->where('is_active', $request->filter)->get();
-    }
-
-    // search the user
-    $search = $request->input('search');
-    if (!empty($search)) {
-      $query->where('name', 'like', '%' . $search . '%');
+    } else {
+      $query->where('name', 'like', '%' . $search . '%')->get();
     }
     $peoples = $query->paginate(8);
     return view('users.people.index', ['peoples' => $peoples, 'filter' => $filter, 'access' => $access]);

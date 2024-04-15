@@ -16,6 +16,7 @@ class RoleController extends Controller
   public function index(Request $request)
   {
     $filter = $request->query('filter', 'all');
+    $search = $request->input('search');
     $query = Role::query();
 
     // filter the role
@@ -23,12 +24,16 @@ class RoleController extends Controller
       $query->where('is_active', $request->filter)->get();
     }
 
-    // search the role
-    $search = $request->input('search');
-    if (!empty($search)) {
-      $query->where('role_name', 'like', '%' . $search . '%');
+    if ($filter != 'all' && !empty($search)) {
+      $query
+        ->where('is_active', $request->filter)
+        ->where('role_name', 'like', '%' . $search . '%')
+        ->get();
+    } elseif ($filter != 'all' && empty($search)) {
+      $query->where('is_active', $request->filter)->get();
+    } else {
+      $query->where('role_name', 'like', '%' . $search . '%')->get();
     }
-    $query->where('role_name', '!=', 'Admin');
 
     $roles = $query->paginate(8);
     return view('admin.roles.index', ['roles' => $roles, 'filter' => $filter]);

@@ -27,15 +27,19 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between m-5 mb-2">
-            @if ($access['add'])
-                <a href="{{ route('company.create') }}" class="btn btn-primary"><i
-                        class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
-                    a Company</a>
-            @endif
+            <div class="link">
+                @if ($access['add'])
+                    <a href="{{ route('company.create') }}" class="btn btn-primary"><i
+                            class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
+                        a Company</a>
+                @endif
+                <a href="{{ route('company.index') }}" class="btn btn-secondary"><i
+                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+            </div>
             <div class="search-container ">
                 <form action="{{ route('company.index') }}" method="GET">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Role..." name="search"
+                        <input type="text" class="form-control" placeholder="Search Company..." name="search"
                             value="">
                         <button class="btn  btn-primary" type="submit"><i class="fas fa-search"></i></button>
                     </div>
@@ -155,7 +159,7 @@
                                         row.remove();
                                         Swal.fire({
                                             icon: 'success',
-                                            title: 'Status Updated!!',
+                                            title: 'Data Deleted!!',
                                             text: data.message,
                                             customClass: {
                                                 confirmButton: 'btn btn-success'

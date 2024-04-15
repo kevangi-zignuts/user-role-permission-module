@@ -26,20 +26,37 @@ class UserController extends Controller
   public function index(Request $request)
   {
     $filter = $request->query('filter', 'all');
+    $search = $request->input('search');
     $query = User::query();
 
     // filter the user
-    if ($filter !== 'all') {
-      $query->where('is_active', $request->filter)->get();
-    }
+    // if ($filter !== 'all') {
+    //   $query->where('is_active', $request->filter)->get();
+    // }
 
     // search the user
-    $search = $request->input('search');
-    if (!empty($search)) {
+    // $search = $request->input('search');
+    // if (!empty($search)) {
+    //   $query->where(function ($query) use ($search) {
+    //     $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
+    //   });
+    // }
+
+    if ($filter != 'all' && !empty($search)) {
+      $query
+        ->where('is_active', $request->filter)
+        ->where(function ($query) use ($search) {
+          $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
+        })
+        ->get();
+    } elseif ($filter != 'all' && empty($search)) {
+      $query->where('is_active', $request->filter)->get();
+    } else {
       $query->where(function ($query) use ($search) {
         $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
       });
     }
+
     $query->where('email', '!=', 'admin@example.com');
     $users = $query->with('role')->paginate(8);
     return view('admin.users.index', ['users' => $users, 'filter' => $filter]);
@@ -77,10 +94,13 @@ class UserController extends Controller
     $token = md5(uniqid(rand(), true));
     $temporaryPassword = Str::random(10);
     $user = new User();
-    $user->fill($request->only('first_name', 'last_name', 'email', 'contact_no', 'address'));
-    $user->password = Hash::make($temporaryPassword);
-    $user->invitation_token = $token;
-    $user->status = 'I';
+    $user->fill(
+      $request->only('first_name', 'last_name', 'email', 'contact_no', 'address') + [
+        'password' => Hash::make($temporaryPassword),
+        'invitation_token' => $token,
+        'status' => 'I',
+      ]
+    );
     $user->save();
 
     Mail::to($request->input('email'))->send(new InvitationEmail($token, $user->first_name));

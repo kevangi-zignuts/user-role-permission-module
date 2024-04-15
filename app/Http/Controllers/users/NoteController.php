@@ -23,7 +23,6 @@ class NoteController extends Controller
       'delete' => Auth::user()->hasPermission('note', 'delete_access'),
     ];
 
-    $filter = $request->query('filter', 'all');
     $query = Note::query();
 
     // search the user

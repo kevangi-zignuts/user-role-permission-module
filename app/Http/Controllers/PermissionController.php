@@ -16,17 +16,18 @@ class PermissionController extends Controller
   public function index(Request $request)
   {
     $filter = $request->query('filter', 'all');
+    $search = $request->input('search');
     $query = Permission::query();
 
-    // filter the permission
-    if ($filter !== 'all') {
+    if ($filter != 'all' && !empty($search)) {
+      $query
+        ->where('is_active', $request->filter)
+        ->where('permission_name', 'like', '%' . $search . '%')
+        ->get();
+    } elseif ($filter != 'all' && empty($search)) {
       $query->where('is_active', $request->filter)->get();
-    }
-
-    // search the permission
-    $search = $request->input('search');
-    if (!empty($search)) {
-      $query->where('permission_name', 'like', '%' . $search . '%');
+    } else {
+      $query->where('permission_name', 'like', '%' . $search . '%')->get();
     }
 
     $permissions = $query->paginate(8);

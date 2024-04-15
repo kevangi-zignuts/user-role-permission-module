@@ -40,28 +40,30 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between m-5 mb-2">
-            <a href="{{ route('users.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
-                a User</a>
-            <div class="search-container ">
-                <form action="{{ route('users.index') }}" method="GET">
+            <div class="link">
+                <a href="{{ route('users.create') }}" class="btn btn-primary"><i
+                        class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
+                    a User</a>
+                <a href="{{ route('users.index') }}" class="btn btn-secondary"><i
+                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+            </div>
+            <div class="search-filter">
+                <form action="{{ route('users.index') }}" method="GET" class="d-flex">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Role..." name="search"
+                        <input type="text" class="form-control" placeholder="Search User..." name="search"
                             value="">
-                        <button class="btn  btn-primary" type="submit"><i class="fas fa-search"></i></button>
                     </div>
+                    <div class="input-group ">
+                        <select name="filter" class="form-select" id="inputGroupSelect04"
+                            aria-label="Example select with button addon" equired>
+                            <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All User</option>
+                            <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated User</option>
+                            <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated User</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-outline-primary" type="submit">Filter</button>
                 </form>
             </div>
-            <form action="{{ route('users.index') }}" method="GET">
-                <div class="input-group ">
-                    <select name="filter" class="form-select" id="inputGroupSelect04"
-                        aria-label="Example select with button addon" equired>
-                        <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Role</option>
-                        <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Role</option>
-                        <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Role</option>
-                    </select>
-                    <button class="btn btn-outline-primary" type="submit">Filter</button>
-                </div>
-            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
@@ -116,11 +118,11 @@
                                                 class="ti ti-pencil me-1"></i> Edit</a>
                                         <button data-id="{{ $user->id }}" class="btn text-danger delete-class"
                                             type="button"><i class="ti ti-trash me-1"></i> Delete</button>
-                                        <a href="#"
-                                            data-route="{{ route('users.resetPassword') }}"
-                                            data-email="{{ $user->email }}" data-id="{{ $user->id }}" class="dropdown-item add-new-role"
-                                            data-bs-target="#addRoleModal" data-bs-toggle="modal"
-                                            class="dropdown-item add-new-role"><i class="ti ti-key me-1"></i> Reset
+                                        <a href="#" data-route="{{ route('users.resetPassword') }}"
+                                            data-email="{{ $user->email }}" data-id="{{ $user->id }}"
+                                            class="dropdown-item add-new-role" data-bs-target="#addRoleModal"
+                                            data-bs-toggle="modal" class="dropdown-item add-new-role"><i
+                                                class="ti ti-key me-1"></i> Reset
                                             Password</a>
                                         <button data-id="{{ $user->id }}"
                                             class="btn text-danger forced-logout-class" type="button"><i
@@ -139,15 +141,15 @@
 
 <!--/ Toast message -->
 <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
-data-bs-delay="2000">
-<div class="toast-header">
-    <i class="ti ti-bell ti-xs me-2"></i>
-    <div class="me-auto fw-semibold">Success</div>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-</div>
-<div class="toast-body">
-    Hello, world! This is a toast message.
-</div>
+    data-bs-delay="2000">
+    <div class="toast-header">
+        <i class="ti ti-bell ti-xs me-2"></i>
+        <div class="me-auto fw-semibold">Success</div>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        Hello, world! This is a toast message.
+    </div>
 </div>
 <!--/ Toast message -->
 
@@ -205,7 +207,7 @@ data-bs-delay="2000">
                     text: "You won't be able to revert this!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonText: 'Yes, change it!',
                     customClass: {
                         confirmButton: 'btn btn-primary me-3',
                         cancelButton: 'btn btn-label-secondary'
@@ -271,7 +273,7 @@ data-bs-delay="2000">
                                     row.remove();
                                     Swal.fire({
                                         icon: 'success',
-                                        title: 'Status Updated!!',
+                                        title: 'Data Deleted!!',
                                         text: data.message,
                                         customClass: {
                                             confirmButton: 'btn btn-success'
@@ -297,7 +299,7 @@ data-bs-delay="2000">
                     text: "You won't be able to revert this!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonText: 'Yes, logout it!',
                     customClass: {
                         confirmButton: 'btn btn-primary me-3',
                         cancelButton: 'btn btn-label-secondary'
@@ -314,7 +316,7 @@ data-bs-delay="2000">
                                 if (data.success) {
                                     Swal.fire({
                                         icon: 'success',
-                                        title: 'Status Updated!!',
+                                        title: 'Logout Successfully!!',
                                         text: data.message,
                                         customClass: {
                                             confirmButton: 'btn btn-success'

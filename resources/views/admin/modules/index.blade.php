@@ -175,7 +175,7 @@
                         text: "You won't be able to revert this!",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'Yes, delete it!',
+                        confirmButtonText: 'Yes, change it!',
                         customClass: {
                             confirmButton: 'btn btn-primary me-3',
                             cancelButton: 'btn btn-label-secondary'

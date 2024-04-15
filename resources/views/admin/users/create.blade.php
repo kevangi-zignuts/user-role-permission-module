@@ -84,7 +84,7 @@ $configData = Helper::appClasses();
             <div class="row">
               <div class="mt-3">
                 <button type="submit" class="btn btn-primary me-2">Send Invitation</button>
-                <button type="button" class="btn btn-label-secondary"><a href="{{ route('users.index') }}">Cancle</a></button>
+                <a href="{{ route('users.index') }}" class="btn btn-label-secondary">Cancle</a>
               </div>
             </div>
           </form>
