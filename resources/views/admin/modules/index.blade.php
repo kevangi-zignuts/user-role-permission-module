@@ -41,26 +41,25 @@
     @endphp
     <div class="card">
         <div class="card-header d-flex justify-content-between m-5 mb-2">
-            <div class="search-container ">
-                <form action="{{ route('modules.index') }}" method="GET">
+            <a href="{{ route('modules.index') }}" class="btn btn-secondary"><i
+                    class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+            <div class="search-filter">
+                <form action="{{ route('modules.index') }}" method="GET" class="d-flex">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search modules..." name="search"
+                        <input type="text" class="form-control" placeholder="Search User..." name="search"
                             value="">
-                        <button class="btn  btn-primary" type="submit"><i class="fas fa-search"></i></button>
                     </div>
+                    <div class="input-group ">
+                        <select name="filter" class="form-select" id="inputGroupSelect04"
+                            aria-label="Example select with button addon" equired>
+                            <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Modules</option>
+                            <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Modules</option>
+                            <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Modules</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-outline-primary" type="submit">Filter</button>
                 </form>
             </div>
-            <form action="{{ route('modules.index') }}" method="GET">
-                <div class="input-group ">
-                    <select name="filter" class="form-select" id="inputGroupSelect04"
-                        aria-label="Example select with button addon" equired>
-                        <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Modules</option>
-                        <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Modules</option>
-                        <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Modules</option>
-                    </select>
-                    <button class="btn btn-outline-primary" type="submit">Filter</button>
-                </div>
-            </form>
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
@@ -81,68 +80,67 @@
                             </tr>
                         @endif
                         @foreach ($modules as $module)
-                            @if ($module->parent_code === null)
-                                <tr>
-                                    <td class="clickable" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseExample_{{ $module->code }}" aria-expended="false"
-                                        aria-controls="collapseExample_{{ $module->code }}"><button
-                                            class="btn btn-default btn-xs"><i class="fa-solid fa-caret-down"></i></button>
-                                    </td>
-                                    <td>{{ $module->module_name }}</td>
-                                    <td>{{ $module->description }}</td>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                            <input data-id="{{ $module->code }}" class="form-check-input toggle-class"
-                                                type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                                data-offstyle="info" data-toggle="toggle" data-on="Pending"
-                                                data-off="Approved" {{ $module->is_active == 1 ? 'checked' : '' }}>
-                                        </div>
-                                    </td>
-                                    <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
-                                                class="fa-solid fa-pen-to-square"></i></a></td>
-                                </tr>
-                                <tr class="collapse" id = "collapseExample_{{ $module->code }}">
-                                    <td colspan="5">
-                                        <table class="table">
-                                            <thead class="table-light">
-                                                <tr class="info">
-                                                    <th scope="col">Submodule Name</th>
-                                                    <th scope="col">Description</th>
-                                                    <th>Status</th>
-                                                    <th scope="col">Action</th>
+                            {{-- @if ($module->parent_code === null) --}}
+                            <tr>
+                                <td class="clickable" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample_{{ $module->code }}" aria-expended="false"
+                                    aria-controls="collapseExample_{{ $module->code }}"><button
+                                        class="btn btn-default btn-xs"><i class="fa-solid fa-caret-down"></i></button>
+                                </td>
+                                <td>{{ $module->module_name }}</td>
+                                <td>{{ $module->description }}</td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input data-id="{{ $module->code }}" class="form-check-input toggle-class"
+                                            type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                            {{ $module->is_active == 1 ? 'checked' : '' }}>
+                                    </div>
+                                </td>
+                                <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
+                                            class="fa-solid fa-pen-to-square"></i></a></td>
+                            </tr>
+                            <tr class="collapse" id = "collapseExample_{{ $module->code }}">
+                                <td colspan="5">
+                                    <table class="table">
+                                        <thead class="table-light">
+                                            <tr class="info">
+                                                <th scope="col">Submodule Name</th>
+                                                <th scope="col">Description</th>
+                                                <th>Status</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($module->submodules as $submodule)
+                                                {{-- @if (in_array($submodule, $modules->items())) --}}
+                                                <tr>
+                                                    <td>{{ $submodule->module_name }}</td>
+                                                    <td>{{ $submodule->description }}</td>
+                                                    <td>
+                                                        <div class="form-check form-switch">
+                                                            <input data-id="{{ $submodule->code }}"
+                                                                class="form-check-input toggle-class" type="checkbox"
+                                                                role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                                                data-offstyle="info" data-toggle="toggle" data-on="Pending"
+                                                                data-off="Approved"
+                                                                {{ $submodule->is_active == 1 ? 'checked' : '' }}>
+                                                        </div>
+                                                    </td>
+                                                    <td><a
+                                                            href="{{ route('modules.edit', ['code' => $submodule->code]) }}"><i
+                                                                class="fa-solid fa-pen-to-square"></i></a></td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($module->submodules as $submodule)
-                                                    @if (in_array($submodule, $modules->items()))
-                                                        <tr>
-                                                            <td>{{ $submodule->module_name }}</td>
-                                                            <td>{{ $submodule->description }}</td>
-                                                            <td>
-                                                                <div class="form-check form-switch">
-                                                                    <input data-id="{{ $submodule->code }}"
-                                                                        class="form-check-input toggle-class"
-                                                                        type="checkbox" role="switch"
-                                                                        id="switchCheckDefault" data-onstyle="danger"
-                                                                        data-offstyle="info" data-toggle="toggle"
-                                                                        data-on="Pending" data-off="Approved"
-                                                                        {{ $submodule->is_active == 1 ? 'checked' : '' }}>
-                                                                </div>
-                                                            </td>
-                                                            <td><a
-                                                                    href="{{ route('modules.edit', ['code' => $submodule->code]) }}"><i
-                                                                        class="fa-solid fa-pen-to-square"></i></a></td>
-                                                        </tr>
-                                                    @endif
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                                @php
-                                    $i++;
-                                @endphp
-                            @endif
+                                                {{-- @endif --}}
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            @php
+                                $i++;
+                            @endphp
+                            {{-- @endif --}}
                         @endforeach
                     </tbody>
                 </table>
