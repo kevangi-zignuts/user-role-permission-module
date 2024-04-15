@@ -13,6 +13,8 @@ User Authentication :-
 - Forget Password option to recover forgotten passwords.
 - Password reset functionality via email.
 
+Admin Side :-
+
 Dashboard :-
 
 - Upon successful login, admins are redirected to the dashboard.
@@ -43,6 +45,46 @@ User Management :-
 - Allows admins to set new passwords, edit user details, and delete users.
 - Admins can reset user passwords, triggering an email notification to the user.
 - Includes a force logout feature to log out users from all devices upon admin action.
+
+User Side :-
+
+Accept Invitation :-
+
+- Clicking 'Accept Invite' in the email redirects the user to the platform, displaying a welcome message and prompting them to set their password. After setting and confirming the password, clicking 'Save' redirects the user directly to their dashboard.
+
+Dashboard :-
+
+- View user details, edit personal information, change password, and access permitted modules. Edit button allows modification of name, contact, and address; change password prompts for current, new, and confirm passwords, redirecting to login with new password.
+
+Sidebar :-
+
+- View assigned modules and submodules, with collapsible main modules revealing their respective submodules.
+
+Contact - People Module :-
+
+- View, search, and filter people with permission-dependent actions such as edit, delete, and create; edit and delete actions controlled by user permissions.
+- User-permission-based control over creating, editing, and deleting people with respective form functionalities and confirmation popups.
+
+Contact - Company Module :-
+
+- View, search, and list companies with permission-dependent actions for editing and deleting; creation controlled by user permissions.
+- Create/Edit/Delete: User-permission-based control over creating, editing, and deleting companies with respective form functionalities and confirmation popups.
+
+Account - Notes Module :-
+
+- View and search notes with permission-based actions for editing and deleting; creation controlled by user permissions.
+- Create/Edit/Delete: User-permission-based control over creating, editing, and deleting notes with respective form functionalities and confirmation popups.
+
+Account - Meetings Module :-
+
+- View, search, and filter meetings with permission-based actions for editing and deleting; automatic deactivation of past meetings.
+- Create/Edit/Delete: User-permission-based control over creating, editing, and deleting meetings with form functionalities ensuring future dates and times, and confirmation popups.
+
+Account - Activity Log :-
+
+- View, search, and filter activity log with permission-based actions for editing and deleting; creation controlled by user permissions.
+
+- Create/Edit/Delete: User-permission-based control over creating, editing, and deleting activity log entries with respective form functionalities and confirmation popups.
 
 ## Requirements
 
