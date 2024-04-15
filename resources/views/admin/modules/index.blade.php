@@ -81,63 +81,68 @@
                             </tr>
                         @endif
                         @foreach ($modules as $module)
-                            <tr>
-                                <td class="clickable" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseExample_{{ $module->code }}" aria-expended="false"
-                                    aria-controls="collapseExample_{{ $module->code }}"><button
-                                        class="btn btn-default btn-xs"><i class="fa-solid fa-caret-down"></i></button>
-                                </td>
-                                <td>{{ $module->module_name }}</td>
-                                <td>{{ $module->description }}</td>
-                                <td>
-                                    <div class="form-check form-switch">
-                                        <input data-id="{{ $module->code }}" class="form-check-input toggle-class"
-                                            type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
-                                            {{ $module->is_active == 1 ? 'checked' : '' }}>
-                                    </div>
-                                </td>
-                                <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
-                                            class="fa-solid fa-pen-to-square"></i></a></td>
-                            </tr>
-                            <tr class="collapse" id = "collapseExample_{{ $module->code }}">
-                                <td colspan="5">
-                                    <table class="table">
-                                        <thead class="table-light">
-                                            <tr class="info">
-                                                <th scope="col">Submodule Name</th>
-                                                <th scope="col">Description</th>
-                                                <th>Status</th>
-                                                <th scope="col">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($module->submodules as $submodule)
-                                                <tr>
-                                                    <td>{{ $submodule->module_name }}</td>
-                                                    <td>{{ $submodule->description }}</td>
-                                                    <td>
-                                                        <div class="form-check form-switch">
-                                                            <input data-id="{{ $submodule->code }}"
-                                                                class="form-check-input toggle-class" type="checkbox"
-                                                                role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                                                data-offstyle="info" data-toggle="toggle" data-on="Pending"
-                                                                data-off="Approved"
-                                                                {{ $submodule->is_active == 1 ? 'checked' : '' }}>
-                                                        </div>
-                                                    </td>
-                                                    <td><a
-                                                            href="{{ route('modules.edit', ['code' => $submodule->code]) }}"><i
-                                                                class="fa-solid fa-pen-to-square"></i></a></td>
+                            @if ($module->parent_code === null)
+                                <tr>
+                                    <td class="clickable" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseExample_{{ $module->code }}" aria-expended="false"
+                                        aria-controls="collapseExample_{{ $module->code }}"><button
+                                            class="btn btn-default btn-xs"><i class="fa-solid fa-caret-down"></i></button>
+                                    </td>
+                                    <td>{{ $module->module_name }}</td>
+                                    <td>{{ $module->description }}</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input data-id="{{ $module->code }}" class="form-check-input toggle-class"
+                                                type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
+                                                data-offstyle="info" data-toggle="toggle" data-on="Pending"
+                                                data-off="Approved" {{ $module->is_active == 1 ? 'checked' : '' }}>
+                                        </div>
+                                    </td>
+                                    <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
+                                                class="fa-solid fa-pen-to-square"></i></a></td>
+                                </tr>
+                                <tr class="collapse" id = "collapseExample_{{ $module->code }}">
+                                    <td colspan="5">
+                                        <table class="table">
+                                            <thead class="table-light">
+                                                <tr class="info">
+                                                    <th scope="col">Submodule Name</th>
+                                                    <th scope="col">Description</th>
+                                                    <th>Status</th>
+                                                    <th scope="col">Action</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            @php
-                                $i++;
-                            @endphp
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($module->submodules as $submodule)
+                                                    @if (in_array($submodule, $modules->items()))
+                                                        <tr>
+                                                            <td>{{ $submodule->module_name }}</td>
+                                                            <td>{{ $submodule->description }}</td>
+                                                            <td>
+                                                                <div class="form-check form-switch">
+                                                                    <input data-id="{{ $submodule->code }}"
+                                                                        class="form-check-input toggle-class"
+                                                                        type="checkbox" role="switch"
+                                                                        id="switchCheckDefault" data-onstyle="danger"
+                                                                        data-offstyle="info" data-toggle="toggle"
+                                                                        data-on="Pending" data-off="Approved"
+                                                                        {{ $submodule->is_active == 1 ? 'checked' : '' }}>
+                                                                </div>
+                                                            </td>
+                                                            <td><a
+                                                                    href="{{ route('modules.edit', ['code' => $submodule->code]) }}"><i
+                                                                        class="fa-solid fa-pen-to-square"></i></a></td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                @php
+                                    $i++;
+                                @endphp
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -157,12 +162,7 @@
         <div class="toast-body">
             Hello, world! This is a toast message.
         </div>
-    </div
-
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+    </div @endsection @section('page-script') <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
     <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
     <script>

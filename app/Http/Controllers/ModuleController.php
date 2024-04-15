@@ -28,7 +28,8 @@ class ModuleController extends Controller
         ])
         ->get();
     }
-    $modules = $query->where('parent_code', null)->paginate(10);
+    // $modules = $query->where('parent_code', null)->paginate(10);
+    $modules = $query->paginate(10);
 
     // search the module
     $search = $request->input('search');
