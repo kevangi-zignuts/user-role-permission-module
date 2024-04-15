@@ -37,7 +37,7 @@ Route::post('/forget-password', [ForgetPasswordController::class, 'submit'])->na
 Route::get('/reset-password-link/{token}', [ResetPasswordController::class, 'showForm'])->name('resetPassword');
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'submit'])->name('resetPasswordSubmit');
 
-Route::middleware('auth', 'access', 'adminCheck')->group(function () {
+Route::middleware('auth', 'adminCheck')->group(function () {
   // Main Page Route
 
   Route::group(['prefix' => 'admin'], function () {
@@ -88,7 +88,7 @@ Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')
   ->name('auth.logout')
   ->middleware('auth', 'access');
 
-Route::middleware('auth', 'access', 'isUser')->group(function () {
+Route::middleware('auth', 'isUser')->group(function () {
   Route::group(['prefix' => 'user'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/edit', [DashboardController::class, 'edit'])->name('user.edit');
