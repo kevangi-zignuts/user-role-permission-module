@@ -86,7 +86,7 @@ Route::middleware('auth', 'adminCheck')->group(function () {
 });
 Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')
   ->name('auth.logout')
-  ->middleware('auth', 'access');
+  ->middleware('auth');
 
 Route::middleware('auth', 'isUser')->group(function () {
   Route::group(['prefix' => 'user'], function () {

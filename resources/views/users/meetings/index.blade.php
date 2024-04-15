@@ -82,8 +82,8 @@
                             <tr>
                                 <td>{{ $meeting->title }}</td>
                                 <td>{{ $meeting->description }}</td>
-                                <td class="meetingDate">{{ $meeting->date }}</td>
-                                <td>{{ $meeting->time }}</td>
+                                <td class="meetingDate" data-id="{{ $meeting->id }}">{{ $meeting->date }}</td>
+                                <td class="meetingTime" data-id="{{ $meeting->id }}">{{ $meeting->time }}</td>
                                 <td>
                                     <div class="form-check form-switch">
                                         <input data-id="{{ $meeting->id }}" class="form-check-input toggle-class"
@@ -165,6 +165,26 @@
         document.addEventListener("DOMContentLoaded", function() {
             toggleSwitches = document.querySelectorAll('.toggle-class');
             toggleSwitches.forEach(function(toggleSwitch) {
+                var meetingId = $(toggleSwitch).data('id');
+                var isChecked = $(toggleSwitch).prop('checked');
+                var dateString = $('.meetingDate[data-id="' + meetingId + '"]').text();
+                var timeString = $('.meetingTime[data-id="' + meetingId + '"]').text();
+                var dateParts = dateString.split('-');
+                var timeParts = timeString.split(':');
+                var day = parseInt(dateParts[0], 10);
+                var month = parseInt(dateParts[1], 10) - 1;
+                var year = parseInt(dateParts[2], 10);
+                var hour = parseInt(timeParts[0], 10);
+                var minute = parseInt(timeParts[1], 10);
+                var second = parseInt(timeParts[2], 10);
+                var meetingDate = new Date(year, month, day, hour, minute, second);
+                // console.log(meetingDate);
+                var currentDate = new Date();
+                if (meetingDate < currentDate && isChecked) {
+                    $(toggleSwitch).prop('checked', false);
+                }
+                console.log(meetingDate);
+                var meetingDate = new Date($('.meetingDate[data-id="' + meetingId + '"]').text());
                 toggleSwitch.addEventListener('click', function() {
                     Swal.fire({
                         title: 'Are you sure?',

@@ -64,12 +64,17 @@ class MenuServiceProvider extends ServiceProvider
       if ($module->parent_code === null && $user->hasPermission($module->code, 'view_access')) {
         $submodules = $module->submodules()->get();
         $moduleArray = $module->toArray();
-        $submodulesArray = [];
-        foreach ($submodules as $submodule) {
-          if ($user->hasPermission($submodule->code, 'view_access')) {
-            $submodulesArray[] = $submodule->toArray();
-          }
-        }
+        // $submodulesArray = [];
+        // foreach ($submodules as $submodule) {
+        //   if ($user->hasPermission($submodule->code, 'view_access')) {
+        //     $submodulesArray[] = $submodule->toArray();
+        //   }
+        // }
+        $submodulesArray = $submodules
+          ->filter(function ($submodule) use ($user) {
+            return $user->hasPermission($submodule->code, 'view_access');
+          })
+          ->toArray();
         if (!empty($submodulesArray)) {
           $moduleArray['submenu'] = $submodulesArray;
           $menus[] = $moduleArray;
