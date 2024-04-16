@@ -59,30 +59,28 @@ class MenuServiceProvider extends ServiceProvider
     $staticMenuData = json_decode($staticMenuJson, true);
 
     $modules = Module::all();
-    $menus = [];
-    foreach ($modules as $module) {
-      if ($module->parent_code === null && $user->hasPermission($module->code, 'view_access')) {
-        $submodules = $module->submodules()->get();
-        $moduleArray = $module->toArray();
-        // $submodulesArray = [];
-        // foreach ($submodules as $submodule) {
-        //   if ($user->hasPermission($submodule->code, 'view_access')) {
-        //     $submodulesArray[] = $submodule->toArray();
-        //   }
-        // }
-        $submodulesArray = $submodules
+    $menu = $modules
+      ->filter(function ($module) use ($user) {
+        return $module->parent_code === null && $user->hasPermission($module->code, 'view_access');
+      })
+      ->map(function ($module) use ($user) {
+        $submodulesArray = $module->submodules
           ->filter(function ($submodule) use ($user) {
             return $user->hasPermission($submodule->code, 'view_access');
           })
           ->toArray();
         if (!empty($submodulesArray)) {
+          $moduleArray = $module->toArray();
           $moduleArray['submenu'] = $submodulesArray;
-          $menus[] = $moduleArray;
+          return $moduleArray;
         }
-      }
-    }
-
-    $staticMenuData['menu'] = array_merge($staticMenuData['menu'], $menus);
+        return null;
+      })
+      ->filter()
+      ->toArray();
+    // $menu = $menu->values()->toArray();
+    // dd($menu);
+    $staticMenuData['menu'] = array_merge($staticMenuData['menu'], $menu);
     // Format the menu
     $menu = [(object) $staticMenuData];
     return $menu;

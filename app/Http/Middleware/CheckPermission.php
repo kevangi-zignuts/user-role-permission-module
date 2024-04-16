@@ -21,7 +21,9 @@ class CheckPermission
       return redirect()->route('login');
     }
     if (!Auth::user()->hasPermission($moduleCode, $accessType)) {
-      return abort(403, 'Unauthorized'); // or redirect to another page
+      return redirect()
+        ->back()
+        ->with('error', 'Unauthorized Access');
     }
     $module = Module::findOrFail($moduleCode);
     if (
@@ -31,7 +33,9 @@ class CheckPermission
         Auth::user()->hasPermission($module->parent_code, 'view_access')
       )
     ) {
-      return abort(403, 'Unauthorized');
+      return redirect()
+        ->back()
+        ->with('error', 'Unauthorized Access');
     }
     return $next($request);
   }
