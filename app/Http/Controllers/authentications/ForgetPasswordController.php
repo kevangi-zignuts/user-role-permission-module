@@ -38,14 +38,14 @@ class ForgetPasswordController extends Controller
     $token = Str::random(64);
 
     $now = Carbon::now();
-    $tokenExpiry = $now->addSeconds(120);
+    // $tokenExpiry = $now->addSeconds(120);
     DB::table('password_reset_tokens')->updateOrInsert(
       [
         'email' => $request->email,
       ],
       [
         'token' => $token,
-        'token_expiry' => $tokenExpiry,
+        // 'token_expiry' => $tokenExpiry,
         'created_at' => Carbon::now(),
       ]
     );

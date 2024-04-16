@@ -25,12 +25,20 @@ class ResetPasswordController extends Controller
       ->where('token', $token)
       ->first();
 
-    $tokenExpiry = $tokenRecord ? Carbon::parse($tokenRecord->token_expiry) : null;
-
-    if ($tokenRecord && !$tokenExpiry->isPast()) {
-      // Token is a password reset token
+    if (!$tokenRecord) {
+      return redirect()
+        ->route('auth-login-basic')
+        ->with('error', 'Password reset already!! ');
+    } else {
       return view('content.forgetPassword.passwordResetForm', compact('token'));
     }
+
+    // $tokenExpiry = $tokenRecord ? Carbon::parse($tokenRecord->token_expiry) : null;
+
+    // if ($tokenRecord && !$tokenExpiry->isPast()) {
+    //   // Token is a password reset token
+    //   return view('content.forgetPassword.passwordResetForm', compact('token'));
+    // }
 
     $user = User::where('invitation_token', $token)->first();
     if ($user) {
@@ -71,6 +79,9 @@ class ResetPasswordController extends Controller
       $user->update(['password' => $password]);
 
       Mail::to($tokenRecord->email)->send(new ResetPassword($user->first_name));
+      DB::table('password_reset_tokens')
+        ->where('token', $token)
+        ->delete();
 
       return redirect()
         ->route('auth-login-basic')
