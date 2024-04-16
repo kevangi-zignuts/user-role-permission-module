@@ -58,7 +58,7 @@ class MeetingController extends Controller
   {
     $request->validate([
       'title' => 'required|string|max:255',
-      'date' => 'required|date',
+      'date' => 'required|date|after_or_equal:today',
       'time' => 'required',
     ]);
 
