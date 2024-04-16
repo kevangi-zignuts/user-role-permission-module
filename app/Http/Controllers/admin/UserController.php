@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use App\Models\Role;
 use App\Models\User;
 use App\Mail\ResetPassword;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Mail\InvitationEmail;
 use Illuminate\Validation\Rule;

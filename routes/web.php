@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\admin\RoleController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Middleware\CheckUserTokens;
-use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\admin\ModuleController;
+use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\users\NoteController;
 use App\Http\Controllers\users\PeopleController;
 use App\Http\Controllers\users\CompanyController;
