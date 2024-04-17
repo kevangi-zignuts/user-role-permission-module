@@ -25,7 +25,13 @@
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endsection
 
-
+@section('page-script')
+    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
+    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+@endsection
 
 @section('content')
     {{-- @dd(Session::all())
@@ -155,86 +161,4 @@
     <!--/ Toast message -->
 @endsection
 
-@section('page-script')
-    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
 
-
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-
-    {{-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            deleteButtons = document.querySelectorAll('.delete-class');
-            deleteButtons.forEach(function(deleteButton) {
-                deleteButton.addEventListener('click', function() {
-                    var row = this.closest('tr');
-
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, delete it!',
-                        customClass: {
-                            confirmButton: 'btn btn-primary me-3',
-                            cancelButton: 'btn btn-label-secondary'
-                        },
-                        buttonsStyling: false
-                    }).then(function(result) {
-                        if (result.isConfirmed) {
-                            var id = $(deleteButton).data('id');
-                            $.ajax({
-                                type: "GET",
-                                dataType: "json",
-                                url: "/user/people/delete/" + id,
-                                success: function(data) {
-                                    if (data.success) {
-                                        row.remove();
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Data Deleted!!',
-                                            text: data.message,
-                                            customClass: {
-                                                confirmButton: 'btn btn-success'
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    });
-                })
-            });
-        });
-    </script> --}}
-
-    <!-- Script to handle toast display -->
-    <script>
-        $(document).ready(function() {
-            // Function to get URL parameter by name
-            function getUrlParameter(name) {
-                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-                var results = regex.exec(location.search);
-                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-            };
-
-            // Check if success parameter exists and is true
-            var successParam = getUrlParameter('success');
-            if (successParam == '1') {
-                var messageParam = getUrlParameter('message');
-                var toastAnimationExample = document.querySelector('.toast-ex');
-                var selectedType = 'text-success';
-                var selectedAnimation = 'animate__tada';
-                toastAnimationExample.classList.add(selectedAnimation);
-                toastAnimationExample.querySelector('.ti').classList.add(selectedType);
-                var Message = document.querySelector('.toast-body');
-                Message.innerText = messageParam;
-                toastAnimation = new bootstrap.Toast(toastAnimationExample);
-                toastAnimation.show();
-            }
-        });
-    </script>
-
-@endsection

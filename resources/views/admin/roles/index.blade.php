@@ -8,14 +8,18 @@
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
 @endsection
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 @endsection
 
 
@@ -132,40 +136,4 @@
 
 @endsection
 
-@section('page-script')
-    <script src="{{ asset('assets/js/ui-toasts.js') }}"></script>
-    <script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 
-    <!-- Script to handle toast display -->
-    <script>
-        $(document).ready(function() {
-            // Function to get URL parameter by name
-            function getUrlParameter(name) {
-                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-                var results = regex.exec(location.search);
-                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-            };
-
-            // Check if success parameter exists and is true
-            var successParam = getUrlParameter('success');
-            if (successParam == '1') {
-                var messageParam = getUrlParameter('message');
-                var toastAnimationExample = document.querySelector('.toast-ex');
-                var selectedType = 'text-success';
-                var selectedAnimation = 'animate__tada';
-                toastAnimationExample.classList.add(selectedAnimation);
-                toastAnimationExample.querySelector('.ti').classList.add(selectedType);
-                var Message = document.querySelector('.toast-body');
-                Message.innerText = messageParam;
-                toastAnimation = new bootstrap.Toast(toastAnimationExample);
-                toastAnimation.show();
-            }
-        });
-    </script>
-
-
-
-@endsection
