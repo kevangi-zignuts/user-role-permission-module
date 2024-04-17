@@ -122,7 +122,7 @@
                                                         Edit</a>
                                                 @endif
                                                 @if ($access['delete'])
-                                                    <button data-id="{{ $people->id }}"
+                                                    <button data-route="{{ route('people.delete', ['id' => $people->id]) }}"
                                                         class="btn text-danger delete-class" type="button"><i
                                                             class="ti ti-trash me-1"></i> Delete</button>
                                                 @endif
@@ -153,7 +153,6 @@
         </div>
     </div>
     <!--/ Toast message -->
-    {{-- <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script> --}}
 @endsection
 
 @section('page-script')
@@ -164,9 +163,7 @@
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 
-
-
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             deleteButtons = document.querySelectorAll('.delete-class');
             deleteButtons.forEach(function(deleteButton) {
@@ -210,7 +207,7 @@
                 })
             });
         });
-    </script>
+    </script> --}}
 
     <!-- Script to handle toast display -->
     <script>

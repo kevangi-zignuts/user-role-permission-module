@@ -95,7 +95,7 @@
                                             <a class="dropdown-item"
                                                 href="{{ route('permissions.edit', ['id' => $permission->id]) }}"><i
                                                     class="ti ti-pencil me-1"></i> Edit</a>
-                                            <button data-id="{{ $permission->id }}" class="btn text-danger delete-class"
+                                            <button data-route="{{ route('permissions.delete', ['id' => $permission->id]) }}" class="btn text-danger delete-class"
                                                 type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         </div>
                                     </div>
@@ -131,52 +131,6 @@
     <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            deleteButtons = document.querySelectorAll('.delete-class');
-            deleteButtons.forEach(function(deleteButton) {
-                deleteButton.addEventListener('click', function() {
-                    var row = this.closest('tr');
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, delete it!',
-                        customClass: {
-                            confirmButton: 'btn btn-primary me-3',
-                            cancelButton: 'btn btn-label-secondary'
-                        },
-                        buttonsStyling: false
-                    }).then(function(result) {
-                        if (result.isConfirmed) {
-                            var id = $(deleteButton).data('id');
-                            $.ajax({
-                                type: "GET",
-                                dataType: "json",
-                                url: "/admin/permissions/delete/" + id,
-                                success: function(data) {
-                                    if (data.success) {
-                                        row.remove();
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Data Deleted!!',
-                                            text: data.message,
-                                            customClass: {
-                                                confirmButton: 'btn btn-success'
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    });
-                })
-            });
-        });
-    </script>
 
 
     <script>
