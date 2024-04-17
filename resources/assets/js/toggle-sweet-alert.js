@@ -112,4 +112,45 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     })
   });
+
+
+  forcedLogoutButtons = document.querySelectorAll('.forced-logout-class');
+  forcedLogoutButtons.forEach(function (forcedLogoutButton) {
+    forcedLogoutButton.addEventListener('click', function () {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, logout it!',
+        customClass: {
+          confirmButton: 'btn btn-primary me-3',
+          cancelButton: 'btn btn-label-secondary'
+        },
+        buttonsStyling: false
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          var route = $(forcedLogoutButton).data('route');
+          $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: route,
+            success: function (data) {
+              if (data.success) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Logout Successfully!!',
+                  text: data.message,
+                  customClass: {
+                    confirmButton: 'btn btn-success'
+                  }
+                });
+              }
+            }
+          });
+        }
+      });
+    })
+  });
+
 });
