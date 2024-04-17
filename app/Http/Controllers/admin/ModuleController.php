@@ -18,31 +18,6 @@ class ModuleController extends Controller
     $search = $request->input('search');
     $query = Module::query();
 
-    // filter the module
-    // if ($filter !== 'all') {
-    //   $query
-    //     ->where('is_active', $request->filter)
-    //     ->with([
-    //       'submodules' => function ($query) use ($request) {
-    //         $query->where('is_active', $request->filter);
-    //       },
-    //     ])
-    //     ->get();
-    // }
-    // $modules = $query->where('parent_code', null)->paginate(10);
-    // $modules = $query->paginate(10);
-
-    // search the module
-    // $search = $request->input('search');
-    // if (!empty($search)) {
-    //   $query
-    //     ->whereHas('submodules', function ($q) use ($search) {
-    //       $q->where('module_name', 'like', '%' . $search . '%');
-    //     })
-    //     ->orWhere('module_name', 'like', '%' . $search . '%');
-    //   $modules = $query->paginate(10);
-    // }
-
     if ($filter != 'all' && !empty($search)) {
       $query
         ->where('is_active', $request->filter)
@@ -60,24 +35,6 @@ class ModuleController extends Controller
         ->orWhere('module_name', 'like', '%' . $search . '%');
     }
     $modules = $query->where('parent_code', null)->paginate(10);
-    // $examples = $query
-    //   ->where('module_name', 'like', '%' . $search . '%')
-    //   ->orWhereHas('parentModule', function ($q) use ($search) {
-    //     $q->where('module_name', 'like', '%' . $search . '%');
-    //   })
-    //   ->with(['parentModule', 'submodules'])
-    //   ->get();
-
-    // $result = [];
-    // foreach ($examples as $example) {
-    //   if ($example->parentModule) {
-    //     $result[$example->parentModule][] = $example;
-    //   } else {
-    //     $result[$example->module_name] = $example;
-    //     $result[$example->module_name] = $example->submodules->toArray();
-    //   }
-    // }
-    // dd($result);
 
     return view('admin.modules.index', ['modules' => $modules, 'filter' => $filter]);
   }

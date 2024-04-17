@@ -21,14 +21,11 @@ class PermissionController extends Controller
     $query = Permission::query();
 
     if ($filter != 'all' && !empty($search)) {
-      $query
-        ->where('is_active', $request->filter)
-        ->where('permission_name', 'like', '%' . $search . '%')
-        ->get();
+      $query->where('is_active', $request->filter)->where('permission_name', 'like', '%' . $search . '%');
     } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter)->get();
+      $query->where('is_active', $request->filter);
     } else {
-      $query->where('permission_name', 'like', '%' . $search . '%')->get();
+      $query->where('permission_name', 'like', '%' . $search . '%');
     }
 
     $permissions = $query->paginate(8);

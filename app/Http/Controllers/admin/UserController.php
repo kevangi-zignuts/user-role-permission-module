@@ -30,19 +30,7 @@ class UserController extends Controller
     $search = $request->input('search');
     $query = User::query();
 
-    // filter the user
-    // if ($filter !== 'all') {
-    //   $query->where('is_active', $request->filter)->get();
-    // }
-
-    // search the user
-    // $search = $request->input('search');
-    // if (!empty($search)) {
-    //   $query->where(function ($query) use ($search) {
-    //     $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
-    //   });
-    // }
-
+    // filter and search the user
     if ($filter != 'all' && !empty($search)) {
       $query
         ->where('is_active', $request->filter)

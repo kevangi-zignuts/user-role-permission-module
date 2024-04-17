@@ -20,20 +20,13 @@ class RoleController extends Controller
     $search = $request->input('search');
     $query = Role::query();
 
-    // filter the role
-    if ($filter !== 'all') {
-      $query->where('is_active', $request->filter)->get();
-    }
-
+    // filter and search the role
     if ($filter != 'all' && !empty($search)) {
-      $query
-        ->where('is_active', $request->filter)
-        ->where('role_name', 'like', '%' . $search . '%')
-        ->get();
+      $query->where('is_active', $request->filter)->where('role_name', 'like', '%' . $search . '%');
     } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter)->get();
+      $query->where('is_active', $request->filter);
     } else {
-      $query->where('role_name', 'like', '%' . $search . '%')->get();
+      $query->where('role_name', 'like', '%' . $search . '%');
     }
 
     $roles = $query->paginate(8);

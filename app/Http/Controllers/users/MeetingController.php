@@ -28,14 +28,11 @@ class MeetingController extends Controller
     $query = Meeting::query();
 
     if ($filter != 'all' && !empty($search)) {
-      $query
-        ->where('is_active', $request->filter)
-        ->where('title', 'like', '%' . $search . '%')
-        ->get();
+      $query->where('is_active', $request->filter)->where('title', 'like', '%' . $search . '%');
     } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter)->get();
+      $query->where('is_active', $request->filter);
     } else {
-      $query->where('title', 'like', '%' . $search . '%')->get();
+      $query->where('title', 'like', '%' . $search . '%');
     }
 
     $meetings = $query->paginate(8);

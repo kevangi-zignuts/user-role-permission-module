@@ -28,14 +28,11 @@ class ActivityLogController extends Controller
     $query = ActivityLog::query();
 
     if ($filter != 'all' && !empty($search)) {
-      $query
-        ->where('is_active', $request->filter)
-        ->where('name', 'like', '%' . $search . '%')
-        ->get();
+      $query->where('is_active', $request->filter)->where('name', 'like', '%' . $search . '%');
     } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter)->get();
+      $query->where('is_active', $request->filter);
     } else {
-      $query->where('name', 'like', '%' . $search . '%')->get();
+      $query->where('name', 'like', '%' . $search . '%');
     }
     $logs = $query->paginate(8);
     return view('users.logs.index', ['logs' => $logs, 'filter' => $filter, 'access' => $access]);
