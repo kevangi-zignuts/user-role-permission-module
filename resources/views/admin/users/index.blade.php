@@ -17,12 +17,17 @@
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 @endsection
 
 
@@ -102,9 +107,10 @@
                             </td>
                             <td>
                                 <div class="form-check form-switch">
-                                    <input data-route="{{ route('users.status', ['id' => $user->id]) }}" class="form-check-input toggle-class"
-                                        type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                        data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                    <input data-route="{{ route('users.status', ['id' => $user->id]) }}"
+                                        class="form-check-input toggle-class" type="checkbox" role="switch"
+                                        id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
+                                        data-toggle="toggle" data-on="Pending" data-off="Approved"
                                         {{ $user->is_active == 1 ? 'checked' : '' }}>
                                 </div>
                             </td>
@@ -116,15 +122,16 @@
                                         <a class="dropdown-item"
                                             href="{{ route('users.edit', ['id' => $user->id]) }}"><i
                                                 class="ti ti-pencil me-1"></i> Edit</a>
-                                        <button data-route="{{ route('users.delete', ['id' => $user->id]) }}" class="btn text-danger delete-class"
-                                            type="button"><i class="ti ti-trash me-1"></i> Delete</button>
+                                        <button data-route="{{ route('users.delete', ['id' => $user->id]) }}"
+                                            class="btn text-danger delete-class" type="button"><i
+                                                class="ti ti-trash me-1"></i> Delete</button>
                                         <a href="#" data-route="{{ route('users.resetPassword') }}"
                                             data-email="{{ $user->email }}" data-id="{{ $user->id }}"
                                             class="dropdown-item add-new-role" data-bs-target="#addRoleModal"
                                             data-bs-toggle="modal" class="dropdown-item add-new-role"><i
                                                 class="ti ti-key me-1"></i> Reset
                                             Password</a>
-                                        <button data-id="{{ $user->id }}"
+                                        <button data-route="{{ route('users.forceLogout', ['id' => $user->id]) }}"
                                             class="btn text-danger forced-logout-class" type="button"><i
                                                 class='ti ti-logout me-2'></i> Force Logout</button>
                                     </div>
@@ -190,58 +197,4 @@
 </script>
 @endsection
 
-@section('page-script')
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-<script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-<script src="{{ asset('assets/js/extended-ui-sweetalert2.js') }}"></script>
-<script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-<script src="{{ asset('assets/js/toast-message.js') }}"></script>
 
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        forcedLogoutButtons = document.querySelectorAll('.forced-logout-class');
-        forcedLogoutButtons.forEach(function(forcedLogoutButton) {
-            forcedLogoutButton.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, logout it!',
-                    customClass: {
-                        confirmButton: 'btn btn-primary me-3',
-                        cancelButton: 'btn btn-label-secondary'
-                    },
-                    buttonsStyling: false
-                }).then(function(result) {
-                    if (result.isConfirmed) {
-                        var id = $(forcedLogoutButton).data('id');
-                        $.ajax({
-                            type: "GET",
-                            dataType: "json",
-                            url: "/admin/users/forced-logout/" + id,
-                            success: function(data) {
-                                if (data.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Logout Successfully!!',
-                                        text: data.message,
-                                        customClass: {
-                                            confirmButton: 'btn btn-success'
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                });
-            })
-        });
-    });
-</script>
-
-
-@endsection

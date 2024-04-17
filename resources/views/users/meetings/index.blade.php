@@ -16,14 +16,19 @@
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endsection
 
-
+@section('page-script')
+    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
+    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+@endsection
 
 @section('content')
 
@@ -86,9 +91,11 @@
                                 <td class="meetingTime" data-id="{{ $meeting->id }}">{{ $meeting->time }}</td>
                                 <td>
                                     <div class="form-check form-switch">
-                                        <input data-id="{{ $meeting->id }}" class="form-check-input toggle-class"
-                                            type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                        <input data-id="{{ $meeting->id }}"
+                                            data-route="{{ route('meetings.status', ['id' => $meeting->id]) }}"
+                                            class="form-check-input toggle-class" type="checkbox" role="switch"
+                                            id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
+                                            data-toggle="toggle" data-on="Pending" data-off="Approved"
                                             {{ $meeting->is_active == 1 ? 'checked' : '' }}>
                                     </div>
                                 </td>
@@ -105,7 +112,8 @@
                                                         Edit</a>
                                                 @endif
                                                 @if ($access['delete'])
-                                                    <button data-route="{{ route('meetings.delete', ['id' => $meeting->id]) }}"
+                                                    <button
+                                                        data-route="{{ route('meetings.delete', ['id' => $meeting->id]) }}"
                                                         class="btn text-danger delete-class" type="button"><i
                                                             class="ti ti-trash me-1"></i> Delete</button>
                                                 @endif
@@ -156,81 +164,4 @@
 
 @endsection
 
-@section('page-script')
-    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
 
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            toggleSwitches = document.querySelectorAll('.toggle-class');
-            toggleSwitches.forEach(function(toggleSwitch) {
-                var meetingId = $(toggleSwitch).data('id');
-                var isChecked = $(toggleSwitch).prop('checked');
-                var dateString = $('.meetingDate[data-id="' + meetingId + '"]').text();
-                var timeString = $('.meetingTime[data-id="' + meetingId + '"]').text();
-                var dateParts = dateString.split('-');
-                var timeParts = timeString.split(':');
-                var day = parseInt(dateParts[0], 10);
-                var month = parseInt(dateParts[1], 10) - 1;
-                var year = parseInt(dateParts[2], 10);
-                var hour = parseInt(timeParts[0], 10);
-                var minute = parseInt(timeParts[1], 10);
-                var second = parseInt(timeParts[2], 10);
-                var meetingDate = new Date(year, month, day, hour, minute, second);
-                // console.log(meetingDate);
-                var currentDate = new Date();
-                if (meetingDate < currentDate && isChecked) {
-                    $(toggleSwitch).prop('checked', false);
-                }
-                console.log(meetingDate);
-                // var meetingDate = new Date($('.meetingDate[data-id="' + meetingId + '"]').text());
-                toggleSwitch.addEventListener('click', function() {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, change it!',
-                        customClass: {
-                            confirmButton: 'btn btn-primary me-3',
-                            cancelButton: 'btn btn-label-secondary'
-                        },
-                        buttonsStyling: false
-                    }).then(function(result) {
-                        if (result.isConfirmed) {
-                            var status = $(toggleSwitch).prop('checked') == true ? 1 : 0;
-                            var id = $(toggleSwitch).data('id');
-                            $.ajax({
-                                type: "GET",
-                                dataType: "json",
-                                url: "/user/meetings/status/" + id,
-                                success: function(data) {
-                                    if (data.success) {
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Status Updated!!',
-                                            text: data.message,
-                                            customClass: {
-                                                confirmButton: 'btn btn-success'
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        } else {
-                            var currentState = $(toggleSwitch).prop('checked');
-                            $(toggleSwitch).prop('checked', !currentState);
-                        }
-                    });
-                });
-            });
-        });
-    </script>
-
-
-
-
-@endsection
