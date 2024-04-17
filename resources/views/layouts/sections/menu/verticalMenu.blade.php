@@ -23,7 +23,6 @@
 
 
     <div class="menu-inner-shadow"></div>
-
     <ul class="menu-inner py-1">
         @if (!empty($menuData))
             {{-- @dd($menuData[0]->menu) --}}

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
 
 class PeopleController extends Controller
@@ -117,9 +118,10 @@ class PeopleController extends Controller
     $people = People::findOrFail($id);
     $people->update($request->only(['name', 'email', 'designation', 'contact_no', 'address']));
 
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role updated successfully');
+    Session::push('success', 'People Details updated successfully');
+    // Session::flash('success', 'People Details updated successfully');
+    // return redirect()->route('people.index')
+    // ->with('success', 'People Details updated successfully');
     return redirect()->route('people.index', [
       'success' => true,
       'message' => 'People Details updated successfully',

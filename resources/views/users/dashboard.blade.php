@@ -31,48 +31,7 @@
 
 @section('content')
 
-    {{-- <div class="card">
-        <div class="card-header d-flex justify-content-between m-5 mb-2">
-            <a class="btn btn-primary" href="{{ route('user.edit') }}"><i class="ti ti-pencil me-1"></i> Edit</a>
-
-            <a href="#" data-route="{{ route('user.resetPassword') }}" data-id="{{ Auth::id() }}"
-                class="btn btn-primary add-new-role" data-bs-target="#addRoleModal" data-bs-toggle="modal"
-                class="dropdown-item add-new-role"><i class="ti ti-key me-1"></i> Reset
-                Password</a>
-        </div>
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label">First Name *</label>
-                    <input type="text" class="form-control" name="first_name" value="{{ $user->first_name }}"
-                        disabled />
-                    @error('first_name')
-                        <div class="text-danger pt-2">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Last Name</label>
-                    <input type="text" class="form-control phone-mask" name="last_name" value="{{ $user->last_name }}"
-                        disabled />
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email *</label>
-                <input type="email" class="form-control" name="email" value="{{ $user->email }}" autofocus disabled>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">contact no</label>
-                <input type="tel" class="form-control" name="contact_no" value="{{ $user->contact_no }}" autofocus
-                    disabled>
-            </div>
-            <div class="form-group mb-3">
-                <label for="exampleFormControlTextarea1">Address</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="address" disabled>{{ $user->address }}</textarea>
-            </div>
-        </div>
-    </div> --}}
-
-    <div class="card bg-label-primary  p-4">
+    {{-- <div class="card bg-label-primary  p-4">
         <div class="row g-4">
             <div class="col-xl-4 col-lg-6 col-md-6 w-25">
                 <div class="card">
@@ -82,10 +41,14 @@
                                 class="rounded-circle w-px-100" />
                         </div>
                         <h4 class="mb-3 card-title">{{ $user->first_name }} {{ $user->last_name }}</h4>
+                        @if ($user->is_active)
+                            <p><span class="badge bg-label-success">Active</span></p>
+                        @else
+                            <p><span class="badge bg-label-success">Inactive</span></p>
+                        @endif
                         <div class="align-items-center justify-content-center">
                             <a class="btn btn-primary d-flex align-items-center mb-3" href="{{ route('user.edit') }}"><i
                                     class="ti ti-pencil me-1"></i> Edit</a>
-
                             <a href="#" data-route="{{ route('user.resetPassword') }}" data-id="{{ Auth::id() }}"
                                 data-bs-target="#addRoleModal" data-bs-toggle="modal"
                                 class="btn btn-primary add-new-role d-flex align-items-center mb-3"><i
@@ -98,35 +61,94 @@
             </div>
             <div class="col-xl-4 col-lg-6 col-md-6 w-75">
                 <div class="card">
-                  <div class="card-body">
-                      <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                          <p class="fw-bold mb-2">First Name :- </p>
-                          <p class="m-5 mb-2 mt-0">{{ $user->first_name }}</p>
-                      </div>
-                      <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                          <p class="fw-bold mb-2">Last Name :- </p>
-                          <p class="m-5 mb-2 mt-0">{{ $user->last_name }}</p>
-                      </div>
-                      <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                          <p class="fw-bold mb-2">Email :- </p>
-                          <p class="m-5 mb-2 mt-0">{{ $user->email}}</p>
-                      </div>
-                      <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                          <p class="fw-bold mb-2">Contact No. :- </p>
-                          <p class="m-5 mb-2 mt-0">{{ $user->contact_no}}</p>
-                      </div>
-                      <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                          <p class="fw-bold mb-2">Address :- </p>
-                          <p class="m-5 mb-2 mt-0">{{ $user->address}}</p>
-                      </div>
-                  </div>
+                    <div class="card-body">
+                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                            <p class="fw-bold mb-2">First Name :- </p>
+                            <p class="m-5 mb-2 mt-0">{{ $user->first_name }}</p>
+                        </div>
+                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                            <p class="fw-bold mb-2">Last Name :- </p>
+                            <p class="m-5 mb-2 mt-0">{{ $user->last_name }}</p>
+                        </div>
+                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                            <p class="fw-bold mb-2">Email :- </p>
+                            <p class="m-5 mb-2 mt-0">{{ $user->email }}</p>
+                        </div>
+                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                            <p class="fw-bold mb-2">Contact No. :- </p>
+                            <p class="m-5 mb-2 mt-0">{{ $user->contact_no }}</p>
+                        </div>
+                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                            <p class="fw-bold mb-2">Address :- </p>
+                            <p class="m-5 mb-2 mt-0">{{ $user->address }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div> --}}
 
 
 
+
+    <div class="card bg-label-primary  p-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="d-flex">
+                    <img src="{{ asset('assets/img/avatars/3.png') }}" alt="Avatar Image" class="rounded-circle w-px-75" />
+                    <div>
+                        <h4 class="card-title m-3 mb-0">{{ $user->first_name }} {{ $user->last_name }}</h4>
+                        @if ($user->is_active)
+                            <p><span class="badge bg-label-success m-3 mb-0 mt-0">Active</span></p>
+                        @else
+                            <p><span class="badge bg-label-success m-3 mb-0 mt-0">Inactive</span></p>
+                        @endif
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <a class="btn btn-primary h-50 m-2" href="{{ route('user.edit') }}"><i class="ti ti-pencil me-1"></i>
+                        Edit</a>
+                    <a href="#" data-route="{{ route('user.resetPassword') }}" data-id="{{ Auth::id() }}"
+                        data-bs-target="#addRoleModal" data-bs-toggle="modal"
+                        class="btn btn-primary add-new-role h-50 m-2"><i class="ti ti-key me-1"></i>
+                        Reset
+                        Password</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                    <p class="fw-bold mb-2">First Name :- </p>
+                    <p class="m-5 mb-2 mt-0">{{ $user->first_name }}</p>
+                </div>
+                <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                    <p class="fw-bold mb-2">Last Name :- </p>
+                    <p class="m-5 mb-2 mt-0">{{ $user->last_name }}</p>
+                </div>
+                <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                    <p class="fw-bold mb-2">Email :- </p>
+                    <p class="m-5 mb-2 mt-0">{{ $user->email }}</p>
+                </div>
+                <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                    <p class="fw-bold mb-2">Contact No. :- </p>
+                    <p class="m-5 mb-2 mt-0">{{ $user->contact_no }}</p>
+                </div>
+                <div class="w-100 mt-4 pb-0 border-bottom d-flex">
+                    <p class="fw-bold mb-2">Address :- </p>
+                    <p class="m-5 mb-2 mt-0">{{ $user->address }}</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
+
+
+
+
+
+
+
 
 
     @include('admin.users.resetPassword')

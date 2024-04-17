@@ -48,7 +48,7 @@ Route::middleware('auth', 'adminCheck')->group(function () {
       Route::get('/index', [ModuleController::class, 'index'])->name('modules.index');
       Route::get('/edit/{code}', [ModuleController::class, 'edit'])->name('modules.edit');
       Route::post('/update/{code}', [ModuleController::class, 'update'])->name('modules.update');
-      Route::get('/status/{code}', [ModuleController::class, 'updateStatus']);
+      Route::get('/status/{code}', [ModuleController::class, 'updateStatus'])->name('modules.status');
     });
 
     Route::group(['prefix' => 'permissions'], function () {
@@ -58,7 +58,7 @@ Route::middleware('auth', 'adminCheck')->group(function () {
       Route::get('/edit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
       Route::post('/update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
       Route::get('/delete/{id}', [PermissionController::class, 'delete'])->name('permissions.delete');
-      Route::get('/status/{id}', [PermissionController::class, 'updateStatus']);
+      Route::get('/status/{id}', [PermissionController::class, 'updateStatus'])->name('permissions.status');
     });
 
     Route::group(['prefix' => 'roles'], function () {
@@ -68,7 +68,7 @@ Route::middleware('auth', 'adminCheck')->group(function () {
       Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
       Route::post('/update/{id}', [RoleController::class, 'update'])->name('roles.update');
       Route::get('/delete/{id}', [RoleController::class, 'delete'])->name('roles.delete');
-      Route::get('/status/{id}', [RoleController::class, 'updateStatus']);
+      Route::get('/status/{id}', [RoleController::class, 'updateStatus'])->name('roles.status');
     });
 
     Route::group(['prefix' => 'users'], function () {
@@ -78,7 +78,7 @@ Route::middleware('auth', 'adminCheck')->group(function () {
       Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
       Route::post('/update/{id}', [UserController::class, 'update'])->name('users.update');
       Route::get('/delete/{id}', [UserController::class, 'delete'])->name('users.delete');
-      Route::get('/status/{id}', [UserController::class, 'updateStatus']);
+      Route::get('/status/{id}', [UserController::class, 'updateStatus'])->name('users.status');
       Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
       Route::get('/forced-logout/{id}', [UserController::class, 'forceLogout'])->name('users.forceLogout');
     });
@@ -120,9 +120,9 @@ Route::middleware('auth', 'isUser')->group(function () {
         ->name('activityLogs.create')
         ->middleware('permission:' . 'act' . ',add_access');
       Route::post('/store', [ActivityLogController::class, 'store'])->name('activityLogs.store');
-      Route::get('/status/{id}', [ActivityLogController::class, 'updateStatus'])->middleware(
-        'permission:' . 'act' . ',view_access'
-      );
+      Route::get('/status/{id}', [ActivityLogController::class, 'updateStatus'])
+        ->name('activityLogs.status')
+        ->middleware('permission:' . 'act' . ',view_access');
       Route::get('/edit/{id}', [ActivityLogController::class, 'edit'])
         ->name('activityLogs.edit')
         ->middleware('permission:' . 'act' . ',edit_access');
@@ -140,9 +140,9 @@ Route::middleware('auth', 'isUser')->group(function () {
         ->name('meetings.create')
         ->middleware('permission:' . 'meet' . ',add_access');
       Route::post('/store', [MeetingController::class, 'store'])->name('meetings.store');
-      Route::get('/status/{id}', [MeetingController::class, 'updateStatus'])->middleware(
-        'permission:' . 'meet' . ',view_access'
-      );
+      Route::get('/status/{id}', [MeetingController::class, 'updateStatus'])
+        ->name('meetings.status')
+        ->middleware('permission:' . 'meet' . ',view_access');
       Route::get('/edit/{id}', [MeetingController::class, 'edit'])
         ->name('meetings.edit')
         ->middleware('permission:' . 'meet' . ',edit_access');
@@ -177,9 +177,9 @@ Route::middleware('auth', 'isUser')->group(function () {
         ->name('people.create')
         ->middleware('permission:' . 'peo' . ',add_access');
       Route::post('/store', [PeopleController::class, 'store'])->name('people.store');
-      Route::get('/status/{id}', [PeopleController::class, 'updateStatus'])->middleware(
-        'permission:' . 'peo' . ',view_access'
-      );
+      Route::get('/status/{id}', [PeopleController::class, 'updateStatus'])
+        ->name('people.status')
+        ->middleware('permission:' . 'peo' . ',view_access');
       Route::get('/edit/{id}', [PeopleController::class, 'edit'])
         ->name('people.edit')
         ->middleware('permission:' . 'peo' . ',edit_access');

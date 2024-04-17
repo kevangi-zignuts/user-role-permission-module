@@ -74,7 +74,4 @@
   </div>
 </div>
 
-
-
-
 @endsection
