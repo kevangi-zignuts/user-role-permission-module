@@ -6,20 +6,11 @@
 document.addEventListener("DOMContentLoaded", function () {
   toggleSwitches = document.querySelectorAll('.toggle-class');
   toggleSwitches.forEach(function (toggleSwitch) {
-    var meetingId = $(toggleSwitch).data('id');
+    const [day, month, year] = $('.meetingDate[data-id="' + $(toggleSwitch).data('id') + '"]').text().split('-').map(Number);
+    const [hour, minute, second] = $('.meetingTime[data-id="' + $(toggleSwitch).data('id') + '"]').text().split(':').map(Number);
+    const meetingDate = new Date(year, month - 1, day, hour, minute, second);
+    const currentDate = new Date();
     var isChecked = $(toggleSwitch).prop('checked');
-    var dateString = $('.meetingDate[data-id="' + meetingId + '"]').text();
-    var timeString = $('.meetingTime[data-id="' + meetingId + '"]').text();
-    var dateParts = dateString.split('-');
-    var timeParts = timeString.split(':');
-    var day = parseInt(dateParts[0], 10);
-    var month = parseInt(dateParts[1], 10) - 1;
-    var year = parseInt(dateParts[2], 10);
-    var hour = parseInt(timeParts[0], 10);
-    var minute = parseInt(timeParts[1], 10);
-    var second = parseInt(timeParts[2], 10);
-    var meetingDate = new Date(year, month, day, hour, minute, second);
-    var currentDate = new Date();
     if (meetingDate < currentDate && isChecked) {
       $(toggleSwitch).prop('checked', false);
       var route = $(toggleSwitch).data('route');
