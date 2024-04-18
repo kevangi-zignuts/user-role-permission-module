@@ -39,32 +39,31 @@
         </div>
     @endif
 
+    <div class="search-filter m-3 w-75 mx-auto">
+        <form action="{{ route('roles.index') }}" method="GET" class="d-flex">
+            <div class="input-group m-2">
+                <input type="text" class="form-control" placeholder="Search Role..." name="search" value="">
+            </div>
+            <div class="input-group w-px-500 m-2">
+                <select name="filter" class="form-select" id="inputGroupSelect04"
+                    aria-label="Example select with button addon" equired>
+                    <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Role</option>
+                    <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Role</option>
+                    <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Role</option>
+                </select>
+            </div>
+            <button class="btn btn-primary m-2 w-25" type="submit">Filter</button>
+            <a href="{{ route('roles.index') }}" class="btn btn-secondary m-2 w-25"><i
+              class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+        </form>
+    </div>
     <div class="card">
-        <div class="card-header d-flex justify-content-between m-5 mb-2">
+        <div class="card-header d-flex justify-content-between">
             <div class="link">
-                <a href="{{ route('roles.create') }}" class="btn btn-primary"><i
+                <a href="{{ route('roles.create') }}" class="btn btn-primary m-3 mt-0 mb-0"><i
                         class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
                     a
                     Role</a>
-                <a href="{{ route('roles.index') }}" class="btn btn-secondary"><i
-                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
-            </div>
-            <div class="search-filter">
-                <form action="{{ route('roles.index') }}" method="GET" class="d-flex">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Role..." name="search"
-                            value="">
-                    </div>
-                    <div class="input-group ">
-                        <select name="filter" class="form-select" id="inputGroupSelect04"
-                            aria-label="Example select with button addon" equired>
-                            <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Role</option>
-                            <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Role</option>
-                            <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Role</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-outline-primary" type="submit">Filter</button>
-                </form>
             </div>
         </div>
         <div class="card-body">
@@ -91,9 +90,10 @@
                                 <td>{{ $role->description }}</td>
                                 <td>
                                     <div class="form-check form-switch">
-                                        <input data-route="{{ route('roles.status', ['id' => $role->id]) }}" class="form-check-input toggle-class"
-                                            type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                        <input data-route="{{ route('roles.status', ['id' => $role->id]) }}"
+                                            class="form-check-input toggle-class" type="checkbox" role="switch"
+                                            id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
+                                            data-toggle="toggle" data-on="Pending" data-off="Approved"
                                             {{ $role->is_active == 1 ? 'checked' : '' }}>
                                     </div>
                                 </td>
@@ -105,8 +105,9 @@
                                             <a class="dropdown-item"
                                                 href="{{ route('roles.edit', ['id' => $role->id]) }}"><i
                                                     class="ti ti-pencil me-1"></i> Edit</a>
-                                            <button data-route="{{ route('roles.delete', ['id' => $role->id]) }}" class="btn text-danger delete-class"
-                                                type="button"><i class="ti ti-trash me-1"></i> Delete</button>
+                                            <button data-route="{{ route('roles.delete', ['id' => $role->id]) }}"
+                                                class="btn text-danger delete-class" type="button"><i
+                                                    class="ti ti-trash me-1"></i> Delete</button>
                                         </div>
                                     </div>
                                 </td>
@@ -135,5 +136,3 @@
 
 
 @endsection
-
-

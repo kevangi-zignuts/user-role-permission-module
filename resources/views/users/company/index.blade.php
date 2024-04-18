@@ -32,26 +32,27 @@
 
 @section('content')
 
+    <div class="search-container m-3 w-50 mx-auto">
+        <form action="{{ route('company.index') }}" method="GET" class="d-flex">
+            <div class="input-group m-2">
+                <input type="text" class="form-control" placeholder="Search Company..." name="search" value="">
+              </div>
+              <button class="btn  btn-primary m-2 w-25" type="submit"><i class="fas fa-search p-1 pt-0 pb-0"></i> Search</button>
+              <a href="{{ route('company.index') }}" class="btn btn-secondary m-2 w-25"><i
+                class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+        </form>
+    </div>
     <div class="card">
-        <div class="card-header d-flex justify-content-between m-5 mb-2">
+        <div class="card-header d-flex justify-content-between">
             <div class="link">
                 @if ($access['add'])
-                    <a href="{{ route('company.create') }}" class="btn btn-primary"><i
+                    <a href="{{ route('company.create') }}" class="btn btn-primary m-2 mb-0 mt-0"><i
                             class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
                         a Company</a>
                 @endif
-                <a href="{{ route('company.index') }}" class="btn btn-secondary"><i
-                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+
             </div>
-            <div class="search-container ">
-                <form action="{{ route('company.index') }}" method="GET">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Company..." name="search"
-                            value="">
-                        <button class="btn  btn-primary" type="submit"><i class="fas fa-search"></i></button>
-                    </div>
-                </form>
-            </div>
+
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
@@ -91,7 +92,8 @@
                                                         Edit</a>
                                                 @endif
                                                 @if ($access['delete'])
-                                                    <button data-route="{{ route('company.delete', ['id' => $company->id]) }}"
+                                                    <button
+                                                        data-route="{{ route('company.delete', ['id' => $company->id]) }}"
                                                         class="btn text-danger delete-class" type="button"><i
                                                             class="ti ti-trash me-1"></i> Delete</button>
                                                 @endif
@@ -129,5 +131,3 @@
 
 
 @endsection
-
-

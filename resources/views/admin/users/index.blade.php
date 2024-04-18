@@ -42,32 +42,30 @@
             {{ session('error') }}
         </div>
     @endif
-
+    <div class="search-filter m-3 w-75 mx-auto">
+        <form action="{{ route('users.index') }}" method="GET" class="d-flex">
+            <div class="input-group m-2">
+                <input type="text" class="form-control" placeholder="Search User..." name="search" value="">
+            </div>
+            <div class="input-group w-px-500 m-2">
+                <select name="filter" class="form-select" id="inputGroupSelect04"
+                    aria-label="Example select with button addon" equired>
+                    <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All User</option>
+                    <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated User</option>
+                    <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated User</option>
+                </select>
+            </div>
+            <button class="btn btn-primary m-2 w-25" type="submit">Filter</button>
+            <a href="{{ route('users.index') }}" class="btn btn-secondary m-2 w-25"><i
+              class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+        </form>
+    </div>
     <div class="card">
-        <div class="card-header d-flex justify-content-between m-5 mb-2">
+        <div class="card-header d-flex justify-content-between">
             <div class="link">
-                <a href="{{ route('users.create') }}" class="btn btn-primary"><i
+                <a href="{{ route('users.create') }}" class="btn btn-primary m-3 mt-0 mb-0"><i
                         class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
                     a User</a>
-                <a href="{{ route('users.index') }}" class="btn btn-secondary"><i
-                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
-            </div>
-            <div class="search-filter">
-                <form action="{{ route('users.index') }}" method="GET" class="d-flex">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search User..." name="search"
-                            value="">
-                    </div>
-                    <div class="input-group ">
-                        <select name="filter" class="form-select" id="inputGroupSelect04"
-                            aria-label="Example select with button addon" equired>
-                            <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All User</option>
-                            <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated User</option>
-                            <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated User</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-outline-primary" type="submit">Filter</button>
-                </form>
             </div>
         </div>
         <div class="card-body">
@@ -196,5 +194,3 @@
     });
 </script>
 @endsection
-
-

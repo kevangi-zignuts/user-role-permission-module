@@ -32,9 +32,9 @@
 
 @section('content')
 
-<div class="search-filter m-3 w- mx-auto">
+<div class="search-filter m-3 w-75 mx-auto">
   <form action="{{ route('meetings.index') }}" method="GET" class="d-flex">
-      <div class="input-group">
+      <div class="input-group m-2">
           <input type="text" class="form-control" placeholder="Search Meeting..." name="search"
               value="">
       </div>
@@ -46,8 +46,8 @@
               <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Meetings</option>
           </select>
       </div>
-      <button class="btn btn-outline-primary m-2 w-25" type="submit">Filter</button>
-      <a href="{{ route('meetings.index') }}" class="btn btn-secondary"><i
+      <button class="btn btn-primary m-2 w-25" type="submit">Filter</button>
+      <a href="{{ route('meetings.index') }}" class="btn btn-secondary m-2 w-25"><i
         class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
     </form>
 </div>
@@ -73,7 +73,7 @@
                             <th scope="col" class="text-white">Description</th>
                             <th scope="col" class="text-white">Date</th>
                             <th scope="col" class="text-white">Time</th>
-                            <th>Status</th>
+                            <th class="text-white">Status</th>
                             @if ($access['edit'] || $access['delete'])
                                 <th scope="col" class="text-white">Action</th>
                             @endif

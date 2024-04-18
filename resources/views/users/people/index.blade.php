@@ -71,9 +71,9 @@
     </div>
     <div class="card">
         <div class="card-header d-flex justify-content-between ">
-            <div class="link m-3 mt-0 mb-0">
+            <div class="link">
                 @if ($access['add'])
-                    <a href="{{ route('people.create') }}" class="btn btn-primary"><i
+                    <a href="{{ route('people.create') }}" class="btn btn-primary m-3 mt-0 mb-0"><i
                             class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
                         a People</a>
                 @endif

@@ -32,35 +32,36 @@
 
 @section('content')
 
+    <div class="search-filter m-3 w-75 mx-auto">
+        <form action="{{ route('activityLogs.index') }}" method="GET" class="d-flex">
+            <div class="input-group m-2">
+                <input type="text" class="form-control" placeholder="Search Log..." name="search" value="">
+            </div>
+            <div class="input-group w-px-500 m-2">
+                <select name="filter" class="form-select" id="inputGroupSelect04"
+                    aria-label="Example select with button addon" equired>
+                    <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Activity Logs</option>
+                    <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Activity Logs</option>
+                    <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Activity Logs
+                    </option>
+                </select>
+            </div>
+            <button class="btn btn-primary m-2 w-25" type="submit">Filter</button>
+            <a href="{{ route('activityLogs.index') }}" class="btn btn-secondary m-2 w-25"><i
+              class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+          </form>
+    </div>
     <div class="card">
-        <div class="card-header d-flex justify-content-between m-5 mb-2">
+        <div class="card-header d-flex justify-content-between">
             <div class="link">
                 @if ($access['add'])
-                    <a href="{{ route('activityLogs.create') }}" class="btn btn-primary"><i
+                    <a href="{{ route('activityLogs.create') }}" class="btn btn-primary m-2 mb-0 mt-0"><i
                             class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
                         a Activity Log</a>
                 @endif
-                <a href="{{ route('activityLogs.index') }}" class="btn btn-secondary"><i
-                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+
             </div>
-            <div class="search-filter">
-                <form action="{{ route('activityLogs.index') }}" method="GET" class="d-flex">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Log..." name="search"
-                            value="">
-                    </div>
-                    <div class="input-group ">
-                        <select name="filter" class="form-select" id="inputGroupSelect04"
-                            aria-label="Example select with button addon" equired>
-                            <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Activity Logs</option>
-                            <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Activity Logs</option>
-                            <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Activity Logs
-                            </option>
-                        </select>
-                    </div>
-                    <button class="btn btn-outline-primary" type="submit">Filter</button>
-                </form>
-            </div>
+
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
@@ -100,9 +101,10 @@
                                 <td>{{ $log->log }}</td>
                                 <td>
                                     <div class="form-check form-switch">
-                                        <input data-route="{{ route('activityLogs.status', ['id' => $log->id]) }}" class="form-check-input toggle-class"
-                                            type="checkbox" role="switch" id="switchCheckDefault" data-onstyle="danger"
-                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                        <input data-route="{{ route('activityLogs.status', ['id' => $log->id]) }}"
+                                            class="form-check-input toggle-class" type="checkbox" role="switch"
+                                            id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
+                                            data-toggle="toggle" data-on="Pending" data-off="Approved"
                                             {{ $log->is_active == 1 ? 'checked' : '' }}>
                                     </div>
                                 </td>
@@ -119,7 +121,8 @@
                                                         Edit</a>
                                                 @endif
                                                 @if ($access['delete'])
-                                                    <button data-route="{{ route('activityLogs.delete', ['id' => $log->id]) }}"
+                                                    <button
+                                                        data-route="{{ route('activityLogs.delete', ['id' => $log->id]) }}"
                                                         class="btn text-danger delete-class" type="button"><i
                                                             class="ti ti-trash me-1"></i> Delete</button>
                                                 @endif
@@ -151,7 +154,3 @@
     </div>
 
 @endsection
-
-
-
-
