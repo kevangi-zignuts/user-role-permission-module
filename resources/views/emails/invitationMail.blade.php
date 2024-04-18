@@ -26,7 +26,7 @@
     <div class="container mx-auto mt-5">
         <div class="card mx-auto mx-100 p-3 shadow-lg mb-5 bg-white rounded">
             <div class="card-body text-left">
-                <p class="heading">Hello Sir/Ma'am {{ $name }}, </p>
+                <p class="heading">Hello Sir/Ma'am {{ $name }},</p>
                 <p class="mb-4 mt-3"><b>Click below button to login the Website</b></p>
                 <div class="text-div mx-auto mw-100 justify-content-center">
                   <a href="{{ route('resetPassword', ['token' => $token]) }}" class="btn btn-primary mx-auto">Login</a>

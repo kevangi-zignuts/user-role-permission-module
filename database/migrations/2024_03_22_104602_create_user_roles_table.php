@@ -13,6 +13,7 @@ return new class extends Migration {
     Schema::create('user_roles', function (Blueprint $table) {
       $table->unsignedBigInteger('user_id');
       $table->unsignedBigInteger('role_id');
+      $table->softDeletes();
 
       $table
         ->foreign('user_id')

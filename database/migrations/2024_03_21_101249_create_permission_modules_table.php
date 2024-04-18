@@ -17,6 +17,7 @@ return new class extends Migration {
       $table->tinyInteger('view_access')->default(0);
       $table->tinyInteger('edit_access')->default(0);
       $table->tinyInteger('delete_access')->default(0);
+      $table->softDeletes();
 
       $table
         ->foreign('permission_id')

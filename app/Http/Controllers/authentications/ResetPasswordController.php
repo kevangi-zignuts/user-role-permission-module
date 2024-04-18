@@ -21,15 +21,15 @@ class ResetPasswordController extends Controller
    */
   public function showForm($token)
   {
-    $tokenRecord = DB::table('password_reset_tokens')
+    $resetPasswordToken = DB::table('password_reset_tokens')
       ->where('token', $token)
       ->first();
-
-    if (!$tokenRecord) {
+    $invitationToken = User::where('invitation_token', $token)->first();
+    if (!($resetPasswordToken || $invitationToken)) {
       return redirect()
         ->route('auth-login-basic')
         ->with('error', 'Password reset already!! ');
-    } else {
+    } elseif ($resetPasswordToken) {
       return view('content.forgetPassword.passwordResetForm', compact('token'));
     }
 
@@ -39,7 +39,6 @@ class ResetPasswordController extends Controller
     //   // Token is a password reset token
     //   return view('content.forgetPassword.passwordResetForm', compact('token'));
     // }
-
     $user = User::where('invitation_token', $token)->first();
     if ($user) {
       if ($user->status === 'A') {
