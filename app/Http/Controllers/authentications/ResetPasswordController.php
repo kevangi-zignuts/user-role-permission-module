@@ -24,8 +24,8 @@ class ResetPasswordController extends Controller
     $resetPasswordToken = DB::table('password_reset_tokens')
       ->where('token', $token)
       ->first();
-    $invitationToken = User::where('invitation_token', $token)->first();
-    if (!($resetPasswordToken || $invitationToken)) {
+    $user = User::where('invitation_token', $token)->first();
+    if (!($resetPasswordToken || $user)) {
       return redirect()
         ->route('auth-login-basic')
         ->with('error', 'Password reset already!! ');
@@ -39,7 +39,6 @@ class ResetPasswordController extends Controller
     //   // Token is a password reset token
     //   return view('content.forgetPassword.passwordResetForm', compact('token'));
     // }
-    $user = User::where('invitation_token', $token)->first();
     if ($user) {
       if ($user->status === 'A') {
         // User already accepted the invitation
