@@ -32,48 +32,50 @@
 
 @section('content')
 
+<div class="search-filter m-3 w- mx-auto">
+  <form action="{{ route('meetings.index') }}" method="GET" class="d-flex">
+      <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search Meeting..." name="search"
+              value="">
+      </div>
+      <div class="input-group w-px-500 m-2">
+          <select name="filter" class="form-select" id="inputGroupSelect04"
+              aria-label="Example select with button addon" equired>
+              <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Meetings</option>
+              <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Meetings</option>
+              <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Meetings</option>
+          </select>
+      </div>
+      <button class="btn btn-outline-primary m-2 w-25" type="submit">Filter</button>
+      <a href="{{ route('meetings.index') }}" class="btn btn-secondary"><i
+        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+    </form>
+</div>
     <div class="card">
-        <div class="card-header d-flex justify-content-between m-5 mb-2">
+        <div class="card-header d-flex justify-content-between">
             <div class="link">
                 @if ($access['add'])
-                    <a href="{{ route('meetings.create') }}" class="btn btn-primary"><i
+                    <a href="{{ route('meetings.create') }}" class="btn btn-primary m-2 mb-0 mt-0"><i
                             class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
                         a Meeting</a>
                 @endif
-                <a href="{{ route('meetings.index') }}" class="btn btn-secondary"><i
-                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+
             </div>
-            <div class="search-filter">
-                <form action="{{ route('meetings.index') }}" method="GET" class="d-flex">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Meeting..." name="search"
-                            value="">
-                    </div>
-                    <div class="input-group ">
-                        <select name="filter" class="form-select" id="inputGroupSelect04"
-                            aria-label="Example select with button addon" equired>
-                            <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Meetings</option>
-                            <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Meetings</option>
-                            <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Meetings</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-outline-primary" type="submit">Filter</button>
-                </form>
-            </div>
+
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
-                    <thead class="table-dark">
+                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
                         <tr>
-                            <th scope="col">Title</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Time</th>
+                            <th scope="col" class="text-white">Title</th>
+                            <th scope="col" class="text-white">Description</th>
+                            <th scope="col" class="text-white">Date</th>
+                            <th scope="col" class="text-white">Time</th>
                             <th>Status</th>
                             @if ($access['edit'] || $access['delete'])
-                                <th scope="col">Action</th>
+                                <th scope="col" class="text-white">Action</th>
                             @endif
                         </tr>
                     </thead>

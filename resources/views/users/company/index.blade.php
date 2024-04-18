@@ -57,11 +57,11 @@
             <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
-                    <thead class="table-dark">
+                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
                         <tr>
-                            <th scope="col">Company Name</th>
-                            <th scope="col">Owner Name</th>
-                            <th scope="col">Industry</th>
+                            <th scope="col" class="text-white">Company Name</th>
+                            <th scope="col" class="text-white">Owner Name</th>
+                            <th scope="col" class="text-white">Industry</th>
                             @if ($access['edit'] || $access['delete'])
                                 <th scope="col">Action</th>
                             @endif

@@ -115,7 +115,11 @@ class PeopleController extends Controller
     $people = People::findOrFail($id);
     $people->update($request->only(['name', 'email', 'designation', 'contact_no', 'address']));
 
-    Session::push('success', 'People Details updated successfully');
+    // Optionally, you can flash a message to indicate the session has been regenerated
+    Session::flash('flash_message', 'Task successfully added!');
+    Session::save();
+
+    // Session::keep('success', 'People Details updated successfully');
     // Session::flash('success', 'People Details updated successfully');
     // return redirect()->route('people.index')
     // ->with('success', 'People Details updated successfully');

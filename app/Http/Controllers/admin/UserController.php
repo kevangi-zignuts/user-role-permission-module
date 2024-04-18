@@ -48,6 +48,7 @@ class UserController extends Controller
 
     $query->where('email', '!=', 'admin@example.com');
     $users = $query->with('role')->paginate(8);
+    $users->appends(['search' => $search, 'filter' => $filter]);
     return view('admin.users.index', ['users' => $users, 'filter' => $filter]);
   }
 

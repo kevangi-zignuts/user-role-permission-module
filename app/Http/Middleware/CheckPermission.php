@@ -17,6 +17,7 @@ class CheckPermission
    */
   public function handle(Request $request, Closure $next, $moduleCode, $accessType): Response
   {
+    // dd('here');
     if (!Auth::check()) {
       return redirect()->route('login');
     }
@@ -26,13 +27,7 @@ class CheckPermission
         ->with('error', 'Unauthorized Access');
     }
     $module = Module::findOrFail($moduleCode);
-    if (
-      $module->parent_code !== null &&
-      !(
-        Auth::user()->hasPermission($module->parent_code, 'add_access') ||
-        Auth::user()->hasPermission($module->parent_code, 'view_access')
-      )
-    ) {
+    if ($module->parent_code !== null && !Auth::user()->hasPermission($module->parent_code, 'view_access')) {
       return redirect()
         ->back()
         ->with('error', 'Unauthorized Access');

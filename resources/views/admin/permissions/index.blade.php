@@ -67,12 +67,12 @@
             <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
-                    <thead class="table-dark">
+                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th>Status</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" class="text-white">Name</th>
+                            <th scope="col" class="text-white">Description</th>
+                            <th class="text-white">Status</th>
+                            <th scope="col" class="text-white">Action</th>
                         </tr>
                     </thead>
                     <tbody>

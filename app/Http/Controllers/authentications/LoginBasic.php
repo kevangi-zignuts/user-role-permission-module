@@ -122,8 +122,9 @@ class LoginBasic extends Controller
       $user = Auth::user();
       $user->tokens()->delete();
 
-      $user->is_active = 0;
-      $user->save();
+      // $user->is_active = 0;
+      // $user->save();
+      Auth::logout();
 
       return redirect()
         ->route('login')

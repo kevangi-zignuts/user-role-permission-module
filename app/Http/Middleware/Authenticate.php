@@ -13,7 +13,9 @@ class Authenticate extends Middleware
   public function handle($request, Closure $next, ...$guards)
   {
     if (!Auth::guard($guards)->check()) {
-      return $this->redirectTo($request);
+      return redirect()
+        ->route('login')
+        ->with('error', 'Trying to access unauthorized part');
     }
     if (
       Auth::check() &&
@@ -33,6 +35,7 @@ class Authenticate extends Middleware
    */
   protected function redirectTo(Request $request): ?string
   {
+    // dd('here');
     return $request->expectsJson() ? null : route('login');
   }
 }

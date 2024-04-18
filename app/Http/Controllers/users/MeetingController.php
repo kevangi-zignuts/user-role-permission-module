@@ -36,6 +36,7 @@ class MeetingController extends Controller
     }
 
     $meetings = $query->paginate(8);
+    $meetings->appends(['search' => $search, 'filter' => $filter]);
 
     return view('users.meetings.index', ['meetings' => $meetings, 'filter' => $filter, 'access' => $access]);
   }

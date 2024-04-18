@@ -46,6 +46,16 @@
     @php
         $i = 1;
     @endphp
+
+{{-- commented code --}}
+{{-- @foreach ($modules as $module)
+@dd($module->module_name)
+
+@endforeach --}}
+{{-- commented code --}}
+
+
+
     <div class="card">
         <div class="card-header d-flex justify-content-between m-5 mb-2">
             <a href="{{ route('modules.index') }}" class="btn btn-secondary"><i
@@ -71,23 +81,24 @@
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
                 <table class="table">
-                    <thead class="table-dark">
+                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
                         <tr>
                             <th></th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th>Status</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" class="text-white">Name</th>
+                            <th scope="col" class="text-white">Description</th>
+                            <th class="text-white">Status</th>
+                            <th scope="col" class="text-white">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if ($modules->isEmpty())
+                        {{-- @if (empty($modules)) --}}
                             <tr>
                                 <td colspan="5" class="text-center text-danger h5">No data available</td>
                             </tr>
                         @endif
                         @foreach ($modules as $module)
-                            {{-- @if ($module->parent_code === null) --}}
+                            @if ($module->parent_code === null)
                             <tr>
                                 <td class="clickable" data-bs-toggle="collapse"
                                     data-bs-target="#collapseExample_{{ $module->code }}" aria-expended="false"
@@ -120,7 +131,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($module->submodules as $submodule)
-                                                {{-- @if (in_array($submodule, $modules->items())) --}}
+                                                @if (in_array($submodule, $modules->all()))
                                                 <tr>
                                                     <td>{{ $submodule->module_name }}</td>
                                                     <td>{{ $submodule->description }}</td>
@@ -138,7 +149,7 @@
                                                             href="{{ route('modules.edit', ['code' => $submodule->code]) }}"><i
                                                                 class="fa-solid fa-pen-to-square"></i></a></td>
                                                 </tr>
-                                                {{-- @endif --}}
+                                                @endif
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -147,13 +158,13 @@
                             @php
                                 $i++;
                             @endphp
-                            {{-- @endif --}}
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-        {{ $modules->links('pagination::bootstrap-5') }}
+        {{-- {{ $modules->links('pagination::bootstrap-5') }} --}}
     </div>
     </div>
 

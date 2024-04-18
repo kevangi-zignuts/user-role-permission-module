@@ -33,37 +33,38 @@
 
 @section('content')
 
+    <div class="search-container m-3 w-50 mx-auto">
+        <form action="{{ route('notes.index') }}" method="GET" class="d-flex">
+            <div class="input-group m-2">
+                <input type="text" class="form-control" placeholder="Search Note..." name="search" value="">
+            </div>
+            <button class="btn btn-primary m-2 w-25" type="submit"><i class="fas fa-search p-1 pt-0 pb-0"></i> Search</button>
+            <a href="{{ route('notes.index') }}" class="btn btn-secondary m-2 w-25"><i class="fa-solid fa-xmark p-1 pt-0 pb-0"></i>
+                Clear</a>
+        </form>
+    </div>
     <div class="card">
-        <div class="card-header d-flex justify-content-between m-5 mb-2">
-            <div class="link">
+        <div class="card-header d-flex justify-content-between ">
+            <div class="link m-2 mb-0 mt-0">
                 @if ($access['add'])
                     <a href="{{ route('notes.create') }}" class="btn btn-primary"><i
                             class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
                         a Note</a>
                 @endif
-                <a href="{{ route('notes.index') }}" class="btn btn-secondary"><i
-                        class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+
             </div>
-            <div class="search-container ">
-                <form action="{{ route('notes.index') }}" method="GET">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search Note..." name="search"
-                            value="">
-                        <button class="btn  btn-primary" type="submit"><i class="fas fa-search"></i></button>
-                    </div>
-                </form>
-            </div>
+
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
-                    <thead class="table-dark">
+                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
                         <tr>
-                            <th scope="col">Title</th>
-                            <th scope="col">Description</th>
+                            <th scope="col" class="text-white">Title</th>
+                            <th scope="col" class="text-white">Description</th>
                             @if ($access['edit'] || $access['delete'])
-                                <th scope="col">Action</th>
+                                <th scope="col" class="text-white">Action</th>
                             @endif
                         </tr>
                     </thead>
@@ -123,6 +124,3 @@
 
 
 @endsection
-
-
-

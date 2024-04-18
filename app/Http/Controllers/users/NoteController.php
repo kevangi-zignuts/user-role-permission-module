@@ -31,6 +31,7 @@ class NoteController extends Controller
       $query->where('title', 'like', '%' . $search . '%');
     }
     $notes = $query->paginate(8);
+    $notes->appends(['search' => $search]);
     return view('users.notes.index', ['notes' => $notes, 'access' => $access]);
   }
 

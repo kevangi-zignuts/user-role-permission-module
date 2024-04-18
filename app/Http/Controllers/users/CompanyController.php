@@ -31,6 +31,7 @@ class CompanyController extends Controller
       $query->where('company_name', 'like', '%' . $search . '%');
     }
     $companies = $query->paginate(8);
+    $companies->appends(['search' => $search]);
     return view('users.company.index', ['companies' => $companies, 'access' => $access]);
   }
 

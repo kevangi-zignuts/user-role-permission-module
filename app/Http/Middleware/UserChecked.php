@@ -16,6 +16,7 @@ class UserChecked
    */
   public function handle(Request $request, Closure $next): Response
   {
+    // dd('here');
     if (Auth::check()) {
       if (Auth::user()->email !== 'admin@example.com') {
         return $next($request);

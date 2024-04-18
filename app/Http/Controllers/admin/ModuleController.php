@@ -19,24 +19,43 @@ class ModuleController extends Controller
     $query = Module::query();
 
     if ($filter != 'all' && !empty($search)) {
-      $query
-        ->where('is_active', $request->filter)
-        ->whereHas('submodules', function ($q) use ($search) {
-          $q->where('module_name', 'like', '%' . $search . '%');
-        })
-        ->orWhere('module_name', 'like', '%' . $search . '%');
+      $query->where('is_active', $request->filter)->where('module_name', 'like', '%' . $search . '%');
     } elseif ($filter != 'all' && empty($search)) {
       $query->where('is_active', $request->filter);
     } else {
-      $query
-        ->whereHas('submodules', function ($q) use ($search) {
-          $q->where('module_name', 'like', '%' . $search . '%');
-        })
-        ->orWhere('module_name', 'like', '%' . $search . '%');
+      $query->where('module_name', 'like', '%' . $search . '%');
     }
-    $modules = $query->where('parent_code', null)->paginate(10);
+    $modules = $query->get();
+    $allModules = [];
+    foreach ($modules as $module) {
+      if ($module->parent_code !== null) {
+        $tempModule = Module::findOrFail($module->parent_code);
+        if ($tempModule->is_active == $module->is_active) {
+          $allModules[] = $tempModule;
+        }
+      } else {
+        if ($filter != 'all') {
+          $filteredSubmodules = $module->submodules->filter(function ($submodule) use ($module) {
+            return $module->is_active == $submodule->is_active;
+          });
+          $allModules = collect($allModules)->merge($filteredSubmodules);
+        } else {
+          $allModules = collect($allModules)->merge($module->submodules);
+        }
+      }
+      $allModules[] = $module;
+    }
+    // dd($allModules);
+    $modules = collect($allModules)->unique(function ($module) {
+      return $module->code;
+    });
+
+    // dd($modules);
+
+    // $modules = $query->where('parent_code', null)->paginate(10);
 
     return view('admin.modules.index', ['modules' => $modules, 'filter' => $filter]);
+    // return view('admin.modules.index', ['modules' => $allModules, 'filter' => $filter]);
   }
 
   /**

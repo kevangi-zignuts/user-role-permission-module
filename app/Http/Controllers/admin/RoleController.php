@@ -30,6 +30,7 @@ class RoleController extends Controller
     }
 
     $roles = $query->paginate(8);
+    $roles->appends(['search' => $search, 'filter' => $filter]);
     return view('admin.roles.index', ['roles' => $roles, 'filter' => $filter]);
   }
 

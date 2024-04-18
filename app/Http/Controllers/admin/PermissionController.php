@@ -29,6 +29,7 @@ class PermissionController extends Controller
     }
 
     $permissions = $query->paginate(8);
+    $permissions->appends(['search' => $search, 'filter' => $filter]);
     return view('admin.permissions.index', ['permissions' => $permissions, 'filter' => $filter]);
   }
 
