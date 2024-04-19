@@ -50,21 +50,21 @@ class CompanyController extends Controller
   public function store(Request $request)
   {
     // dd('here');
-    $validator = Validator::make($request->all(), [
-      'company_name' => 'required|string|max:255',
-      'owner_name'   => 'required|string|max:255',
-      'industry'     => 'required|string|max:255',
-    ]);
-    // dd($validator->fails());
-    // $request->validate([
+    // $validator = Validator::make($request->all(), [
     //   'company_name' => 'required|string|max:255',
     //   'owner_name'   => 'required|string|max:255',
     //   'industry'     => 'required|string|max:255',
     // ]);
+    // dd($validator->fails());
+    $request->validate([
+      'company_name' => 'required|string|max:255',
+      'owner_name'   => 'required|string|max:255',
+      'industry'     => 'required|string|max:255',
+    ]);
 
-    if ($validator->fails()) {
-      return redirect()->back()->withErrors($validator)->withInput();
-    }
+    // if ($validator->fails()) {
+    //   return redirect()->back()->withErrors($validator)->withInput();
+    // }
 
     $requestData = $request->only(['company_name', 'owner_name', 'industry']);
     $requestData = array_filter($requestData, function ($value) {

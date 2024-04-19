@@ -33,14 +33,14 @@ class ForgetPasswordController extends Controller
       'email' => 'required|email|exists:users',
     ]);
 
-    $user = User::where('email', $request->email)->first();
-
+    $user  = User::where('email', $request->email)->first();
+    $token = Str::random(64);
     DB::table('password_reset_tokens')->updateOrInsert(
       [
         'email' => $request->email,
       ],
       [
-        'token' => Str::random(64),
+        'token' => $token,
         'created_at' => Carbon::now(),
       ]
     );
