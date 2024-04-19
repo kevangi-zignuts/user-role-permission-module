@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\users;
 
+use DateTime;
 use App\Models\User;
 use App\Models\Meeting;
 use Illuminate\Http\Request;
@@ -113,6 +114,14 @@ class MeetingController extends Controller
 
     $meeting = Meeting::findOrFail($id);
     $meeting->update($request->only(['title', 'description', 'date', 'time']));
+
+    $dateTimeString = $request->date . ' ' . $request->time;
+    $combinedDateTime = DateTime::createFromFormat('Y-m-d H:i', $dateTimeString);
+    $currentDateTime = now();
+
+    if ($combinedDateTime > $currentDateTime) {
+      $meeting->update(['is_active' => 1]);
+    }
 
     // return redirect()
     //   ->route('roles.index')

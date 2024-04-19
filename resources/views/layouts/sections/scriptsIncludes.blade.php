@@ -38,15 +38,15 @@
       'controls': <?php echo json_encode($configData['customizerControls']); ?>,
   });
 
-  document.addEventListener("DOMContentLoaded", function() {
+  // document.addEventListener("DOMContentLoaded", function() {
         // Get a reference to the alert element
-        var alertSuccess = document.getElementById('alert-success');
-        var alertError   = document.getElementById('alert-success');
+   //     var alertSuccess = document.getElementById('alert-success');
+     //   var alertError   = document.getElementById('alert-success');
         // Set a timeout to hide the alert after 5 seconds (5000 milliseconds)
-        setTimeout(function() {
-            alertSuccess.style.display = 'none';
-            alertError.style.display = 'none';
-        }, 5000); // 5000 milliseconds = 5 seconds
-    });
+       // setTimeout(function() {
+  //          alertSuccess.style.display = 'none';
+    //        alertError.style.display = 'none';
+      //  }, 5000); // 5000 milliseconds = 5 seconds
+  //  });
   </script>
 @endif
