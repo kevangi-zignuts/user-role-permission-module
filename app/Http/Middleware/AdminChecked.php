@@ -20,12 +20,8 @@ class AdminChecked
       if (Auth::user()->email === 'admin@example.com') {
         return $next($request);
       }
-      return redirect()
-        ->route('user.dashboard')
-        ->with('error', 'Trying to access unauthorized part');
+      return redirect()->route('user.dashboard')->with('error', 'Trying to access unauthorized part');
     }
-    return redirect()
-      ->route('auth-login-basic')
-      ->with('error', 'Trying to access unauthorized part');
+    return redirect()->route('auth-login-basic')->with('error', 'Trying to access unauthorized part');
   }
 }

@@ -21,39 +21,24 @@ class ResetPasswordController extends Controller
    */
   public function showForm($token)
   {
-    $resetPasswordToken = DB::table('password_reset_tokens')
-      ->where('token', $token)
-      ->first();
-    $user = User::where('invitation_token', $token)->first();
-    if (!($resetPasswordToken || $user)) {
-      return redirect()
-        ->route('auth-login-basic')
-        ->with('error', 'Password reset already!! ');
-    } elseif ($resetPasswordToken) {
-      return view('content.forgetPassword.passwordResetForm', compact('token'));
-    }
+      $resetPasswordToken = DB::table('password_reset_tokens')->where('token', $token)->first();
+      $user = User::where('invitation_token', $token)->first();
 
-    // $tokenExpiry = $tokenRecord ? Carbon::parse($tokenRecord->token_expiry) : null;
-
-    // if ($tokenRecord && !$tokenExpiry->isPast()) {
-    //   // Token is a password reset token
-    //   return view('content.forgetPassword.passwordResetForm', compact('token'));
-    // }
-    if ($user) {
-      if ($user->status === 'A') {
-        // User already accepted the invitation
-        return redirect()
-          ->route('auth-login-basic')
-          ->with('error', 'Invitation accepted already!! ');
-      } elseif ($user->status === 'I') {
-        return view('admin.users.invitationResetPasswordForm', compact('token'));
+      if (!($resetPasswordToken || $user)) {
+          return redirect()->route('auth-login-basic')->with('error', 'Password reset already!! ');
+      } elseif ($resetPasswordToken) {
+          return view('content.forgetPassword.passwordResetForm', compact('token'));
       }
-    }
 
-    // Default case: Token is invalid or expired, redirect to login with error message
-    return redirect()
-      ->route('auth-login-basic')
-      ->with('error', 'Invalid or expired token');
+      if ($user) {
+          if ($user->status === 'A') {
+              return redirect()->route('auth-login-basic')->with('error', 'Invitation accepted already!! ');
+          } elseif ($user->status === 'I') {
+              return view('admin.users.invitationResetPasswordForm', compact('token'));
+          }
+      }
+
+      return redirect()->route('auth-login-basic')->with('error', 'Invalid or expired token');
   }
 
   /**
@@ -61,14 +46,11 @@ class ResetPasswordController extends Controller
    */
   public function submit(Request $request, $token)
   {
-    // dd($token);
     $request->validate([
-      'password' => 'required|confirmed',
+        'password' => 'required|confirmed',
     ]);
 
-    $tokenRecord = DB::table('password_reset_tokens')
-      ->where('token', $token)
-      ->first();
+    $tokenRecord = DB::table('password_reset_tokens')->where('token', $token)->first();
 
     if ($tokenRecord) {
       $user = User::where('email', $tokenRecord->email)->first();
@@ -77,13 +59,9 @@ class ResetPasswordController extends Controller
       $user->update(['password' => $password]);
 
       Mail::to($tokenRecord->email)->send(new ResetPassword($user->first_name));
-      DB::table('password_reset_tokens')
-        ->where('token', $token)
-        ->delete();
+      DB::table('password_reset_tokens')->where('token', $token)->delete();
 
-      return redirect()
-        ->route('auth-login-basic')
-        ->with('success', "User's password updated successfully");
+      return redirect()->route('auth-login-basic')->with('success', "User's password updated successfully");
     }
 
     $user = User::where('invitation_token', $token)->first();
@@ -97,13 +75,9 @@ class ResetPasswordController extends Controller
 
       Auth::login($user);
 
-      return redirect()
-        ->route('user.dashboard')
-        ->with('success', "User's password updated successfully");
+      return redirect()->route('user.dashboard')->with('success', "User's password updated successfully");
     }
 
-    return redirect()
-      ->route('auth-login-basic')
-      ->with('error', 'Invalid token');
+    return redirect()->route('auth-login-basic')->with('error', 'Invalid token');
   }
 }

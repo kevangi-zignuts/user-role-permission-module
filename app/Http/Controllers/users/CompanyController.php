@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
@@ -17,9 +18,9 @@ class CompanyController extends Controller
   public function index(Request $request)
   {
     $access = [
-      'add' => Auth::user()->hasPermission('com', 'add_access'),
-      'view' => Auth::user()->hasPermission('com', 'view_access'),
-      'edit' => Auth::user()->hasPermission('com', 'edit_access'),
+      'add'    => Auth::user()->hasPermission('com', 'add_access'),
+      'view'   => Auth::user()->hasPermission('com', 'view_access'),
+      'edit'   => Auth::user()->hasPermission('com', 'edit_access'),
       'delete' => Auth::user()->hasPermission('com', 'delete_access'),
     ];
 
@@ -48,11 +49,22 @@ class CompanyController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
+    // dd('here');
+    $validator = Validator::make($request->all(), [
       'company_name' => 'required|string|max:255',
-      'owner_name' => 'required|string|max:255',
-      'industry' => 'required|string|max:255',
+      'owner_name'   => 'required|string|max:255',
+      'industry'     => 'required|string|max:255',
     ]);
+    // dd($validator->fails());
+    // $request->validate([
+    //   'company_name' => 'required|string|max:255',
+    //   'owner_name'   => 'required|string|max:255',
+    //   'industry'     => 'required|string|max:255',
+    // ]);
+
+    if ($validator->fails()) {
+      return redirect()->back()->withErrors($validator)->withInput();
+    }
 
     $requestData = $request->only(['company_name', 'owner_name', 'industry']);
     $requestData = array_filter($requestData, function ($value) {
@@ -60,13 +72,11 @@ class CompanyController extends Controller
     });
     $requestData['user_id'] = Auth::id();
     Company::create($requestData);
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role Created successfully!');
-    return redirect()->route('company.index', [
-      'success' => true,
-      'message' => 'Company added successfully!',
-    ]);
+    return redirect()
+      ->route('company.index', [
+        'success' => true,
+        'message' => 'Company added successfully!',
+      ]);
   }
 
   /**
@@ -85,16 +95,13 @@ class CompanyController extends Controller
   {
     $request->validate([
       'company_name' => 'required|string|max:255',
-      'owner_name' => 'required|string|max:255',
-      'industry' => 'required|string|max:255',
+      'owner_name'   => 'required|string|max:255',
+      'industry'     => 'required|string|max:255',
     ]);
 
     $company = Company::findOrFail($id);
     $company->update($request->only(['company_name', 'owner_name', 'industry']));
 
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role updated successfully');
     return redirect()->route('company.index', [
       'success' => true,
       'message' => 'Company Details updated successfully',
@@ -108,9 +115,7 @@ class CompanyController extends Controller
   {
     $company = Company::find($id);
     if (!$company) {
-      // return redirect()
-      //   ->route('roles.index')
-      //   ->with('fail', 'We can not found data');
+      return redirect()->route('roles.index')->with('fail', 'We can not found data');
     }
     $company->delete();
     return Response::json(

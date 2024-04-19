@@ -35,7 +35,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Permission Name *</label>
                                 <input type="text" class="form-control" id="email" name="permission_name"
-                                    value="{{ $permission->permission_name }}" autofocus required>
+                                    value="{{ $permission->permission_name }}" autofocus >
                                 @error('permission_name')
                                     <div class="text-danger pt-2">{{ $message }}</div>
                                 @enderror

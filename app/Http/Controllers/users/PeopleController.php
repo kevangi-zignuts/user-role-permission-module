@@ -19,15 +19,15 @@ class PeopleController extends Controller
   public function index(Request $request)
   {
     $access = [
-      'add' => Auth::user()->hasPermission('peo', 'add_access'),
-      'view' => Auth::user()->hasPermission('peo', 'view_access'),
-      'edit' => Auth::user()->hasPermission('peo', 'edit_access'),
+      'add'    => Auth::user()->hasPermission('peo', 'add_access'),
+      'view'   => Auth::user()->hasPermission('peo', 'view_access'),
+      'edit'   => Auth::user()->hasPermission('peo', 'edit_access'),
       'delete' => Auth::user()->hasPermission('peo', 'delete_access'),
     ];
 
     $filter = $request->query('filter', 'all');
     $search = $request->input('search');
-    $query = People::query();
+    $query  = People::query();
 
     if ($filter != 'all' && !empty($search)) {
       $query->where('is_active', $request->filter)->where('name', 'like', '%' . $search . '%');
@@ -54,10 +54,10 @@ class PeopleController extends Controller
   public function store(Request $request)
   {
     $request->validate([
-      'name' => 'required|string|max:255',
-      'email' => 'email|required',
+      'name'        => 'required|string|max:255',
+      'email'       => 'email|required',
       'designation' => 'required',
-      'contact_no' => 'numeric|nullable',
+      'contact_no'  => 'numeric|nullable',
     ]);
 
     $requestData = $request->only(['name', 'email', 'designation', 'contact_no', 'address']);
@@ -66,9 +66,7 @@ class PeopleController extends Controller
     });
     $requestData['user_id'] = Auth::id();
     People::create($requestData);
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role Created successfully!');
+
     return redirect()->route('people.index', [
       'success' => true,
       'message' => 'People added successfully!',
@@ -106,23 +104,15 @@ class PeopleController extends Controller
   public function update(Request $request, $id)
   {
     $request->validate([
-      'name' => 'required|string|max:255',
-      'email' => 'email|required',
+      'name'        => 'required|string|max:255',
+      'email'       => 'email|required',
       'designation' => 'required',
-      'contact_no' => 'numeric|nullable',
+      'contact_no'  => 'numeric|nullable',
     ]);
 
     $people = People::findOrFail($id);
     $people->update($request->only(['name', 'email', 'designation', 'contact_no', 'address']));
 
-    // Optionally, you can flash a message to indicate the session has been regenerated
-    Session::flash('flash_message', 'Task successfully added!');
-    Session::save();
-
-    // Session::keep('success', 'People Details updated successfully');
-    // Session::flash('success', 'People Details updated successfully');
-    // return redirect()->route('people.index')
-    // ->with('success', 'People Details updated successfully');
     return redirect()->route('people.index', [
       'success' => true,
       'message' => 'People Details updated successfully',
@@ -136,9 +126,9 @@ class PeopleController extends Controller
   {
     $people = People::find($id);
     if (!$people) {
-      // return redirect()
-      //   ->route('roles.index')
-      //   ->with('fail', 'We can not found data');
+      return redirect()
+        ->route('roles.index')
+        ->with('fail', 'We can not found data');
     }
     $people->delete();
     return Response::json(

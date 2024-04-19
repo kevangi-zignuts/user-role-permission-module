@@ -17,9 +17,9 @@ class NoteController extends Controller
   public function index(Request $request)
   {
     $access = [
-      'add' => Auth::user()->hasPermission('note', 'add_access'),
-      'view' => Auth::user()->hasPermission('note', 'view_access'),
-      'edit' => Auth::user()->hasPermission('note', 'edit_access'),
+      'add'    => Auth::user()->hasPermission('note', 'add_access'),
+      'view'   => Auth::user()->hasPermission('note', 'view_access'),
+      'edit'   => Auth::user()->hasPermission('note', 'edit_access'),
       'delete' => Auth::user()->hasPermission('note', 'delete_access'),
     ];
 
@@ -49,7 +49,7 @@ class NoteController extends Controller
   public function store(Request $request)
   {
     $request->validate([
-      'title' => 'required|string|max:255',
+      'title'       => 'required|string|max:255',
       'description' => 'required',
     ]);
 
@@ -59,9 +59,6 @@ class NoteController extends Controller
     });
     $requestData['user_id'] = Auth::id();
     Note::create($requestData);
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role Created successfully!');
     return redirect()->route('notes.index', [
       'success' => true,
       'message' => 'Note added successfully!',
@@ -83,16 +80,13 @@ class NoteController extends Controller
   public function update(Request $request, $id)
   {
     $request->validate([
-      'title' => 'required|string|max:255',
+      'title'       => 'required|string|max:255',
       'description' => 'required',
     ]);
 
     $note = Note::findOrFail($id);
     $note->update($request->only(['title', 'description']));
 
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role updated successfully');
     return redirect()->route('notes.index', [
       'success' => true,
       'message' => 'Note updated successfully',
@@ -106,9 +100,6 @@ class NoteController extends Controller
   {
     $note = Note::find($id);
     if (!$note) {
-      // return redirect()
-      //   ->route('roles.index')
-      //   ->with('fail', 'We can not found data');
     }
     $note->delete();
     return Response::json(

@@ -20,18 +20,21 @@ class DashboardController extends Controller
     $request->validate([
       'password' => 'required|confirmed',
     ]);
+
     $user = User::findOrFail($request['userId']);
     $hashedPasswordFromDB = $user->password;
     $currentPassword = $request['current_password'];
+
     if (Hash::check($currentPassword, $hashedPasswordFromDB)) {
-      $password = Hash::make($request['password']);
-      $user->update(['password' => $password]);
+      $user->update(['password' => Hash::make($request['password'])]);
       $user->tokens()->delete();
+
       return redirect()->route('auth-login-basic', [
         'success' => true,
         'message' => 'Password Reset Successfully',
       ]);
     }
+
     return redirect()->route('user.dashboard', [
       'error' => true,
       'message' => 'Error In password Reset. Try Again!!',
@@ -54,9 +57,6 @@ class DashboardController extends Controller
     $user = User::findOrFail(auth()->id());
     $user->update($request->only(['first_name', 'last_name', 'contact_no', 'address']));
 
-    // return redirect()
-    //   ->route('users.index')
-    //   ->with('success', "User's data updated Successfully");
     return redirect()->route('user.dashboard', [
       'success' => true,
       'message' => 'User Updated successfully!',

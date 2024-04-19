@@ -18,15 +18,15 @@ class MeetingController extends Controller
   public function index(Request $request)
   {
     $access = [
-      'add' => Auth::user()->hasPermission('meet', 'add_access'),
-      'view' => Auth::user()->hasPermission('meet', 'view_access'),
-      'edit' => Auth::user()->hasPermission('meet', 'edit_access'),
+      'add'    => Auth::user()->hasPermission('meet', 'add_access'),
+      'view'   => Auth::user()->hasPermission('meet', 'view_access'),
+      'edit'   => Auth::user()->hasPermission('meet', 'edit_access'),
       'delete' => Auth::user()->hasPermission('meet', 'delete_access'),
     ];
 
     $filter = $request->query('filter', 'all');
     $search = $request->input('search');
-    $query = Meeting::query();
+    $query  = Meeting::query();
 
     if ($filter != 'all' && !empty($search)) {
       $query->where('is_active', $request->filter)->where('title', 'like', '%' . $search . '%');
@@ -57,8 +57,8 @@ class MeetingController extends Controller
   {
     $request->validate([
       'title' => 'required|string|max:255',
-      'date' => 'required|date|after_or_equal:today',
-      'time' => 'required',
+      'date'  => 'required|date|after_or_equal:today',
+      'time'  => 'required',
     ]);
 
     $requestData = $request->only(['title', 'description', 'date', 'time']);
@@ -67,9 +67,7 @@ class MeetingController extends Controller
     });
     $requestData['user_id'] = Auth::id();
     Meeting::create($requestData);
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role Created successfully!');
+
     return redirect()->route('meetings.index', [
       'success' => true,
       'message' => 'Meeting added successfully!',
@@ -108,24 +106,21 @@ class MeetingController extends Controller
   {
     $request->validate([
       'title' => 'required|string|max:255',
-      'date' => 'required|date',
-      'time' => 'required',
+      'date'  => 'required|date',
+      'time'  => 'required',
     ]);
 
     $meeting = Meeting::findOrFail($id);
     $meeting->update($request->only(['title', 'description', 'date', 'time']));
 
-    $dateTimeString = $request->date . ' ' . $request->time;
+    $dateTimeString   = $request->date . ' ' . $request->time;
     $combinedDateTime = DateTime::createFromFormat('Y-m-d H:i', $dateTimeString);
-    $currentDateTime = now();
+    $currentDateTime  = now();
 
     if ($combinedDateTime > $currentDateTime) {
       $meeting->update(['is_active' => 1]);
     }
 
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role updated successfully');
     return redirect()->route('meetings.index', [
       'success' => true,
       'message' => 'Meeting Details updated successfully',
@@ -139,9 +134,7 @@ class MeetingController extends Controller
   {
     $meeting = Meeting::find($id);
     if (!$meeting) {
-      // return redirect()
-      //   ->route('roles.index')
-      //   ->with('fail', 'We can not found data');
+      return redirect()->route('roles.index')->with('fail', 'We can not found data');
     }
     $meeting->delete();
     return Response::json(

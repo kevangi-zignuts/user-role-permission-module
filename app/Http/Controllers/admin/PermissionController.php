@@ -18,10 +18,11 @@ class PermissionController extends Controller
   {
     $filter = $request->query('filter', 'all');
     $search = $request->input('search');
-    $query = Permission::query();
+    $query  = Permission::query();
 
     if ($filter != 'all' && !empty($search)) {
-      $query->where('is_active', $request->filter)->where('permission_name', 'like', '%' . $search . '%');
+      $query->where('is_active', $request->filter)
+            ->where('permission_name', 'like', '%' . $search . '%');
     } elseif ($filter != 'all' && empty($search)) {
       $query->where('is_active', $request->filter);
     } else {
@@ -30,6 +31,7 @@ class PermissionController extends Controller
 
     $permissions = $query->paginate(8);
     $permissions->appends(['search' => $search, 'filter' => $filter]);
+
     return view('admin.permissions.index', ['permissions' => $permissions, 'filter' => $filter]);
   }
 
@@ -39,9 +41,8 @@ class PermissionController extends Controller
   public function create()
   {
     $modules = Module::where('parent_code', null)
-      ->where('is_active', 1)
-      ->get();
-    // dd($modules);
+                    ->where('is_active', 1)
+                    ->get();
     return view('admin.permissions.create', ['modules' => $modules]);
   }
 
@@ -53,13 +54,13 @@ class PermissionController extends Controller
     try {
       $request->validate([
         'permission_name' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'modules' => 'array',
-        'modules.*' => 'array|nullable',
+        'description'     => 'nullable|string',
+        'modules'         => 'array',
+        'modules.*'       => 'array|nullable',
       ]);
 
       $permission = Permission::create($request->only(['permission_name', 'description']));
-      $modules = $request->input('modules', []);
+      $modules    = $request->input('modules', []);
       $permission->module()->attach($modules);
 
       // return redirect()
@@ -99,9 +100,9 @@ class PermissionController extends Controller
   public function edit($id)
   {
     $permission = Permission::with('module')->findOrFail($id);
-    $modules = Module::where('parent_code', null)
-      ->where('is_active', 1)
-      ->get();
+    $modules    = Module::where('parent_code', null)
+                        ->where('is_active', 1)
+                        ->get();
     return view('admin.permissions.edit', ['permission' => $permission, 'modules' => $modules]);
   }
 
@@ -112,13 +113,14 @@ class PermissionController extends Controller
   {
     $request->validate([
       'permission_name' => 'required|string|max:255',
-      'description' => 'nullable|string',
-      'modules' => 'array',
-      'modules.*' => 'array|nullable',
+      'description'     => 'nullable|string',
+      'modules'         => 'array',
+      'modules.*'       => 'array|nullable',
     ]);
 
     $permission = Permission::findOrFail($id);
     $permission->update($request->only(['permission_name', 'description']));
+
     $selectedModules = $request->input('modules', []);
     // Detach all existing modules
     $permission->module()->detach();
@@ -140,9 +142,7 @@ class PermissionController extends Controller
   {
     $permission = Permission::find($id);
     if (!$permission) {
-      return redirect()
-        ->route('permissions.index')
-        ->with('fail', 'We can not found data');
+      return redirect()->route('permissions.index')->with('fail', 'We can not found data');
     }
     $permission->delete();
     return Response::json(

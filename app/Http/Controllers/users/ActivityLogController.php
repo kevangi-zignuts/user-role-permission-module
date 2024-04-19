@@ -17,21 +17,20 @@ class ActivityLogController extends Controller
   public function index(Request $request)
   {
     $access = [
-      'add' => Auth::user()->hasPermission('act', 'add_access'),
-      'view' => Auth::user()->hasPermission('act', 'view_access'),
-      'edit' => Auth::user()->hasPermission('act', 'edit_access'),
+      'add'    => Auth::user()->hasPermission('act', 'add_access'),
+      'view'   => Auth::user()->hasPermission('act', 'view_access'),
+      'edit'   => Auth::user()->hasPermission('act', 'edit_access'),
       'delete' => Auth::user()->hasPermission('act', 'delete_access'),
     ];
 
     $filter = $request->query('filter', 'all');
     $search = $request->input('search');
-    $query = ActivityLog::query();
+    $query  = ActivityLog::query();
 
     if ($filter != 'all' && !empty($search)) {
-      $logs = $query
-        ->where('is_active', $request->filter)
-        ->where('name', 'like', '%' . $search . '%')
-        ->paginate(8);
+      $logs = $query->where('is_active', $request->filter)
+                    ->where('name', 'like', '%' . $search . '%')
+                    ->paginate(8);
     } elseif ($filter != 'all' && empty($search)) {
       $logs = $query->where('is_active', $request->filter)->paginate(8);
     } else {
@@ -57,7 +56,7 @@ class ActivityLogController extends Controller
     $request->validate([
       'name' => 'required|string|max:255',
       'type' => 'required',
-      'log' => 'required',
+      'log'  => 'required',
     ]);
 
     $requestData = $request->only(['name', 'type', 'log']);
@@ -66,9 +65,7 @@ class ActivityLogController extends Controller
     });
     $requestData['user_id'] = Auth::id();
     ActivityLog::create($requestData);
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role Created successfully!');
+
     return redirect()->route('activityLogs.index', [
       'success' => true,
       'message' => 'Activity Log added successfully!',
@@ -108,15 +105,12 @@ class ActivityLogController extends Controller
     $request->validate([
       'name' => 'required|string|max:255',
       'type' => 'required',
-      'log' => 'required',
+      'log'  => 'required',
     ]);
 
     $log = ActivityLog::findOrFail($id);
     $log->update($request->only(['name', 'type', 'log']));
 
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role updated successfully');
     return redirect()->route('activityLogs.index', [
       'success' => true,
       'message' => 'Activity Log Details updated successfully',
@@ -130,9 +124,7 @@ class ActivityLogController extends Controller
   {
     $log = ActivityLog::find($id);
     if (!$log) {
-      // return redirect()
-      //   ->route('roles.index')
-      //   ->with('fail', 'We can not found data');
+      return redirect()->route('roles.index')->with('fail', 'We can not found data');
     }
     $log->delete();
     return Response::json(

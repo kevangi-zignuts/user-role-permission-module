@@ -17,13 +17,8 @@ class CheckUserTokens
   public function handle(Request $request, Closure $next): Response
   {
     if (
-      Auth::check() &&
-      Auth::user()
-        ->tokens()
-        ->count() === 0 &&
-      Auth::user()->email !== 'admin@example.com'
-    ) {
-      // No tokens associated with the user
+      Auth::check() && Auth::user()->tokens()->count() === 0 && Auth::user()->email !== 'admin@example.com') {
+        
       return redirect()->route('login');
     }
     return $next($request);

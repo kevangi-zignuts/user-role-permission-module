@@ -28,7 +28,7 @@ class UserController extends Controller
   {
     $filter = $request->query('filter', 'all');
     $search = $request->input('search');
-    $query = User::query();
+    $query  = User::query();
 
     // filter and search the user
     if ($filter != 'all' && !empty($search)) {
@@ -49,6 +49,7 @@ class UserController extends Controller
     $query->where('email', '!=', 'admin@example.com');
     $users = $query->with('role')->paginate(8);
     $users->appends(['search' => $search, 'filter' => $filter]);
+
     return view('admin.users.index', ['users' => $users, 'filter' => $filter]);
   }
 
@@ -79,18 +80,17 @@ class UserController extends Controller
       'contact_no' => 'numeric|nullable',
       'roles' => 'array|nullable',
     ]);
-    // dd($validate);
+
     $email = $request->input('email');
     $token = md5(uniqid(rand(), true));
     $temporaryPassword = Str::random(10);
     $user = new User();
     $user->fill(
       $request->only('first_name', 'last_name', 'email', 'contact_no', 'address') + [
-        'password' => Hash::make($temporaryPassword),
+        'password'         => Hash::make($temporaryPassword),
         'invitation_token' => $token,
-        'status' => 'I',
-      ]
-    );
+        'status'           => 'I',
+      ]);
     $user->save();
 
     Mail::to($request->input('email'))->send(new InvitationEmail($token, $user->first_name));
@@ -128,7 +128,7 @@ class UserController extends Controller
    */
   public function edit($id)
   {
-    $user = User::with('role')->find($id);
+    $user  = User::with('role')->find($id);
     $roles = Role::where('is_active', 1)->get();
     return view('admin.users.edit', ['user' => $user, 'roles' => $roles]);
   }
@@ -148,9 +148,6 @@ class UserController extends Controller
     $user->update($request->only(['first_name', 'last_name', 'contact_no', 'address']));
     $user->role()->sync($request->input('roles', []));
 
-    // return redirect()
-    //   ->route('users.index')
-    //   ->with('success', "User's data updated Successfully");
     return redirect()->route('users.index', [
       'success' => true,
       'message' => 'User Updated successfully!',
@@ -171,10 +168,6 @@ class UserController extends Controller
     $user->tokens()->delete();
     $user->delete();
 
-    // return redirect()
-    //   ->route('users.index')
-    //   ->with('success', "User's data deleted successfully");
-
     return Response::json(
       [
         'success' => true,
@@ -192,15 +185,15 @@ class UserController extends Controller
     $request->validate([
       'password' => 'required|confirmed',
     ]);
-    $user = User::findOrFail($request['userId']);
+    $user     = User::findOrFail($request['userId']);
     $password = Hash::make($request['password']);
+
     $user->update(['password' => $password]);
+
     Mail::to($user->email)->send(new ResetPassword($user->first_name));
+
     $user->tokens()->delete();
 
-    // return redirect()
-    //   ->route('users.index')
-    //   ->with('success', "User's password updated successfully");
     return redirect()->route('users.index', [
       'success' => true,
       'message' => 'Password Reset Successfully',
@@ -212,9 +205,7 @@ class UserController extends Controller
    */
   public function forceLogout($id)
   {
-    User::findOrFail($id)
-      ->tokens()
-      ->delete();
+    User::findOrFail($id)->tokens()->delete();
 
     return Response::json(
       [

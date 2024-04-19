@@ -78,8 +78,7 @@ class MenuServiceProvider extends ServiceProvider
       })
       ->filter()
       ->toArray();
-    // $menu = $menu->values()->toArray();
-    // dd($menu);
+      
     $staticMenuData['menu'] = array_merge($staticMenuData['menu'], $menu);
     // Format the menu
     $menu = [(object) $staticMenuData];

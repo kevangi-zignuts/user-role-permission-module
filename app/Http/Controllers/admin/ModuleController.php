@@ -16,16 +16,18 @@ class ModuleController extends Controller
   {
     $filter = $request->query('filter', 'all');
     $search = $request->input('search');
-    $query = Module::query();
+    $query  = Module::query();
 
     if ($filter != 'all' && !empty($search)) {
-      $query->where('is_active', $request->filter)->where('module_name', 'like', '%' . $search . '%');
+      $query->where('is_active', $request->filter)
+            ->where('module_name', 'like', '%' . $search . '%');
     } elseif ($filter != 'all' && empty($search)) {
       $query->where('is_active', $request->filter);
     } else {
       $query->where('module_name', 'like', '%' . $search . '%');
     }
     $modules = $query->get();
+
     $allModules = [];
     foreach ($modules as $module) {
       if ($module->parent_code !== null) {
@@ -45,17 +47,11 @@ class ModuleController extends Controller
       }
       $allModules[] = $module;
     }
-    // dd($allModules);
     $modules = collect($allModules)->unique(function ($module) {
       return $module->code;
     });
 
-    // dd($modules);
-
-    // $modules = $query->where('parent_code', null)->paginate(10);
-
     return view('admin.modules.index', ['modules' => $modules, 'filter' => $filter]);
-    // return view('admin.modules.index', ['modules' => $allModules, 'filter' => $filter]);
   }
 
   /**
@@ -90,12 +86,11 @@ class ModuleController extends Controller
   {
     $request->validate([
       'module_name' => 'required|string|max:255',
-    ]);
+    ]); 
+    
     $module = Module::findOrFail($code);
     $module->update($request->only(['module_name', 'description']));
-    // return redirect()
-    //   ->route('modules.index')
-    //   ->with('success', 'Module data updated successfully');
+
     return redirect()->route('modules.index', [
       'success' => true,
       'message' => 'Module Updated successfully!',

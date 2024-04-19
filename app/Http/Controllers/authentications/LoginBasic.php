@@ -20,40 +20,35 @@ class LoginBasic extends Controller
    */
   public function loginForm()
   {
-    $pageConfigs = ['myLayout' => 'blank'];
+    $pageConfigs   = ['myLayout' => 'blank'];
     $rememberToken = Cookie::get('remember_token');
 
     try {
-      if ($rememberToken) {
-        $decryptedToken = decrypt($rememberToken);
-        // Separate email and hashed password
-        list($email, $password) = explode('|', $decryptedToken);
-        return view('content.authentications.auth-login-basic', [
-          'pageConfigs' => $pageConfigs,
-          'email' => $email,
-          'password' => $password,
-          'rememberToken' => $rememberToken,
-        ]);
-      }
+        if ($rememberToken) {
+            $decryptedToken = decrypt($rememberToken);
+
+            // Separate email and hashed password
+            list($email, $password) = explode('|', $decryptedToken);
+
+            return view('content.authentications.auth-login-basic', [
+              'pageConfigs' => $pageConfigs, 'email' => $email, 'password' => $password, 'rememberToken' => $rememberToken ]);
+        }
     } catch (DecryptException $e) {
-      // Handle decryption error
-      Log::error('Decryption error: ' . $e->getMessage());
-      // Redirect or display an error message
-      return redirect()
-        ->route('login')
-        ->withErrors(['error' => 'Invalid remember token']);
+        // Handle decryption error
+        Log::error('Decryption error: ' . $e->getMessage());
+
+        return redirect()->route('login')->withErrors(['error' => 'Invalid remember token']);
     } catch (Throwable $e) {
-      // Handle other errors
-      Log::error('Error: ' . $e->getMessage());
-      return redirect()
-        ->route('login')
-        ->withErrors(['error' => 'An unexpected error occurred']);
+        // Handle other errors
+        Log::error('Error: ' . $e->getMessage());
+
+        return redirect()->route('login')->withErrors(['error' => 'An unexpected error occurred']);
     }
 
     return view('content.authentications.auth-login-basic', [
-      'pageConfigs' => $pageConfigs,
-      'email' => $email ?? null,
-      'password' => $password ?? null,
+      'pageConfigs'   => $pageConfigs,
+      'email'         => $email ?? null,
+      'password'      => $password ?? null,
       'rememberToken' => $rememberToken ?? null,
     ]);
   }
@@ -64,51 +59,36 @@ class LoginBasic extends Controller
   public function login(Request $request)
   {
     $credentials = $request->only('email', 'password');
-    $remember = $request->has('remember');
+    $remember    = $request->has('remember');
 
     if (Auth::attempt($credentials, $remember)) {
       $user = Auth::user();
       $user->is_active = 1;
       $token = $user->createToken($request->input('email'))->plainTextToken;
+
       if ($remember) {
-        $rememberToken = $request->input('email') . '|' . $request->input('password');
-        $user->remember_token = hash('sha256', $rememberToken);
-        $user->save();
+          $rememberToken = $request->input('email') . '|' . $request->input('password');
+          $user->remember_token = hash('sha256', $rememberToken);
+          $user->save();
 
-        // Store the remember token in a cookie
-        $cookieName = 'remember_token';
-        $cookieValue = encrypt($rememberToken);
-        $cookieExpiration = 60 * 24 * 30; // 30 days expiration
+          // Store the remember token in a cookie
+          $cookie = Cookie::make('remember_token', encrypt($rememberToken), 60 * 24 * 30);
 
-        $cookie = Cookie::make($cookieName, $cookieValue, $cookieExpiration);
+          if ($user->email === 'admin@example.com') {
+            return redirect()->route('admin.dashboard')->with('success', 'You are logged in successfully')->withCookie($cookie);
+          }
 
-        if ($user->email === 'admin@example.com') {
-          return redirect()
-            ->route('admin.dashboard')
-            ->with('success', 'You are logged in successfully')
-            ->withCookie($cookie);
-        }
-        return redirect()
-          ->route('user.dashboard')
-          ->with('success', 'You are logged in successfully')
-          ->withCookie($cookie);
+          return redirect()->route('user.dashboard')->with('success', 'You are logged in successfully')->withCookie($cookie);
       }
 
-      // Redirect to authenticated area
       if ($user->email === 'admin@example.com') {
-        return redirect()
-          ->route('admin.dashboard')
-          ->with('success', 'You are logged in successfully');
+        return redirect()->route('admin.dashboard')->with('success', 'You are logged in successfully');
       }
-      return redirect()
-        ->route('user.dashboard')
-        ->with('success', 'You are logged in successfully');
+      return redirect()->route('user.dashboard')->with('success', 'You are logged in successfully');
     }
 
     // If authentication fails, redirect back with errors
-    return back()
-      ->withInput($request->only('email', 'remember'))
-      ->withErrors(['email' => 'Invalid credentials']);
+    return back()->withInput($request->only('email', 'remember'))->withErrors(['email' => 'Invalid credentials']);
   }
 
   /**
@@ -117,22 +97,13 @@ class LoginBasic extends Controller
   public function logout()
   {
     if (Auth::check()) {
-      // Delete the user's token
-
       $user = Auth::user();
       $user->tokens()->delete();
-
-      // $user->is_active = 0;
-      // $user->save();
       Auth::logout();
 
-      return redirect()
-        ->route('login')
-        ->with('success', 'You have been logged out.');
+      return redirect()->route('login')->with('success', 'You have been logged out.');
     } else {
-      return redirect()
-        ->route('login')
-        ->with('error', 'You are already logged out.');
+      return redirect()->route('login')->with('error', 'You are already logged out.');
     }
   }
 }

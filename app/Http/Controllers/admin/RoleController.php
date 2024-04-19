@@ -18,11 +18,12 @@ class RoleController extends Controller
   {
     $filter = $request->query('filter', 'all');
     $search = $request->input('search');
-    $query = Role::query();
+    $query  = Role::query();
 
     // filter and search the role
     if ($filter != 'all' && !empty($search)) {
-      $query->where('is_active', $request->filter)->where('role_name', 'like', '%' . $search . '%');
+      $query->where('is_active', $request->filter)
+            ->where('role_name', 'like', '%' . $search . '%');
     } elseif ($filter != 'all' && empty($search)) {
       $query->where('is_active', $request->filter);
     } else {
@@ -49,7 +50,7 @@ class RoleController extends Controller
   public function store(Request $request)
   {
     $request->validate([
-      'role_name' => 'required|string|max:255',
+      'role_name'   => 'required|string|max:255',
       'description' => 'nullable|string',
       'permissions' => 'array',
     ]);
@@ -59,9 +60,6 @@ class RoleController extends Controller
 
     $role->permission()->sync($permissionIds);
 
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role Created successfully!');
     return redirect()->route('roles.index', [
       'success' => true,
       'message' => 'Role Created successfully!',
@@ -89,7 +87,7 @@ class RoleController extends Controller
    */
   public function edit($id)
   {
-    $role = Role::with('permission')->find($id);
+    $role        = Role::with('permission')->find($id);
     $permissions = Permission::where('is_active', 1)->get();
     return view('admin.roles.edit', ['role' => $role, 'permissions' => $permissions]);
   }
@@ -100,7 +98,7 @@ class RoleController extends Controller
   public function update(Request $request, $id)
   {
     $request->validate([
-      'role_name' => 'required|string|max:255',
+      'role_name'   => 'required|string|max:255',
       'description' => 'nullable|string',
       'permissions' => 'array',
     ]);
@@ -109,9 +107,6 @@ class RoleController extends Controller
     $role->update($request->only(['role_name', 'description']));
     $role->permission()->sync($request->input('permissions', []));
 
-    // return redirect()
-    //   ->route('roles.index')
-    //   ->with('success', 'Role updated successfully');
     return redirect()->route('roles.index', [
       'success' => true,
       'message' => 'Role updated successfully',
@@ -132,9 +127,6 @@ class RoleController extends Controller
         ],
         200
       );
-      // return redirect()
-      //   ->route('roles.index')
-      //   ->with('fail', 'We can not found data');
     }
     $role->delete();
     return Response::json(
