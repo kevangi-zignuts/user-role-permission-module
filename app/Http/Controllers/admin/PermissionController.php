@@ -16,23 +16,17 @@ class PermissionController extends Controller
    */
   public function index(Request $request)
   {
-    $filter = $request->query('filter', 'all');
-    $search = $request->input('search');
-    $query  = Permission::query();
+    $permissions = Permission::query()->where(function ($query) use ($request){
+      if($request->input('search') != null){
+        $query->where('permission_name', 'like', '%' . $request->input('search') . '%');
+      }
+      if($request->input('filter') && $request->input('filter') != 'all'){
+        $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
+      }
+    })->paginate(8);
+    $permissions->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
 
-    if ($filter != 'all' && !empty($search)) {
-      $query->where('is_active', $request->filter)
-            ->where('permission_name', 'like', '%' . $search . '%');
-    } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter);
-    } else {
-      $query->where('permission_name', 'like', '%' . $search . '%');
-    }
-
-    $permissions = $query->paginate(8);
-    $permissions->appends(['search' => $search, 'filter' => $filter]);
-
-    return view('admin.permissions.index', ['permissions' => $permissions, 'filter' => $filter]);
+    return view('admin.permissions.index', ['permissions' => $permissions, 'filter' => $request->input('filter'), 'search' => $request->input('search')]);
   }
 
   /**

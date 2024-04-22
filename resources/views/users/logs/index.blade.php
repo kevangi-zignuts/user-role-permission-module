@@ -35,21 +35,22 @@
     <div class="search-filter m-3 w-75 mx-auto">
         <form action="{{ route('activityLogs.index') }}" method="GET" class="d-flex">
             <div class="input-group m-2">
-                <input type="text" class="form-control" placeholder="Search Log..." name="search" value="">
+                <input type="text" class="form-control" placeholder="Search Log..." name="search"
+                    value="{{ $search }}">
             </div>
             <div class="input-group w-px-500 m-2">
                 <select name="filter" class="form-select" id="inputGroupSelect04"
                     aria-label="Example select with button addon" equired>
                     <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Activity Logs</option>
-                    <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Activity Logs</option>
-                    <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Activity Logs
+                    <option value="active" {{ $filter == 'active' ? 'selected' : '' }}>Activated Activity Logs</option>
+                    <option value="inactive" {{ $filter == 'inactive' ? 'selected' : '' }}>InActivated Activity Logs
                     </option>
                 </select>
             </div>
             <button class="btn btn-primary m-2 w-25" type="submit">Filter</button>
             <a href="{{ route('activityLogs.index') }}" class="btn btn-secondary m-2 w-25"><i
-              class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
-          </form>
+                    class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+        </form>
     </div>
     <div class="card">
         <div class="card-header d-flex justify-content-between">

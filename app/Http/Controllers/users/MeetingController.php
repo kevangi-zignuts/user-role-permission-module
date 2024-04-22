@@ -24,22 +24,31 @@ class MeetingController extends Controller
       'delete' => Auth::user()->hasPermission('meet', 'delete_access'),
     ];
 
-    $filter = $request->query('filter', 'all');
-    $search = $request->input('search');
-    $query  = Meeting::query();
+    $meetings  = Meeting::query()->where(function ($query) use ($request){
+      if($request->input('search') != null){
+        $query->where('title', 'like', '%' . $request->input('search') . '%');
+      }
+      if($request->input('filter') && $request->input('filter') != 'all'){
+        $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
+      }
+    })->paginate(8);
 
-    if ($filter != 'all' && !empty($search)) {
-      $query->where('is_active', $request->filter)->where('title', 'like', '%' . $search . '%');
-    } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter);
-    } else {
-      $query->where('title', 'like', '%' . $search . '%');
-    }
+    // $filter = $request->query('filter', 'all');
+    // $search = $request->input('search');
+    // $query  = Meeting::query();
 
-    $meetings = $query->paginate(8);
-    $meetings->appends(['search' => $search, 'filter' => $filter]);
+    // if ($filter != 'all' && !empty($search)) {
+    //   $query->where('is_active', $request->filter)->where('title', 'like', '%' . $search . '%');
+    // } elseif ($filter != 'all' && empty($search)) {
+    //   $query->where('is_active', $request->filter);
+    // } else {
+    //   $query->where('title', 'like', '%' . $search . '%');
+    // }
 
-    return view('users.meetings.index', ['meetings' => $meetings, 'filter' => $filter, 'access' => $access]);
+    // $meetings = $query->paginate(8);
+    $meetings->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
+
+    return view('users.meetings.index', ['meetings' => $meetings, 'search' => $request->input('search'), 'filter' => $request->input('filter'), 'access' => $access]);
   }
 
   /**

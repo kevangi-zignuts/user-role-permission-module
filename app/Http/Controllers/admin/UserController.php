@@ -26,31 +26,19 @@ class UserController extends Controller
    */
   public function index(Request $request)
   {
-    $filter = $request->query('filter', 'all');
-    $search = $request->input('search');
-    $query  = User::query();
+    $users  = User::query()->with('role')->where(function ($query) use ($request){
+      if($request->input('search') != null){
+        $query->where(function ($query) use ($request) {
+          $query->where('first_name', 'like', '%' . $request->input('search') . '%')->orWhere('last_name', 'like', '%' . $request->input('search') . '%');
+        });
+      }
+      if($request->input('filter') && $request->input('filter') != 'all'){
+        $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
+      }
+    })->where('email', '!=', 'admin@example.com')->paginate(8);
+    $users->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
 
-    // filter and search the user
-    if ($filter != 'all' && !empty($search)) {
-      $query
-        ->where('is_active', $request->filter)
-        ->where(function ($query) use ($search) {
-          $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
-        })
-        ->get();
-    } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter)->get();
-    } else {
-      $query->where(function ($query) use ($search) {
-        $query->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%');
-      });
-    }
-
-    $query->where('email', '!=', 'admin@example.com');
-    $users = $query->with('role')->paginate(8);
-    $users->appends(['search' => $search, 'filter' => $filter]);
-
-    return view('admin.users.index', ['users' => $users, 'filter' => $filter]);
+    return view('admin.users.index', ['users' => $users, 'search' => $request->input('search'), 'filter' => $request->input('filter')]);
   }
 
   /**

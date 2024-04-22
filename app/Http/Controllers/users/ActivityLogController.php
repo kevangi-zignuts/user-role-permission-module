@@ -23,21 +23,17 @@ class ActivityLogController extends Controller
       'delete' => Auth::user()->hasPermission('act', 'delete_access'),
     ];
 
-    $filter = $request->query('filter', 'all');
-    $search = $request->input('search');
-    $query  = ActivityLog::query();
-
-    if ($filter != 'all' && !empty($search)) {
-      $logs = $query->where('is_active', $request->filter)
-                    ->where('name', 'like', '%' . $search . '%')
-                    ->paginate(8);
-    } elseif ($filter != 'all' && empty($search)) {
-      $logs = $query->where('is_active', $request->filter)->paginate(8);
-    } else {
-      $logs = $query->where('name', 'like', '%' . $search . '%')->paginate(8);
-    }
-    $logs->appends(['search' => $search, 'filter' => $filter]);
-    return view('users.logs.index', ['logs' => $logs, 'filter' => $filter, 'access' => $access]);
+    $logs  = ActivityLog::query()->where(function ($query) use ($request){
+      if($request->input('search') != null){
+        $logs = $query->where('name', 'like', '%' . $request->input('search') . '%');
+      }
+      if($request->input('filter') && $request->input('filter') != 'all'){
+        $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
+      }
+    })->paginate(8);
+    $logs->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
+    
+    return view('users.logs.index', ['logs' => $logs, 'search' => $request->input('search'), 'filter' => $request->input('filter'), 'access' => $access]);
   }
 
   /**

@@ -42,19 +42,20 @@
     <div class="search-filter m-3 w-75 mx-auto">
         <form action="{{ route('roles.index') }}" method="GET" class="d-flex">
             <div class="input-group m-2">
-                <input type="text" class="form-control" placeholder="Search Role..." name="search" value="">
+                <input type="text" class="form-control" placeholder="Search Role..." name="search"
+                    value="{{ $search }}">
             </div>
             <div class="input-group w-px-500 m-2">
                 <select name="filter" class="form-select" id="inputGroupSelect04"
                     aria-label="Example select with button addon" equired>
                     <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Role</option>
-                    <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Role</option>
-                    <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Role</option>
+                    <option value="active" {{ $filter == 'active' ? 'selected' : '' }}>Activated Role</option>
+                    <option value="inactive" {{ $filter == 'inactive' ? 'selected' : '' }}>InActivated Role</option>
                 </select>
             </div>
             <button class="btn btn-primary m-2 w-25" type="submit">Filter</button>
             <a href="{{ route('roles.index') }}" class="btn btn-secondary m-2 w-25"><i
-              class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
+                    class="fa-solid fa-xmark p-1 pt-0 pb-0"></i> Clear</a>
         </form>
     </div>
     <div class="card">

@@ -25,19 +25,29 @@ class PeopleController extends Controller
       'delete' => Auth::user()->hasPermission('peo', 'delete_access'),
     ];
 
-    $filter = $request->query('filter', 'all');
-    $search = $request->input('search');
-    $query  = People::query();
+    $peoples  = People::query()->where(function ($query) use ($request){
+      if($request->input('search') != null){
+        $query->where('name', 'like', '%' . $request->input('search') . '%');
+      }
+      if($request->input('filter') && $request->input('filter') != 'all'){
+        $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
+      }
+    })->paginate(8);
 
-    if ($filter != 'all' && !empty($search)) {
-      $query->where('is_active', $request->filter)->where('name', 'like', '%' . $search . '%');
-    } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter);
-    } else {
-      $query->where('name', 'like', '%' . $search . '%');
-    }
-    $peoples = $query->paginate(8);
-    return view('users.people.index', ['peoples' => $peoples, 'filter' => $filter, 'access' => $access]);
+    // $filter = $request->query('filter', 'all');
+    // $search = $request->input('search');
+    // $query  = People::query();
+
+    // if ($filter != 'all' && !empty($search)) {
+    //   $query->where('is_active', $request->filter)->where('name', 'like', '%' . $search . '%');
+    // } elseif ($filter != 'all' && empty($search)) {
+    //   $query->where('is_active', $request->filter);
+    // } else {
+    //   $query->where('name', 'like', '%' . $search . '%');
+    // }
+    // $peoples = $query->paginate(8);
+    $peoples->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
+    return view('users.people.index', ['peoples' => $peoples, 'search' => $request->input('search'), 'filter' => $request->input('filter'), 'access' => $access]);
   }
 
   /**

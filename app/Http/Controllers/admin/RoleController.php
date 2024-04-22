@@ -16,23 +16,17 @@ class RoleController extends Controller
    */
   public function index(Request $request)
   {
-    $filter = $request->query('filter', 'all');
-    $search = $request->input('search');
-    $query  = Role::query();
+    $roles  = Role::query()->where(function ($query) use ($request){
+      if($request->input('search') != null){
+        $query->where('role_name', 'like', '%' . $request->input('search') . '%');
+      }
+      if($request->input('filter') && $request->input('filter') != 'all'){
+        $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
+      }
+    })->paginate(8);
 
-    // filter and search the role
-    if ($filter != 'all' && !empty($search)) {
-      $query->where('is_active', $request->filter)
-            ->where('role_name', 'like', '%' . $search . '%');
-    } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter);
-    } else {
-      $query->where('role_name', 'like', '%' . $search . '%');
-    }
-
-    $roles = $query->paginate(8);
-    $roles->appends(['search' => $search, 'filter' => $filter]);
-    return view('admin.roles.index', ['roles' => $roles, 'filter' => $filter]);
+    $roles->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
+    return view('admin.roles.index', ['roles' => $roles, 'filter' => $request->input('filter'), 'search' => $request->input('search')]);
   }
 
   /**

@@ -36,10 +36,13 @@
     <div class="search-container m-3 w-50 mx-auto">
         <form action="{{ route('notes.index') }}" method="GET" class="d-flex">
             <div class="input-group m-2">
-                <input type="text" class="form-control" placeholder="Search Note..." name="search" value="">
+                <input type="text" class="form-control" placeholder="Search Note..." name="search"
+                    value="{{ $search }}">
             </div>
-            <button class="btn btn-primary m-2 w-25" type="submit"><i class="fas fa-search p-1 pt-0 pb-0"></i> Search</button>
-            <a href="{{ route('notes.index') }}" class="btn btn-secondary m-2 w-25"><i class="fa-solid fa-xmark p-1 pt-0 pb-0"></i>
+            <button class="btn btn-primary m-2 w-25" type="submit"><i class="fas fa-search p-1 pt-0 pb-0"></i>
+                Search</button>
+            <a href="{{ route('notes.index') }}" class="btn btn-secondary m-2 w-25"><i
+                    class="fa-solid fa-xmark p-1 pt-0 pb-0"></i>
                 Clear</a>
         </form>
     </div>

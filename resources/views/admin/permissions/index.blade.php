@@ -40,14 +40,15 @@
     <div class="search-filter m-3 w-75 mx-auto">
         <form action="{{ route('permissions.index') }}" method="GET" class="d-flex">
             <div class="input-group m-2">
-                <input type="text" class="form-control" placeholder="Search Permission..." name="search" value="">
+                <input type="text" class="form-control" placeholder="Search Permission..." name="search"
+                    value="{{ $search }}">
             </div>
             <div class="input-group w-px-500 m-2">
                 <select name="filter" class="form-select" id="inputGroupSelect04"
                     aria-label="Example select with button addon" equired>
                     <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Permission</option>
-                    <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Permission</option>
-                    <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Permission</option>
+                    <option value="active" {{ $filter == 'active' ? 'selected' : '' }}>Activated Permission</option>
+                    <option value="inactive" {{ $filter == 'inactive' ? 'selected' : '' }}>InActivated Permission</option>
                 </select>
             </div>
             <button class="btn btn-primary m-2 w-25" type="submit">Filter</button>

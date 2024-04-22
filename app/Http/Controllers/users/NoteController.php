@@ -22,17 +22,15 @@ class NoteController extends Controller
       'edit'   => Auth::user()->hasPermission('note', 'edit_access'),
       'delete' => Auth::user()->hasPermission('note', 'delete_access'),
     ];
-
-    $query = Note::query();
-
     // search the user
-    $search = $request->input('search');
-    if (!empty($search)) {
-      $query->where('title', 'like', '%' . $search . '%');
-    }
-    $notes = $query->paginate(8);
-    $notes->appends(['search' => $search]);
-    return view('users.notes.index', ['notes' => $notes, 'access' => $access]);
+    $notes = Note::query()->where(function ($query) use ($request){
+      if($request->input('search') != null){
+        $query->where('title', 'like', '%' . $request->input('search') . '%');
+      }
+    })->paginate(8);
+    $notes->appends(['search' => $request->input('search')]);
+
+    return view('users.notes.index', ['notes' => $notes, 'search' => $request->input('search'), 'access' => $access]);
   }
 
   /**

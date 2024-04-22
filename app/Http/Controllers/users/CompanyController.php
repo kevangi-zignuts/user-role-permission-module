@@ -24,16 +24,12 @@ class CompanyController extends Controller
       'delete' => Auth::user()->hasPermission('com', 'delete_access'),
     ];
 
-    $query = Company::query();
-
-    // search the user
-    $search = $request->input('search');
-    if (!empty($search)) {
-      $query->where('company_name', 'like', '%' . $search . '%');
-    }
-    $companies = $query->paginate(8);
-    $companies->appends(['search' => $search]);
-    return view('users.company.index', ['companies' => $companies, 'access' => $access]);
+    $companies = Company::query()->where(function ($query) use ($request){
+      $query->where('company_name', 'like', '%' . $request->input('search') . '%');
+    })->paginate(8);
+    $companies->appends(['search' => $request->input('search')]);
+    
+    return view('users.company.index', ['companies' => $companies, 'access' => $access, 'search' => $request->input('search')]);
   }
 
   /**
