@@ -32,20 +32,6 @@ class MeetingController extends Controller
         $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
       }
     })->paginate(8);
-
-    // $filter = $request->query('filter', 'all');
-    // $search = $request->input('search');
-    // $query  = Meeting::query();
-
-    // if ($filter != 'all' && !empty($search)) {
-    //   $query->where('is_active', $request->filter)->where('title', 'like', '%' . $search . '%');
-    // } elseif ($filter != 'all' && empty($search)) {
-    //   $query->where('is_active', $request->filter);
-    // } else {
-    //   $query->where('title', 'like', '%' . $search . '%');
-    // }
-
-    // $meetings = $query->paginate(8);
     $meetings->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
 
     return view('users.meetings.index', ['meetings' => $meetings, 'search' => $request->input('search'), 'filter' => $request->input('filter'), 'access' => $access]);

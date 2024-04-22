@@ -8,7 +8,6 @@
                     <h3 class="role-title mb-2">Reset Password</h3>
                 </div>
                 <!-- Add role form -->
-                {{-- {{ $user->id }} --}}
                 <form action="" id="resetPasswordForm" class="row g-3" method="post">
                     @csrf
                     @if (Auth()->user()->email === 'admin@example.com')

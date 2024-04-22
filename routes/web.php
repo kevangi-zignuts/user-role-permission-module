@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Middleware\CheckUserTokens;
+use App\Http\Controllers\admin\AdminDashboardController;
 use App\Http\Controllers\admin\ModuleController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\users\NoteController;
@@ -41,8 +42,7 @@ Route::middleware('auth', 'adminCheck')->group(function () {
   // Main Page Route
 
   Route::group(['prefix' => 'admin'], function () {
-    $controller_path = 'App\Http\Controllers';
-    Route::get('/dashboard', $controller_path . '\pages\HomePage@index')->name('admin.dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::group(['prefix' => 'modules'], function () {
       Route::get('/index', [ModuleController::class, 'index'])->name('modules.index');

@@ -1,6 +1,3 @@
-{{-- Hello!!
-<p>Click <a href="{{ route('resetPassword', ['id' => $id]) }}">here</a> to register.</p>
-<!DOCTYPE html> --}}
 <html>
 
 <head>
@@ -29,7 +26,8 @@
                 <p class="heading">Hello Sir/Ma'am {{ $name }},</p>
                 <p class="mb-4 mt-3"><b>Click below button to login the Website</b></p>
                 <div class="text-div mx-auto mw-100 justify-content-center">
-                  <a href="{{ route('resetPassword', ['token' => $token]) }}" class="btn btn-primary mx-auto">Login</a>
+                    <a href="{{ route('resetPassword', ['token' => $token]) }}"
+                        class="btn btn-primary mx-auto">Login</a>
                 </div>
             </div>
         </div>

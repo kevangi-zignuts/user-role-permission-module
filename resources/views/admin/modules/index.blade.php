@@ -43,17 +43,6 @@
             {{ session('error') }}
         </div>
     @endif
-    @php
-        $i = 1;
-    @endphp
-
-    {{-- commented code --}}
-    {{-- @foreach ($modules as $module)
-@dd($module->module_name)
-
-@endforeach --}}
-    {{-- commented code --}}
-
 
     <div class="search-filter m-3 w-75 mx-auto">
         <form action="{{ route('modules.index') }}" method="GET" class="d-flex">
@@ -89,7 +78,6 @@
                     </thead>
                     <tbody>
                         @if ($modules->isEmpty())
-                            {{-- @if (empty($modules)) --}}
                             <tr>
                                 <td colspan="5" class="text-center text-danger h5">No data available</td>
                             </tr>
@@ -155,17 +143,13 @@
                                         </table>
                                     </td>
                                 </tr>
-                                @php
-                                    $i++;
-                                @endphp
                             @endif
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-        {{-- {{ $modules->links() }} --}}
-
+        {{-- {{ $modules->links('pagination::bootstrap-5') }} --}}
     </div>
     </div>
 

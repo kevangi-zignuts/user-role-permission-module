@@ -34,10 +34,14 @@
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner py-4 mx-auto">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-header">
                         <div class="app-brand justify-content-center mb-4 mt-2">
-                            <span class="app-brand-text demo text-body fw-bold ms-1">Add Meeting</span>
+                            <span class="app-brand-text demo text-body fw-bold ms-1 ">
+                                <p class="">Add Meeting</p>
+                            </span>
                         </div>
+                    </div>
+                    <div class="card-body">
                         <form action="{{ route('meetings.store') }}" method="post" id="formAuthentication" class="mb-3">
                             @csrf
                             <div class="mb-3">
@@ -54,14 +58,16 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Date *</label>
-                                    <input type="date" class="form-control" name="date" id="date" autofocus required>
+                                    <input type="date" class="form-control" name="date" id="date" autofocus
+                                        required>
                                     @error('date')
                                         <div class="pt-2 text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Time *</label>
-                                    <input type="time" class="form-control" name="time" id="time" autofocus required>
+                                    <input type="time" class="form-control" name="time" id="time" autofocus
+                                        required>
                                     @error('time')
                                         <div class="text-danger pt-2">{{ $message }}</div>
                                     @enderror
@@ -83,14 +89,14 @@
     </div>
 
     <script>
-      // Get today's date
-      var today = new Date();
-      // Format the date as YYYY-MM-DD
-      var formattedDate = today.toISOString().substr(0, 10);
-      // Set the minimum date for the date input field
-      document.getElementById('date').min = formattedDate;
+        // Get today's date
+        var today = new Date();
+        // Format the date as YYYY-MM-DD
+        var formattedDate = today.toISOString().substr(0, 10);
+        // Set the minimum date for the date input field
+        document.getElementById('date').min = formattedDate;
 
-      document.getElementById('date').addEventListener('change', function() {
+        document.getElementById('date').addEventListener('change', function() {
             var selectedDate = new Date(this.value);
             var currentDate = new Date();
 
@@ -106,6 +112,6 @@
                 document.getElementById('time').min = '';
             }
         });
-  </script>
+    </script>
 
 @endsection

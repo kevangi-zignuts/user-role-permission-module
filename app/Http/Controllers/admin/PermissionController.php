@@ -57,18 +57,12 @@ class PermissionController extends Controller
       $modules    = $request->input('modules', []);
       $permission->module()->attach($modules);
 
-      // return redirect()
-      //   ->route('permissions.index')
-      //   ->with('success', 'Permission created successfully.');
       return redirect()->route('permissions.index', [
         'success' => true,
         'message' => 'Permission created successfully!',
       ]);
     } catch (ValidationException $e) {
-      return redirect()
-        ->back()
-        ->withErrors($e->validator->errors())
-        ->withInput();
+      return redirect() ->back()->withErrors($e->validator->errors())->withInput();
     }
   }
 
@@ -124,9 +118,6 @@ class PermissionController extends Controller
       'success' => true,
       'message' => 'Permission updated successfully!',
     ]);
-    // return redirect()
-    //   ->route('permissions.index')
-    //   ->with('success', 'Permission updated successfully');
   }
 
   /**

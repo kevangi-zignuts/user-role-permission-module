@@ -31,66 +31,6 @@
 
 @section('content')
 
-    {{-- <div class="card bg-label-primary  p-4">
-        <div class="row g-4">
-            <div class="col-xl-4 col-lg-6 col-md-6 w-25">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="mx-auto my-3">
-                            <img src="{{ asset('assets/img/avatars/3.png') }}" alt="Avatar Image"
-                                class="rounded-circle w-px-100" />
-                        </div>
-                        <h4 class="mb-3 card-title">{{ $user->first_name }} {{ $user->last_name }}</h4>
-                        @if ($user->is_active)
-                            <p><span class="badge bg-label-success">Active</span></p>
-                        @else
-                            <p><span class="badge bg-label-success">Inactive</span></p>
-                        @endif
-                        <div class="align-items-center justify-content-center">
-                            <a class="btn btn-primary d-flex align-items-center mb-3" href="{{ route('user.edit') }}"><i
-                                    class="ti ti-pencil me-1"></i> Edit</a>
-                            <a href="#" data-route="{{ route('user.resetPassword') }}" data-id="{{ Auth::id() }}"
-                                data-bs-target="#addRoleModal" data-bs-toggle="modal"
-                                class="btn btn-primary add-new-role d-flex align-items-center mb-3"><i
-                                    class="ti ti-key me-1"></i>
-                                Reset
-                                Password</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6 col-md-6 w-75">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                            <p class="fw-bold mb-2">First Name :- </p>
-                            <p class="m-5 mb-2 mt-0">{{ $user->first_name }}</p>
-                        </div>
-                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                            <p class="fw-bold mb-2">Last Name :- </p>
-                            <p class="m-5 mb-2 mt-0">{{ $user->last_name }}</p>
-                        </div>
-                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                            <p class="fw-bold mb-2">Email :- </p>
-                            <p class="m-5 mb-2 mt-0">{{ $user->email }}</p>
-                        </div>
-                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                            <p class="fw-bold mb-2">Contact No. :- </p>
-                            <p class="m-5 mb-2 mt-0">{{ $user->contact_no }}</p>
-                        </div>
-                        <div class="w-100 mt-4 pb-0 border-bottom d-flex">
-                            <p class="fw-bold mb-2">Address :- </p>
-                            <p class="m-5 mb-2 mt-0">{{ $user->address }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-
-
-
     <div class="card bg-label-primary  p-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
@@ -139,17 +79,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
 
     @include('admin.users.resetPassword')
 

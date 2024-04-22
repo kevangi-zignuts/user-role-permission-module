@@ -52,7 +52,7 @@ class RoleController extends Controller
 
     $permissionIds = $request->input('permissions', []);
 
-    $role->permission()->sync($permissionIds);
+    $role->permission()->attach($permissionIds);
 
     return redirect()->route('roles.index', [
       'success' => true,

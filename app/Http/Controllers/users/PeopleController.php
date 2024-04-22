@@ -33,20 +33,8 @@ class PeopleController extends Controller
         $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
       }
     })->paginate(8);
-
-    // $filter = $request->query('filter', 'all');
-    // $search = $request->input('search');
-    // $query  = People::query();
-
-    // if ($filter != 'all' && !empty($search)) {
-    //   $query->where('is_active', $request->filter)->where('name', 'like', '%' . $search . '%');
-    // } elseif ($filter != 'all' && empty($search)) {
-    //   $query->where('is_active', $request->filter);
-    // } else {
-    //   $query->where('name', 'like', '%' . $search . '%');
-    // }
-    // $peoples = $query->paginate(8);
     $peoples->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
+    
     return view('users.people.index', ['peoples' => $peoples, 'search' => $request->input('search'), 'filter' => $request->input('filter'), 'access' => $access]);
   }
 
