@@ -14,29 +14,24 @@ class ModuleController extends Controller
    */
   public function index(Request $request)
   {
-    $filter = $request->query('filter', 'all');
-    $search = $request->input('search');
-    $query  = Module::query();
-
-    if ($filter != 'all' && !empty($search)) {
-      $query->where('is_active', $request->filter)
-            ->where('module_name', 'like', '%' . $search . '%');
-    } elseif ($filter != 'all' && empty($search)) {
-      $query->where('is_active', $request->filter);
-    } else {
-      $query->where('module_name', 'like', '%' . $search . '%');
-    }
-    $modules = $query->get();
+    $modules = Module::query()->where(function ($query) use ($request){
+      if($request->input('search') != null){
+        $query->where('module_name', 'like', '%' . $request->input('search') . '%');
+      }
+      if($request->input('filter') && $request->input('filter') != 'all'){
+        $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
+      }
+    })->get();
 
     $allModules = [];
     foreach ($modules as $module) {
       if ($module->parent_code !== null) {
         $tempModule = Module::findOrFail($module->parent_code);
-        if ($tempModule->is_active == $module->is_active) {
+        if (($tempModule->is_active == $module->is_active) || $request->input('filter') == 'all') {
           $allModules[] = $tempModule;
         }
       } else {
-        if ($filter != 'all') {
+        if ($request->input('filter') != 'all') {
           $filteredSubmodules = $module->submodules->filter(function ($submodule) use ($module) {
             return $module->is_active == $submodule->is_active;
           });
@@ -51,7 +46,7 @@ class ModuleController extends Controller
       return $module->code;
     });
 
-    return view('admin.modules.index', ['modules' => $modules, 'filter' => $filter]);
+    return view('admin.modules.index', ['modules' => $modules, 'search' => $request->input('search'), 'filter' => $request->input('filter')]);
   }
 
   /**

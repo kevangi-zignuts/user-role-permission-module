@@ -58,14 +58,15 @@
     <div class="search-filter m-3 w-75 mx-auto">
         <form action="{{ route('modules.index') }}" method="GET" class="d-flex">
             <div class="input-group m-2">
-                <input type="text" class="form-control" placeholder="Search User..." name="search" value="">
+                <input type="text" class="form-control" placeholder="Search User..." name="search"
+                    value="{{ $search }}">
             </div>
             <div class="input-group w-px-500 m-2">
                 <select name="filter" class="form-select" id="inputGroupSelect04"
                     aria-label="Example select with button addon" equired>
                     <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Modules</option>
-                    <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Activated Modules</option>
-                    <option value="0" {{ $filter == '0' ? 'selected' : '' }}>InActivated Modules</option>
+                    <option value="active" {{ $filter == 'active' ? 'selected' : '' }}>Activated Modules</option>
+                    <option value="inactive" {{ $filter == 'inactive' ? 'selected' : '' }}>InActivated Modules</option>
                 </select>
             </div>
             <button class="btn btn-primary m-2 w-25" type="submit">Filter</button>
@@ -163,7 +164,8 @@
                 </table>
             </div>
         </div>
-        {{-- {{ $modules->links('pagination::bootstrap-5') }} --}}
+        {{-- {{ $modules->links() }} --}}
+
     </div>
     </div>
 
