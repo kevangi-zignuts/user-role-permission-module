@@ -1,80 +1,59 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
-@extends('layouts/layoutMaster')
-
-@section('title', 'Edit User Details')
-
-@section('vendor-style')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
-@endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-@endsection
-
-@section('content')
-
-    <div class="card">
-        <div class="card-header d-flex justify-content-center m-5 mb-2">
-            <h3>Edit Details</h3>
-        </div>
-        <div class="card-body">
-            <form action="{{ route('user.update') }}" method="post" id="formAuthentication" class="mb-3">
-                @csrf
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">First Name *</label>
-                        <input type="text" class="form-control" name="first_name" value="{{ $user->first_name }}"
-                            required />
-                        @error('first_name')
+<div class="modal fade" id="editUser" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-add-new-role">
+        <div class="modal-content p-3 p-md-5"
+            style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
+            <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <h3 class="role-title mb-2 text-white">Edit Details</h3>
+                </div>
+                <form action="{{ route('user.update') }}" id="resetPasswordForm" class="row g-3" method="post">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-white">First Name *</label>
+                            <input type="text"
+                                class="form-control border-0 border border-bottom rounded-0 border-white text-white bg-transparent"
+                                name="first_name" value="{{ $user->first_name }}" required />
+                            @error('first_name')
+                                <div class="text-danger pt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-white">Last Name</label>
+                            <input type="text"
+                                class="form-control phone-mask border-0 border border-bottom rounded-0 border-white text-white bg-transparent"
+                                name="last_name" value="{{ $user->last_name }}" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Email *</label>
+                        <input type="email"
+                            class="form-control border-0 border border-bottom rounded-0 border-white text-white bg-transparent"
+                            name="email" value="{{ $user->email }}" autofocus disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-white">Contact no</label>
+                        <input type="tel"
+                            class="form-control border-0 border border-bottom rounded-0 border-white text-white bg-transparent"
+                            name="contact_no" value="{{ $user->contact_no }}" autofocus>
+                        @error('contact_no')
                             <div class="text-danger pt-2">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Last Name</label>
-                        <input type="text" class="form-control phone-mask" name="last_name"
-                            value="{{ $user->last_name }}" />
+                    <div class="form-group mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label text-white">Address</label>
+                        <textarea class="form-control rounded-0 border-white text-white bg-transparent" id="exampleFormControlTextarea1"
+                            rows="3" name="address">{{ $user->address }}</textarea>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Email *</label>
-                    <input type="email" class="form-control" name="email" value="{{ $user->email }}" autofocus
-                        disabled>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">contact no</label>
-                    <input type="tel" class="form-control" name="contact_no" value="{{ $user->contact_no }}" autofocus>
-                    @error('contact_no')
-                        <div class="text-danger pt-2">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="form-group mb-3">
-                    <label for="exampleFormControlTextarea1">Address</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="address">{{ $user->address }}</textarea>
-                </div>
-
-                <div class="row">
-                    <div class="mt-3">
-                        <button type="submit" class="btn btn-primary me-2">Update</button>
-                        <a href="{{ route('user.dashboard') }}" class="btn btn-label-secondary">Cancle</a>
+                    <div class="col-12 text-center mt-4">
+                        <button type="submit"
+                            class="bg-white text-primary btn btn-primary me-sm-3 me-1">Submit</button>
+                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button>
                     </div>
-                </div>
-            </form>
-
+                </form>
+            </div>
         </div>
     </div>
-
-@endsection
+</div>

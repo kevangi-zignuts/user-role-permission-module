@@ -11,6 +11,7 @@
 @endsection
 
 @section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
@@ -27,6 +28,8 @@
 @section('page-script')
     <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
     <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 @endsection
 
 @section('content')
@@ -46,11 +49,12 @@
                     </div>
                 </div>
                 <div class="d-flex">
-                    <a class="btn btn-primary h-50 m-2" href="{{ route('user.edit') }}"><i class="ti ti-pencil me-1"></i>
-                        Edit</a>
+                    <a href="#" data-route="{{ route('user.edit') }}" data-bs-target="#editUser"
+                        data-bs-toggle="modal" class="btn btn-primary h-50 m-2 " id="edit-user"><i
+                            class="ti ti-pencil me-1"></i>Edit</a>
                     <a href="#" data-route="{{ route('user.resetPassword') }}" data-id="{{ Auth::id() }}"
-                        data-bs-target="#addRoleModal" data-bs-toggle="modal"
-                        class="btn btn-primary add-new-role h-50 m-2"><i class="ti ti-key me-1"></i>
+                        data-bs-target="#addRoleModal" data-bs-toggle="modal" class="btn btn-primary h-50 m-2"
+                        id="reset-password"><i class="ti ti-key me-1"></i>
                         Reset
                         Password</a>
                 </div>
@@ -80,30 +84,78 @@
         </div>
     </div>
 
+    <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
+        data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="ti ti-bell ti-xs me-2"></i>
+            <div class="me-auto fw-semibold">Success</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+
+    <div class="bs-toast toast toast-ex animate__animated my-2 error-message" role="alert" aria-live="assertive"
+        aria-atomic="true" data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="ti ti-bell ti-xs me-2"></i>
+            <div class="me-auto fw-semibold">Error</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body toast-body-error">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+
     @include('admin.users.resetPassword')
+    @include('users.edit')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var links = document.querySelectorAll('a[data-bs-toggle="modal"]');
-            links.forEach(function(link) {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent the default action of the link
-                    var form = document.getElementById('resetPasswordForm');
-                    var id = this.getAttribute('data-id');
+            var link = document.querySelector('a[data-bs-toggle="modal"][id="edit-user"]');
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var form = document.getElementById('editForm');
+                if (form) {
+                    var route = this.getElementById('editForm');
                     if (form) {
                         var route = this.getAttribute('data-route');
-                        var UserId = document.getElementById('id');
-                        if (UserId && route) {
-                            UserId.value = id;
-                            form.setAttribute('action',
-                                route); // Set form action to the route URL
+                        if (route) {
+                            form.setAttribute('action', route);
                         } else {
                             console.error('Data-route attribute not found on link.');
                         }
                     } else {
                         console.error('Form not found.');
                     }
-                });
+                }
+            })
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var link = document.querySelector('a[data-bs-toggle="modal"][id="reset-password"]');
+            link.addEventListener('click', function(event) {
+                console.log(link);
+                event.preventDefault();
+                var form = document.getElementById('resetPasswordForm');
+                var id = this.getAttribute('data-id');
+                if (form) {
+                    var route = this.getAttribute('data-route');
+                    var UserId = document.getElementById('id');
+                    if (UserId && route) {
+                        UserId.value = id;
+                        form.setAttribute('action', route);
+                        console.log(form);
+                    } else {
+                        console.error('Data-route attribute not found on link.');
+                    }
+                } else {
+                    console.error('Form not found.');
+                }
+
             });
         });
     </script>

@@ -77,6 +77,7 @@ class MenuServiceProvider extends ServiceProvider
     $staticMenuData['menu'] = array_merge($staticMenuData['menu'], $menu);
     // Format the menu
     $menu = [(object) $staticMenuData];
+    // dd($menu);
     return $menu;
   }
 }
