@@ -114,10 +114,10 @@
 
 
     <!--/ Toast message -->
-    <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
-        data-bs-delay="2000">
+    <div class="bs-toast toast toast-ex animate__animated animate__tada my-2" role="alert" aria-live="assertive"
+        aria-atomic="true" data-bs-delay="2000">
         <div class="toast-header">
-            <i class="ti ti-bell ti-xs me-2"></i>
+            <i class="ti ti-bell ti-xs me-2 text-success"></i>
             <div class="me-auto fw-semibold">Success</div>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
