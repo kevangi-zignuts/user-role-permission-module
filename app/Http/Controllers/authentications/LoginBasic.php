@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -105,7 +106,15 @@ class LoginBasic extends Controller
       $user->tokens()->delete();
       Auth::logout();
 
-      return redirect()->route('login')->with('success', 'You have been logged out.');
+      return Response::json(
+        [
+          'success' => true,
+          'message' => 'You have been logged out.',
+        ],
+        200
+      );
+
+      // return redirect()->route('login')->with('success', 'You have been logged out.');
     } else {
       return redirect()->route('login')->with('error', 'You are already logged out.');
     }

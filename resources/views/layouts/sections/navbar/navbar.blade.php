@@ -152,7 +152,8 @@
                 </li>
                 @if (Auth::check())
                     <li>
-                        <a class="dropdown-item" href="{{ route('auth.logout') }}">
+                        {{-- <a class="dropdown-item" href="{{ route('auth.logout') }}" data-route="{{ route('activityLogs.delete', ['id' => $log->id]) }}"> --}}
+                        <a class="dropdown-item logout" href="#" data-route="{{ route('auth.logout') }}">
                             <i class='ti ti-logout me-2'></i>
                             <span class="align-middle">Logout</span>
                         </a>
@@ -176,3 +177,53 @@
 @endif
 </nav>
 <!-- / Navbar -->
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+<link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
+<script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        logout_btn = document.querySelectorAll('.logout');
+        logout_btn.forEach(function(logout) {
+            logout.addEventListener('click', function() {
+                var row = this.closest('tr');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, logout!',
+                    customClass: {
+                        confirmButton: 'btn btn-primary me-3',
+                        cancelButton: 'btn btn-label-secondary'
+                    },
+                    buttonsStyling: false
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        var route = $(logout).data('route');
+                        $.ajax({
+                            type: "GET",
+                            dataType: "json",
+                            url: route,
+                            success: function(data) {
+                                console.log();
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Logged out Successfully!!',
+                                        text: data.message,
+                                        customClass: {
+                                            confirmButton: 'btn btn-success'
+                                        }
+                                    }).then(function() {
+                                        window.location.reload();
+                                    })
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    });
+</script>
