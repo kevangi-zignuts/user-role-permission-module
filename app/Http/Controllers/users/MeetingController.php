@@ -107,15 +107,7 @@ class MeetingController extends Controller
 
     $meeting = Meeting::findOrFail($id);
     $meeting->update($request->only(['title', 'description', 'date', 'time']));
-
-    $dateTimeString   = $request->date . ' ' . $request->time;
-    $combinedDateTime = DateTime::createFromFormat('Y-m-d H:i', $dateTimeString);
-    $currentDateTime  = now();
-
-    if ($combinedDateTime > $currentDateTime) {
-      $meeting->update(['is_active' => 1]);
-    }
-
+    
     return redirect()->route('meetings.index', [
       'success' => true,
       'message' => 'Meeting Details updated successfully',
