@@ -115,7 +115,9 @@
                                                 data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                             <div class="dropdown-menu">
                                                 @if ($access['edit'])
-                                                    <a class="dropdown-item"
+                                                    <a class="dropdown-item edit-meeting-btn"
+                                                        data-meeting-date="{{ $meeting->date }}"
+                                                        data-meeting-time="{{ $meeting->time }}"
                                                         href="{{ route('meetings.edit', ['id' => $meeting->id]) }}"><i
                                                             class="ti ti-pencil me-1"></i>
                                                         Edit</a>
@@ -140,7 +142,7 @@
     </div>
 
 
-    <!--/ Toast message -->
+    <!--/ Success Toast message -->
     <div class="bs-toast toast toast-ex animate__animated my-2" role="alert" aria-live="assertive" aria-atomic="true"
         data-bs-delay="2000">
         <div class="toast-header">
@@ -152,7 +154,21 @@
             Hello, world! This is a toast message.
         </div>
     </div>
-    <!--/ Toast message -->
+    <!--/ Success Toast message -->
+
+    <!--/ Error Toast message -->
+    <div class="bs-toast toast toast-ex animate__animated animate__tada my-2 error-message" role="alert"
+        aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="ti ti-bell ti-xs me-2 text-danger"></i>
+            <div class="me-auto fw-semibold">Error</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body toast-body-error">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+    <!--/ Error Toast message -->
 
 
     <script>
@@ -192,6 +208,30 @@
 
             var formattedAddress = chunks.join("<br>");
             fullAddress.html(formattedAddress);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var currentTime = new Date();
+
+            $(".edit-meeting-btn").each(function() {
+                var meetingDate = $(this).data("meeting-date");
+                var meetingTime = $(this).data("meeting-time");
+
+                var meetingDatetime = new Date(meetingDate + " " + meetingTime);
+
+                if (meetingDatetime <= currentTime) {
+                    $(this).on("click", function(event) {
+                        event.preventDefault();
+                        $('.error-message')
+                            .find('.toast-body-error')
+                            .text('Meeting is Over, Cannot be added');
+                        var toastAnimation = new bootstrap.Toast($('.error-message')[0]);
+                        toastAnimation.show();
+                    });
+                }
+            });
         });
     </script>
 
