@@ -23,8 +23,21 @@ return new class extends Migration {
       $table->string('invitation_token', 128)->nullable();
       $table->enum('status', ['I', 'A', 'R']); // I=Invited, A=Accepted, R=Rejected
       $table->string('remember_token', 256)->nullable();
+      $table->unsignedBigInteger('created_by')->nullable();
+      $table->unsignedBigInteger('updated_by')->nullable();
       $table->timestamps();
       $table->softDeletes();
+
+      $table
+        ->foreign('created_by')
+        ->references('id')
+        ->on('users')
+        ->onDelete('cascade');
+      $table
+        ->foreign('updated_by')
+        ->references('id')
+        ->on('users')
+        ->onDelete('cascade');
     });
   }
 

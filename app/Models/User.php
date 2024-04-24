@@ -29,7 +29,28 @@ class User extends Authenticatable
     'is_active',
     'invitation_token',
     'status',
+    'created_by', 
+    'updated_by',
   ];
+
+  public static function boot()
+  {
+    parent::boot();
+
+    static::creating(function ($module) {
+      $user = auth()->user();
+      if ($user) {
+        $module->created_by = $user->id;
+      }
+    });
+
+    static::updating(function ($module) {
+      $user = auth()->user();
+      if ($user) {
+        $module->updated_by = $user->id;
+      }
+    });
+  }
 
   /**
    * The attributes that should be hidden for serialization.
