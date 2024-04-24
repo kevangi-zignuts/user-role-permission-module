@@ -19,13 +19,13 @@
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
 @endsection
 
 @section('page-script')
+    <script src="{{ asset('assets/js/pages-profile.js') }}"></script>
     <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
     <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
     <script src="{{ asset('assets/js/toast-message.js') }}"></script>
@@ -34,31 +34,55 @@
 
 @section('content')
 
-    <div class="card bg-label-primary  p-4">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <div class="d-flex">
-                    <img src="{{ asset('assets/img/avatars/3.png') }}" alt="Avatar Image" class="rounded-circle w-px-75" />
-                    <div>
-                        <h4 class="card-title m-3 mb-0">{{ $user->first_name }} {{ $user->last_name }}</h4>
-                        @if ($user->is_active)
-                            <p><span class="badge bg-label-success m-3 mb-0 mt-0">Active</span></p>
-                        @else
-                            <p><span class="badge bg-label-success m-3 mb-0 mt-0">Inactive</span></p>
-                        @endif
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="user-profile-header-banner">
+                    <img src="https://media.istockphoto.com/id/1152097010/photo/beautiful-abstract-pink-and-blue-sky-landscape-background-and-wallpaper.jpg?s=2048x2048&w=is&k=20&c=AgO0hGjs2Felk21Fw69PQfJxN7WGF-XIWQ2wUqVkSvo="
+                        alt="Image
+                        1" class="rounded-top">
+                </div>
+                <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
+                    <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
+                        <img src="{{ asset('assets/img/avatars/14.png') }}" alt="user image"
+                            class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img">
+                    </div>
+                    <div class="flex-grow-1 mt-3 mt-sm-5">
+                        <div
+                            class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-4 flex-md-row flex-column gap-4">
+                            <div class="user-profile-info">
+                                <h4>{{ $user->first_name }} {{ $user->last_name }}</h4>
+                                <ul
+                                    class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
+                                    <li class="list-inline-item d-flex">
+                                        <i class="fa-solid fa-toggle-on"></i>
+                                        @if ($user->is_active)
+                                            <p><span class="m-3 mb-0 mt-0">Active</span></p>
+                                        @else
+                                            <p><span class="m-3 mb-0 mt-0">Inactive</span></p>
+                                        @endif
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex">
+                                <a href="#" data-route="{{ route('user.edit') }}" data-bs-target="#editUser"
+                                    data-bs-toggle="modal" class="btn btn-primary h-50 m-2 " id="edit-user"><i
+                                        class="ti ti-pencil me-1"></i>Edit</a>
+                                <a href="#" data-route="{{ route('user.resetPassword') }}"
+                                    data-id="{{ Auth::id() }}" data-bs-target="#addRoleModal" data-bs-toggle="modal"
+                                    class="btn btn-primary h-50 m-2" id="reset-password"><i class="ti ti-key me-1"></i>
+                                    Reset
+                                    Password</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="d-flex">
-                    <a href="#" data-route="{{ route('user.edit') }}" data-bs-target="#editUser"
-                        data-bs-toggle="modal" class="btn btn-primary h-50 m-2 " id="edit-user"><i
-                            class="ti ti-pencil me-1"></i>Edit</a>
-                    <a href="#" data-route="{{ route('user.resetPassword') }}" data-id="{{ Auth::id() }}"
-                        data-bs-target="#addRoleModal" data-bs-toggle="modal" class="btn btn-primary h-50 m-2"
-                        id="reset-password"><i class="ti ti-key me-1"></i>
-                        Reset
-                        Password</a>
-                </div>
             </div>
+        </div>
+    </div>
+
+    <div class="card bg-label-primary  p-4">
+        <div class="card">
             <div class="card-body">
                 <div class="w-100 mt-4 pb-0 border-bottom d-flex">
                     <p class="fw-bold mb-2">First Name :- </p>

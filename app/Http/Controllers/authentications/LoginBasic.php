@@ -81,6 +81,10 @@ class LoginBasic extends Controller
           return redirect()->route('user.dashboard')->with('success', 'You are logged in successfully')->withCookie($cookie);
       }
 
+      if(Auth::attempt($credentials) && $request->hasCookie('remember_token')){
+        Cookie::queue(Cookie::forget('remember_token'));
+      }
+
       if ($user->email === 'admin@example.com') {
         return redirect()->route('admin.dashboard')->with('success', 'You are logged in successfully');
       }

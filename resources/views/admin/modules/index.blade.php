@@ -77,7 +77,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($modules->isEmpty())
+                        @if ($modules->isEmpty() || $modules->where('parent_code', null)->isEmpty())
                             <tr>
                                 <td colspan="5" class="text-center text-danger h5">No data available</td>
                             </tr>
