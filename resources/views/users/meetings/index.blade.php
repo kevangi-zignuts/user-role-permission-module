@@ -88,7 +88,14 @@
                         @foreach ($meetings as $meeting)
                             <tr>
                                 <td>{{ $meeting->title }}</td>
-                                <td>{{ $meeting->description }}</td>
+                                <td>
+                                    <span class="truncated-address">
+                                        {{ \Illuminate\Support\Str::limit($meeting->description, 45, ' ...') }}
+                                    </span>
+                                    <span class="full-address" style="display: none;">
+                                        {{ $meeting->description }}
+                                    </span>
+                                </td>
                                 <td class="meetingDate" data-id="{{ $meeting->id }}">{{ $meeting->date }}</td>
                                 <td class="meetingTime" data-id="{{ $meeting->id }}">{{ $meeting->time }}</td>
                                 <td>
@@ -162,6 +169,30 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $(".truncated-address").click(function() {
+                $(this).siblings(".full-address").toggle();
+                $(this).toggle();
+            });
 
+            $(".full-address").click(function() {
+                $(this).siblings(".truncated-address").toggle();
+                $(this).toggle();
+            });
+
+            var fullAddress = $(".full-address");
+            var addressText = fullAddress.text().trim();
+
+            var chunks = [];
+            while (addressText.length > 0) {
+                chunks.push(addressText.substring(0, 45));
+                addressText = addressText.substring(45);
+            }
+
+            var formattedAddress = chunks.join("<br>");
+            fullAddress.html(formattedAddress);
+        });
+    </script>
 
 @endsection

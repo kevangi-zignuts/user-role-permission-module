@@ -80,7 +80,14 @@
                         @foreach ($notes as $note)
                             <tr>
                                 <td>{{ $note->title }}</td>
-                                <td>{{ $note->description }}</td>
+                                <td>
+                                    <span class="truncated-address">
+                                        {{ \Illuminate\Support\Str::limit($note->description, 45, ' ...') }}
+                                    </span>
+                                    <span class="full-address" style="display: none;">
+                                        {{ $note->description }}
+                                    </span>
+                                </td>
                                 @if ($access['edit'] || $access['delete'])
                                     <td class="pt-0">
                                         <div class="dropdown" style="position: absolute">
@@ -125,5 +132,31 @@
     </div>
     <!--/ Toast message -->
 
+
+    <script>
+        $(document).ready(function() {
+            $(".truncated-address").click(function() {
+                $(this).siblings(".full-address").toggle();
+                $(this).toggle();
+            });
+
+            $(".full-address").click(function() {
+                $(this).siblings(".truncated-address").toggle();
+                $(this).toggle();
+            });
+
+            var fullAddress = $(".full-address");
+            var addressText = fullAddress.text().trim();
+
+            var chunks = [];
+            while (addressText.length > 0) {
+                chunks.push(addressText.substring(0, 45));
+                addressText = addressText.substring(45);
+            }
+
+            var formattedAddress = chunks.join("<br>");
+            fullAddress.html(formattedAddress);
+        });
+    </script>
 
 @endsection

@@ -88,7 +88,14 @@
                         @foreach ($roles as $role)
                             <tr>
                                 <td>{{ $role->role_name }}</td>
-                                <td>{{ $role->description }}</td>
+                                <td>
+                                    <span class="truncated-address">
+                                        {{ \Illuminate\Support\Str::limit($role->description, 45, ' ...') }}
+                                    </span>
+                                    <span class="full-address" style="display: none;">
+                                        {{ $role->description }}
+                                    </span>
+                                </td>
                                 <td>
                                     <div class="form-check form-switch">
                                         <input data-route="{{ route('roles.status', ['id' => $role->id]) }}"
@@ -135,5 +142,30 @@
     </div>
     <!--/ Toast message -->
 
+    <script>
+        $(document).ready(function() {
+            $(".truncated-address").click(function() {
+                $(this).siblings(".full-address").toggle();
+                $(this).toggle();
+            });
+
+            $(".full-address").click(function() {
+                $(this).siblings(".truncated-address").toggle();
+                $(this).toggle();
+            });
+
+            var fullAddress = $(".full-address");
+            var addressText = fullAddress.text().trim();
+
+            var chunks = [];
+            while (addressText.length > 0) {
+                chunks.push(addressText.substring(0, 45));
+                addressText = addressText.substring(45);
+            }
+
+            var formattedAddress = chunks.join("<br>");
+            fullAddress.html(formattedAddress);
+        });
+    </script>
 
 @endsection

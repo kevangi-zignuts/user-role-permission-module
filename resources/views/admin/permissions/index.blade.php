@@ -85,7 +85,14 @@
                         @foreach ($permissions as $permission)
                             <tr>
                                 <td>{{ $permission->permission_name }}</td>
-                                <td>{{ $permission->description }}</td>
+                                <td>
+                                    <span class="truncated-address">
+                                        {{ \Illuminate\Support\Str::limit($permission->description, 45, ' ...') }}
+                                    </span>
+                                    <span class="full-address" style="display: none;">
+                                        {{ $permission->description }}
+                                    </span>
+                                </td>
                                 <td>
                                     <div class="form-check form-switch">
                                         <input data-route="{{ route('permissions.status', ['id' => $permission->id]) }}"
@@ -131,5 +138,31 @@
             Hello, world! This is a toast message.
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $(".truncated-address").click(function() {
+                $(this).siblings(".full-address").toggle();
+                $(this).toggle();
+            });
+
+            $(".full-address").click(function() {
+                $(this).siblings(".truncated-address").toggle();
+                $(this).toggle();
+            });
+
+            var fullAddress = $(".full-address");
+            var addressText = fullAddress.text().trim();
+
+            var chunks = [];
+            while (addressText.length > 0) {
+                chunks.push(addressText.substring(0, 45));
+                addressText = addressText.substring(45);
+            }
+
+            var formattedAddress = chunks.join("<br>");
+            fullAddress.html(formattedAddress);
+        });
+    </script>
 
 @endsection

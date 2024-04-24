@@ -102,11 +102,17 @@
                                 <td colspan="5" class="text-center text-danger h5">No data available</td>
                             </tr>
                         @endif
-                        @foreach ($peoples as $people)
+                        @foreach ($peoples as $index => $people)
                             <tr>
                                 <td>{{ $people->name }}</td>
                                 <td>{{ $people->designation }}</td>
-                                <td>{{ $people->address }}</td>
+                                <td>
+                                    <span class="truncated-address">
+                                        {{ \Illuminate\Support\Str::limit($people->address, 45, ' ...') }}
+                                    </span>
+                                    <span class="full-address" style="display: none;">
+                                        {{ $people->address }}
+                                    </span>
                                 <td>
                                     <div class="form-check form-switch">
                                         <input data-route="{{ route('people.status', ['id' => $people->id]) }}"
@@ -161,4 +167,33 @@
         </div>
     </div>
     <!--/ Toast message -->
+
+
+    <script>
+        $(document).ready(function() {
+            $(".truncated-address").click(function() {
+                $(this).siblings(".full-address").toggle();
+                $(this).toggle();
+            });
+
+            $(".full-address").click(function() {
+                $(this).siblings(".truncated-address").toggle();
+                $(this).toggle();
+            });
+
+            var fullAddress = $(".full-address");
+            var addressText = fullAddress.text().trim();
+
+            var chunks = [];
+            while (addressText.length > 0) {
+                chunks.push(addressText.substring(0, 45));
+                addressText = addressText.substring(45);
+            }
+
+            var formattedAddress = chunks.join("<br>");
+            fullAddress.html(formattedAddress);
+        });
+    </script>
+
+
 @endsection
