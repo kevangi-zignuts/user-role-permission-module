@@ -4,23 +4,15 @@
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/typeahead-js/typeahead.css') }}" />
 @endsection
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/tagify/tagify.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/bloodhound/bloodhound.js') }}"></script>
 @endsection
 
 @section('page-script')
     <script src="{{ asset('assets/js/forms-selects.js') }}"></script>
-    <script src="{{ asset('assets/js/forms-tagify.js') }}"></script>
-    <script src="{{ asset('assets/js/forms-typeahead.js') }}"></script>
 @endsection
 
 
@@ -59,8 +51,8 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">contact no</label>
-                                <input type="tel" class="form-control" name="contact_no"
-                                    value="{{ $user->contact_no }}" autofocus>
+                                <input type="tel" class="form-control" name="contact_no" value="{{ $user->contact_no }}"
+                                    autofocus>
                                 @error('contact_no')
                                     <div class="text-danger pt-2">{{ $message }}</div>
                                 @enderror
@@ -90,7 +82,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
     </div>

@@ -5,26 +5,7 @@
 @section('content')
 
 @section('vendor-style')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-@endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 @endsection
 
 @section('content')
@@ -99,9 +80,9 @@
                                         <div class="form-check form-switch">
                                             <input data-route="{{ route('modules.status', ['code' => $module->code]) }}"
                                                 class="form-check-input toggle-class" type="checkbox" role="switch"
-                                                id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
-                                                data-toggle="toggle" data-on="Pending" data-off="Approved"
-                                                {{ $module->is_active == 1 ? 'checked' : '' }}>
+                                                id="moduleSwitch{{ $module->id }}" data-onstyle="danger"
+                                                data-offstyle="info" data-toggle="toggle" data-on="Pending"
+                                                data-off="Approved" {{ $module->is_active == 1 ? 'checked' : '' }}>
                                         </div>
                                     </td>
                                     <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
@@ -129,8 +110,7 @@
                                                                     <input
                                                                         data-route="{{ route('modules.status', ['code' => $submodule->code]) }}"
                                                                         class="form-check-input toggle-class"
-                                                                        type="checkbox" role="switch"
-                                                                        id="switchCheckDefault" data-onstyle="danger"
+                                                                        type="checkbox" role="switch" data-onstyle="danger"
                                                                         data-offstyle="info" data-toggle="toggle"
                                                                         data-on="Pending" data-off="Approved"
                                                                         {{ $submodule->is_active == 1 ? 'checked' : '' }}>
@@ -193,5 +173,13 @@
             fullAddress.html(formattedAddress);
         });
     </script>
+
+@endsection
+
+
+@section('page-script')
+    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 
 @endsection

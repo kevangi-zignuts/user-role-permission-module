@@ -3,27 +3,7 @@
 @section('title', 'User Dashboard')
 
 @section('vendor-style')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-@endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 @endsection
 
 @section('content')
@@ -106,8 +86,8 @@
                                 <td>
                                     <div class="form-check form-switch">
                                         <input data-route="{{ route('activityLogs.status', ['id' => $log->id]) }}"
-                                            class="form-check-input toggle-class" type="checkbox" role="switch"
-                                            id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
+                                            class="form-check-input" type="checkbox" role="switch"
+                                            id="logSwitch{{ $log->id }}" data-onstyle="danger" data-offstyle="info"
                                             data-toggle="toggle" data-on="Pending" data-off="Approved"
                                             {{ $log->is_active == 1 ? 'checked' : '' }}>
                                     </div>
@@ -127,8 +107,8 @@
                                                 @if ($access['delete'])
                                                     <button
                                                         data-route="{{ route('activityLogs.delete', ['id' => $log->id]) }}"
-                                                        class="btn text-danger delete-class" type="button"><i
-                                                            class="ti ti-trash me-1"></i> Delete</button>
+                                                        class="btn text-danger" id="deleteLog{{ $log->id }}"
+                                                        type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                                 @endif
                                             </div>
                                         </div>
@@ -183,5 +163,150 @@
             fullAddress.html(formattedAddress);
         });
     </script>
+
+@endsection
+
+
+@section('page-script')
+    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
+    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+
+    {{-- Script for switch --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($logs as $log)
+                const switch{{ $log->id }} = document.getElementById('logSwitch{{ $log->id }}');
+                switch{{ $log->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, change it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var status = $(switch{{ $log->id }}).prop('checked') == true ? 1 :
+                                0;
+                            var route = $(switch{{ $log->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            var currentState = $(switch{{ $log->id }}).prop('checked');
+                            $(switch{{ $log->id }}).prop('checked', !currentState);
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for switch --}}
+
+    {{-- Script for delete log --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($logs as $log)
+                const delete{{ $log->id }} = document.getElementById('deleteLog{{ $log->id }}');
+                delete{{ $log->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var route = $(delete{{ $log->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        }).then(function() {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for delete log --}}
 
 @endsection

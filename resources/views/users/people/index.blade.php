@@ -3,30 +3,7 @@
 @section('title', 'User Dashboard')
 
 @section('vendor-style')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-@endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
-
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 @endsection
 
 @section('content')
@@ -102,9 +79,9 @@
                                 <td>
                                     <div class="form-check form-switch">
                                         <input data-route="{{ route('people.status', ['id' => $people->id]) }}"
-                                            class="form-check-input toggle-class" type="checkbox" role="switch"
-                                            id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
-                                            data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                            class="form-check-input" id="peopleSwitch{{ $people->id }}" type="checkbox"
+                                            role="switch" data-onstyle="danger" data-offstyle="info" data-toggle="toggle"
+                                            data-on="Pending" data-off="Approved"
                                             {{ $people->is_active == 1 ? 'checked' : '' }}>
                                     </div>
                                 </td>
@@ -123,8 +100,8 @@
                                                 @if ($access['delete'])
                                                     <button
                                                         data-route="{{ route('people.delete', ['id' => $people->id]) }}"
-                                                        class="btn text-danger delete-class" type="button"><i
-                                                            class="ti ti-trash me-1"></i> Delete</button>
+                                                        class="btn text-danger" id="deletePeople{{ $people->id }}"
+                                                        type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                                 @endif
                                             </div>
                                         </div>
@@ -154,7 +131,6 @@
     </div>
     <!--/ Toast message -->
 
-
     <script>
         $(document).ready(function() {
             $(".truncated-address").click(function() {
@@ -180,6 +156,151 @@
             fullAddress.html(formattedAddress);
         });
     </script>
+
+@endsection
+
+
+@section('page-script')
+    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
+    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+
+    {{-- Script for switch --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($peoples as $people)
+                const switch{{ $people->id }} = document.getElementById('peopleSwitch{{ $people->id }}');
+                switch{{ $people->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, change it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var status = $(switch{{ $people->id }}).prop('checked') == true ? 1 :
+                                0;
+                            var route = $(switch{{ $people->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            var currentState = $(switch{{ $people->id }}).prop('checked');
+                            $(switch{{ $people->id }}).prop('checked', !currentState);
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for switch --}}
+
+    {{-- Script for delete people --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($peoples as $people)
+                const delete{{ $people->id }} = document.getElementById('deletePeople{{ $people->id }}');
+                delete{{ $people->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var route = $(delete{{ $people->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        }).then(function() {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for delete people --}}
+
 
 
 @endsection

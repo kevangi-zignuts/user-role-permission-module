@@ -2,21 +2,7 @@
 
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
 @endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-@endsection
-
 
 @section('title', 'Role')
 
@@ -94,8 +80,8 @@
                                 <td>
                                     <div class="form-check form-switch">
                                         <input data-route="{{ route('roles.status', ['id' => $role->id]) }}"
-                                            class="form-check-input toggle-class" type="checkbox" role="switch"
-                                            id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
+                                            class="form-check-input" type="checkbox" role="switch"
+                                            id="roleSwitch{{ $role->id }}" data-onstyle="danger" data-offstyle="info"
                                             data-toggle="toggle" data-on="Pending" data-off="Approved"
                                             {{ $role->is_active == 1 ? 'checked' : '' }}>
                                     </div>
@@ -109,8 +95,8 @@
                                                 href="{{ route('roles.edit', ['id' => $role->id]) }}"><i
                                                     class="ti ti-pencil me-1"></i> Edit</a>
                                             <button data-route="{{ route('roles.delete', ['id' => $role->id]) }}"
-                                                class="btn text-danger delete-class" type="button"><i
-                                                    class="ti ti-trash me-1"></i> Delete</button>
+                                                id="deleteRole{{ $role->id }}" class="btn text-danger"
+                                                type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         </div>
                                     </div>
                                 </td>
@@ -163,4 +149,145 @@
         });
     </script>
 
+@endsection
+
+
+@section('page-script')
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+
+    {{-- Script for switch --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($roles as $role)
+                const switch{{ $role->id }} = document.getElementById('roleSwitch{{ $role->id }}');
+                switch{{ $role->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, change it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var status = $(switch{{ $role->id }}).prop('checked') == true ? 1 :
+                                0;
+                            var route = $(switch{{ $role->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            var currentState = $(switch{{ $role->id }}).prop('checked');
+                            $(switch{{ $role->id }}).prop('checked', !currentState);
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for switch --}}
+
+    {{-- Script for delete role --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($roles as $role)
+                const delete{{ $role->id }} = document.getElementById('deleteRole{{ $role->id }}');
+                delete{{ $role->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var route = $(delete{{ $role->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        }).then(function() {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for delete role --}}
 @endsection

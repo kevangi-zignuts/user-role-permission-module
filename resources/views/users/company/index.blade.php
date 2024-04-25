@@ -3,29 +3,8 @@
 @section('title', 'Company Dashboard')
 
 @section('vendor-style')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
-@endsection
-
 @section('content')
 
     <div class="search-container m-3 w-50 mx-auto">
@@ -62,7 +41,7 @@
                             <th scope="col" class="text-white">Owner Name</th>
                             <th scope="col" class="text-white">Industry</th>
                             @if ($access['edit'] || $access['delete'])
-                                <th scope="col">Action</th>
+                                <th scope="col" class="text-white">Action</th>
                             @endif
                         </tr>
                     </thead>
@@ -92,8 +71,8 @@
                                                 @if ($access['delete'])
                                                     <button
                                                         data-route="{{ route('company.delete', ['id' => $company->id]) }}"
-                                                        class="btn text-danger delete-class" type="button"><i
-                                                            class="ti ti-trash me-1"></i> Delete</button>
+                                                        class="btn text-danger" id="deleteCompany{{ $company->id }}"
+                                                        type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                                 @endif
                                             </div>
                                         </div>
@@ -125,6 +104,81 @@
 
 
 
+
+
+
+@endsection
+
+
+@section('page-script')
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+
+    {{-- Script for delete company details --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($companies as $company)
+                const delete{{ $company->id }} = document.getElementById('deleteCompany{{ $company->id }}');
+                delete{{ $company->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var route = $(delete{{ $company->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        }).then(function() {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for delete company details --}}
 
 
 

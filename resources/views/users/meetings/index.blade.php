@@ -3,27 +3,7 @@
 @section('title', 'User Dashboard')
 
 @section('vendor-style')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-@endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/app-access-roles.js') }}"></script>
-    <script src="{{ asset('assets/js/modal-add-role.js') }}"></script>
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 @endsection
 
 @section('content')
@@ -99,8 +79,8 @@
                                         <input data-id="{{ $meeting->id }}"
                                             data-route="{{ route('meetings.status', ['id' => $meeting->id]) }}"
                                             class="form-check-input toggle-class" type="checkbox" role="switch"
-                                            id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
-                                            data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                            id="meetingSwitch{{ $meeting->id }}" data-onstyle="danger"
+                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
                                             {{ $meeting->is_active == 1 ? 'checked' : '' }}>
                                     </div>
                                 </td>
@@ -121,7 +101,8 @@
                                                 @if ($access['delete'])
                                                     <button
                                                         data-route="{{ route('meetings.delete', ['id' => $meeting->id]) }}"
-                                                        class="btn text-danger delete-class" type="button"><i
+                                                        class="btn text-danger delete-class"
+                                                        id="deleteMeeting{{ $meeting->id }}" type="button"><i
                                                             class="ti ti-trash me-1"></i> Delete</button>
                                                 @endif
                                             </div>
@@ -230,5 +211,13 @@
             });
         });
     </script>
+
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+
 
 @endsection

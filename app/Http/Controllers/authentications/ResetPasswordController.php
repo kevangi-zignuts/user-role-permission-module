@@ -36,7 +36,7 @@ class ResetPasswordController extends Controller
           if ($user->status === 'A') {
               return redirect()->route('auth-login-basic')->with('error', 'Invitation accepted already!! ');
           } elseif ($user->status === 'I') {
-              return view('admin.users.invitationResetPasswordForm', compact('token', 'pageConfigs'));
+              return view('content.forgetPassword.passwordResetForm', compact('token', 'pageConfigs'));
           }
       }
 

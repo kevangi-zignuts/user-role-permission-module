@@ -1,26 +1,12 @@
 @extends('layouts/layoutMaster')
 
 @section('vendor-style')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
-@endsection
-
-@section('vendor-script')
-    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-@endsection
-
-@section('page-script')
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 @endsection
 
 @section('title', 'Permission')
 
 @section('content')
-
 
     @if (session('success'))
         <div class="alert alert-success" id="alert-success">
@@ -92,9 +78,9 @@
                                 <td>
                                     <div class="form-check form-switch">
                                         <input data-route="{{ route('permissions.status', ['id' => $permission->id]) }}"
-                                            class="form-check-input toggle-class" type="checkbox" role="switch"
-                                            id="switchCheckDefault" data-onstyle="danger" data-offstyle="info"
-                                            data-toggle="toggle" data-on="Pending" data-off="Approved"
+                                            class="form-check-input" type="checkbox" role="switch"
+                                            id="permissionSwitch{{ $permission->id }}" data-onstyle="danger"
+                                            data-offstyle="info" data-toggle="toggle" data-on="Pending" data-off="Approved"
                                             {{ $permission->is_active == 1 ? 'checked' : '' }}>
                                     </div>
                                 </td>
@@ -108,8 +94,8 @@
                                                     class="ti ti-pencil me-1"></i> Edit</a>
                                             <button
                                                 data-route="{{ route('permissions.delete', ['id' => $permission->id]) }}"
-                                                class="btn text-danger delete-class" type="button"><i
-                                                    class="ti ti-trash me-1"></i> Delete</button>
+                                                class="btn text-danger" id="deletePermission{{ $permission->id }}"
+                                                type="button"><i class="ti ti-trash me-1"></i> Delete</button>
                                         </div>
                                     </div>
                                 </td>
@@ -160,5 +146,149 @@
             fullAddress.html(formattedAddress);
         });
     </script>
+
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+
+    {{-- Script for switch --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($permissions as $permission)
+                const switch{{ $permission->id }} = document.getElementById(
+                    'permissionSwitch{{ $permission->id }}');
+                switch{{ $permission->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, change it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var status = $(switch{{ $permission->id }}).prop('checked') == true ?
+                                1 :
+                                0;
+                            var route = $(switch{{ $permission->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            var currentState = $(switch{{ $permission->id }}).prop('checked');
+                            $(switch{{ $permission->id }}).prop('checked', !currentState);
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for switch --}}
+
+    {{-- Script for delete people --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @foreach ($permissions as $permission)
+                const delete{{ $permission->id }} = document.getElementById(
+                    'deletePermission{{ $permission->id }}');
+                delete{{ $permission->id }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var route = $(delete{{ $permission->id }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        }).then(function() {
+                                            window.location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'An error occurred while processing your request. Please try again later.',
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            @endforeach
+        });
+    </script>
+    {{-- Script for delete people --}}
 
 @endsection

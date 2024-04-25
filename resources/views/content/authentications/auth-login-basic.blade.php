@@ -2,10 +2,6 @@
 
 @section('title', 'Login Basic - Pages')
 
-@section('vendor-style')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
-@endsection
-
 @section('page-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-auth.css') }}">
 @endsection
@@ -72,6 +68,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Login -->
         </div>
     </div>
     </div>

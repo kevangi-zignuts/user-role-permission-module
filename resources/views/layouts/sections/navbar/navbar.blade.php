@@ -177,7 +177,6 @@
 @endif
 </nav>
 <!-- / Navbar -->
-{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
