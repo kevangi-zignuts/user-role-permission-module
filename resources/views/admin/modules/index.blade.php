@@ -103,7 +103,13 @@
                                                     @if (in_array($submodule, $modules->all()))
                                                         <tr>
                                                             <td>{{ $submodule->module_name }}</td>
-                                                            <td>{{ $submodule->description }}</td>
+                                                            <td>
+                                                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                    title="{{ $submodule->description }}"
+                                                                    data-bs-custom-class="tooltip-primary">
+                                                                    {{ \Illuminate\Support\Str::limit($submodule->description, 45, ' ...') }}
+                                                                </span>
+                                                            </td>
                                                             <td>
                                                                 <div class="form-check form-switch">
                                                                     <input

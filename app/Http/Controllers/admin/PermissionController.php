@@ -88,7 +88,7 @@ class PermissionController extends Controller
   public function edit($id)
   {
     $permission = Permission::with('module')->findOrFail($id);
-    $modules    = Module::where('parent_code', null)
+    $modules    = Module::whereNull('parent_code')
                         ->where('is_active', 1)
                         ->get();
     return view('admin.permissions.edit', ['permission' => $permission, 'modules' => $modules]);
@@ -104,15 +104,15 @@ class PermissionController extends Controller
       'description'     => 'nullable|string',
       'modules'         => 'array',
       'modules.*'       => 'array|nullable',
+      'modules.*.*'     => 'boolean',
     ]);
-
+    
     $permission = Permission::findOrFail($id);
     $permission->update($request->only(['permission_name', 'description']));
 
     $selectedModules = $request->input('modules', []);
-    // Detach all existing modules
-    $permission->module()->detach();
-    $permission->module()->attach($selectedModules);
+    
+    $permission->module()->sync($selectedModules);
 
     return redirect()->route('permissions.index', [
       'success' => true,

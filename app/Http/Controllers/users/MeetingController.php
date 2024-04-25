@@ -75,6 +75,21 @@ class MeetingController extends Controller
   public function updateStatus(Request $request, $id)
   {
     $meeting = Meeting::findOrFail($id);
+
+    $meetingDateTime = new DateTime($meeting->date . ' ' . $meeting->time);
+    $currentDateTime = new DateTime();
+
+    // Check meeting Date and Time if it is in past then can't modify the status
+    if($meetingDateTime < $currentDateTime){
+      return Response::json(
+      [
+        'error' => true,
+        'message' => 'Meeting Date and Time are in past',
+      ],
+      200
+    );
+    }
+
     $meeting->update(['is_active' => !$meeting->is_active]);
     return Response::json(
       [

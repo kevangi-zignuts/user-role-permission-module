@@ -36,6 +36,7 @@ class ModuleController extends Controller
           })->all();
         })->unique('code');
 
+
     return view('admin.modules.index', ['modules' => $modules, 'search' => $request->input('search'), 'filter' => $request->input('filter')]);
   }
 
