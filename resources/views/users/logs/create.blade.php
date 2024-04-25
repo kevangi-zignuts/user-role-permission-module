@@ -1,7 +1,3 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
 @extends('layouts/layoutMaster')
 
 @section('title', 'User Create')
@@ -38,7 +34,8 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Add Activity Log</span>
                         </div>
-                        <form action="{{ route('activityLogs.store') }}" method="post" id="formAuthentication" class="mb-3">
+                        <form action="{{ route('activityLogs.store') }}" method="post" id="formAuthentication"
+                            class="mb-3">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Name *</label>
@@ -76,7 +73,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
     </div>

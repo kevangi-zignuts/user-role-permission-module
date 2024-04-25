@@ -1,7 +1,3 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
 @extends('layouts/layoutMaster')
 
 @section('title', 'Admin Dashboard')
@@ -15,7 +11,6 @@
 @endsection
 
 @section('page-style')
-    <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/cards-advance.css') }}">
 @endsection
 

@@ -1,7 +1,3 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
@@ -35,7 +31,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Permission Name *</label>
                                 <input type="text" class="form-control" id="email" name="permission_name"
-                                    value="{{ $permission->permission_name }}" autofocus >
+                                    value="{{ $permission->permission_name }}" autofocus>
                                 @error('permission_name')
                                     <div class="text-danger pt-2">{{ $message }}</div>
                                 @enderror
@@ -171,7 +167,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
     </div>
@@ -188,7 +183,6 @@
                     .lastIndexOf("]"));
                 var isSubmodule = $checkbox.closest('tr').hasClass(
                     'submodule'); // Check if it's a submodule
-                // console.log(isSubmodule);
 
                 if (isSubmodule) {
                     // Find the main module checkbox

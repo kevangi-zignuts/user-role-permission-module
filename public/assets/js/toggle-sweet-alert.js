@@ -50,6 +50,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     confirmButton: 'btn btn-success'
                   }
                 });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error!',
+                  text: data.message,
+                  customClass: {
+                    confirmButton: 'btn btn-danger'
+                  }
+                });
               }
             }
           });

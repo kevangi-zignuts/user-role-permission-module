@@ -1,7 +1,3 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
 @extends('layouts/layoutMaster')
 
 @section('title', 'Create Permission')
@@ -126,7 +122,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
     </div>

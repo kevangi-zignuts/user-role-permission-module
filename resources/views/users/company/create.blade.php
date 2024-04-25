@@ -1,7 +1,3 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
 @extends('layouts/layoutMaster')
 
 @section('title', 'User Create')
@@ -76,7 +72,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
     </div>

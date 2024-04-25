@@ -1,7 +1,3 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
 @extends('layouts/layoutMaster')
 
 @section('title', 'User Dashboard')
@@ -34,16 +30,6 @@
 @endsection
 
 @section('content')
-    {{-- @dd(Session::all()) --}}
-    {{-- @dd(Session::pull('success')) --}}
-    {{-- <div class="alert alert-success">
-      {{ Session::pull('success') }}
-    </div> --}}
-    {{-- @if (session('success'))
-        <div class="alert alert-success">
-            {{ Session::pull('success') }}
-        </div>
-    @endif --}}
 
     @if (session('error'))
         <div class="alert alert-danger" role="alert-error">

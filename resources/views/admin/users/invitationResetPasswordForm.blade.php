@@ -1,19 +1,12 @@
-@php
-    $customizerHidden = 'customizer-hide';
-    $configData = Helper::appClasses();
-@endphp
-
 @extends('layouts/layoutAuthentication')
 
 @section('title', 'Reset Password Cover - Pages')
 
 @section('vendor-style')
-    <!-- Vendor -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
 @endsection
 
 @section('page-style')
-    <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-auth.css') }}">
 @endsection
 
@@ -31,7 +24,6 @@
     <div class="authentication-wrapper authentication-cover authentication-bg ">
         <div class="authentication-inner row">
 
-            <!-- /Left Text -->
             <div class="d-none d-lg-flex col-lg-7 p-0">
                 <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
                     <img src="{{ asset('assets/img/illustrations/auth-reset-password-illustration-' . $configData['style'] . '.png') }}"
@@ -45,7 +37,6 @@
                         data-app-dark-img="illustrations/bg-shape-image-dark.png">
                 </div>
             </div>
-            <!-- /Left Text -->
 
             <!-- Reset Password -->
             <div class="d-flex col-12 col-lg-5 align-items-center p-4 p-sm-5">

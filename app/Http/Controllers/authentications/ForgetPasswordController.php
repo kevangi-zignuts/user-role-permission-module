@@ -21,7 +21,8 @@ class ForgetPasswordController extends Controller
    */
   public function showForm()
   {
-    return view('content.forgetPassword.forgotPasswordForm');
+    $pageConfigs = ['myLayout' => 'blank'];
+    return view('content.forgetPassword.forgotPasswordForm', compact('pageConfigs'));
   }
 
   /**

@@ -19,17 +19,8 @@ return new class extends Migration {
       $table->tinyInteger('delete_access')->default(0);
       $table->softDeletes();
 
-      $table
-        ->foreign('permission_id')
-        ->references('id')
-        ->on('permissions')
-        ->onDelete('cascade');
-      $table
-        ->foreign('module_code')
-        ->references('code')
-        ->on('modules')
-        ->onDelete('cascade')
-        ->nullable();
+      $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+      $table->foreign('module_code')->references('code')->on('modules')->onDelete('cascade')->nullable();
     });
   }
 

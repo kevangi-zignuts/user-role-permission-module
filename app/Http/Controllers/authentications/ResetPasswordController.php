@@ -21,20 +21,22 @@ class ResetPasswordController extends Controller
    */
   public function showForm($token)
   {
+      $pageConfigs = ['myLayout' => 'blank'];
+
       $resetPasswordToken = DB::table('password_reset_tokens')->where('token', $token)->first();
       $user = User::where('invitation_token', $token)->first();
 
       if (!($resetPasswordToken || $user)) {
           return redirect()->route('auth-login-basic')->with('error', 'Password reset already!! ');
       } elseif ($resetPasswordToken) {
-          return view('content.forgetPassword.passwordResetForm', compact('token'));
+          return view('content.forgetPassword.passwordResetForm', compact('token', 'pageConfigs'));
       }
 
       if ($user) {
           if ($user->status === 'A') {
               return redirect()->route('auth-login-basic')->with('error', 'Invitation accepted already!! ');
           } elseif ($user->status === 'I') {
-              return view('admin.users.invitationResetPasswordForm', compact('token'));
+              return view('admin.users.invitationResetPasswordForm', compact('token', 'pageConfigs'));
           }
       }
 

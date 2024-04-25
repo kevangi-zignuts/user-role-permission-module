@@ -15,16 +15,8 @@ return new class extends Migration {
       $table->unsignedBigInteger('permission_id');
       $table->softDeletes();
 
-      $table
-        ->foreign('role_id')
-        ->references('id')
-        ->on('roles')
-        ->onDelete('cascade');
-      $table
-        ->foreign('permission_id')
-        ->references('id')
-        ->on('permissions')
-        ->onDelete('cascade');
+      $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+      $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
     });
   }
 

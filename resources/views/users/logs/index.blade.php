@@ -1,7 +1,3 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
 @extends('layouts/layoutMaster')
 
 @section('title', 'User Dashboard')
@@ -160,6 +156,7 @@
             Hello, world! This is a toast message.
         </div>
     </div>
+    <!--/ Toast message -->
 
     <script>
         $(document).ready(function() {

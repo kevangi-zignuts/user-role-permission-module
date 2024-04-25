@@ -1,11 +1,10 @@
 @php
-    $customizerHidden = 'customizer-hide';
     $configData = Helper::appClasses();
 @endphp
 
-@extends('layouts/layoutAuthentication')
+@extends('layouts/layoutMaster')
 
-@section('title', 'Forgot Password Cover - Pages')
+@section('title', 'Forgot Password Form')
 
 @section('vendor-style')
     <!-- Vendor -->

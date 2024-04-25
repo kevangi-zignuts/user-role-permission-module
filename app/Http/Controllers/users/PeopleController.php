@@ -124,9 +124,13 @@ class PeopleController extends Controller
   {
     $people = People::find($id);
     if (!$people) {
-      return redirect()
-        ->route('roles.index')
-        ->with('fail', 'We can not found data');
+      return Response::json(
+        [
+          'error' => true,
+          'message' => "We can not found data",
+        ],
+        200
+      );
     }
     $people->delete();
     return Response::json(

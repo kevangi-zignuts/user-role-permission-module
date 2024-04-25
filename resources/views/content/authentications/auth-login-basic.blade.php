@@ -1,19 +1,12 @@
-@php
-    $customizerHidden = 'customizer-hide';
-@endphp
-
 @extends('layouts/layoutMaster')
-{{-- @extends('layouts/layoutAuthentication') --}}
 
 @section('title', 'Login Basic - Pages')
 
 @section('vendor-style')
-    <!-- Vendor -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
 @endsection
 
 @section('page-style')
-    <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-auth.css') }}">
 @endsection
 
@@ -38,6 +31,7 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Login</span>
                         </div>
+                        <!-- Logo -->
 
                         <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="post">
                             @csrf

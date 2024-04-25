@@ -33,14 +33,14 @@ class DatabaseSeeder extends Seeder
           'email' => $user['email'],
         ],
         [
-          'first_name' => $user['first_name'],
-          'last_name' => $user['last_name'],
-          'password' => $user['password'],
-          'contact_no' => $user['contact_no'],
-          'address' => $user['address'],
-          'is_active' => $user['is_active'],
+          'first_name'       => $user['first_name'],
+          'last_name'        => $user['last_name'],
+          'password'         => $user['password'],
+          'contact_no'       => $user['contact_no'],
+          'address'          => $user['address'],
+          'is_active'        => $user['is_active'],
           'invitation_token' => $user['invitation_token'],
-          'status' => $user['status'],
+          'status'           => $user['status'],
         ]
       );
     }

@@ -1,7 +1,3 @@
-@php
-    $configData = Helper::appClasses();
-@endphp
-
 @extends('layouts/layoutMaster')
 
 @section('title', 'User Create')
@@ -38,11 +34,13 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Add Activity Log</span>
                         </div>
-                        <form action="{{ route('activityLogs.update', ['id' => $log->id]) }}" method="post" id="formAuthentication" class="mb-3">
+                        <form action="{{ route('activityLogs.update', ['id' => $log->id]) }}" method="post"
+                            id="formAuthentication" class="mb-3">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Name *</label>
-                                <input type="text" class="form-control" name="name" value="{{ $log->name }}" autofocus required>
+                                <input type="text" class="form-control" name="name" value="{{ $log->name }}"
+                                    autofocus required>
                                 @error('name')
                                     <div class="pt-2 text-danger">{{ $message }}</div>
                                 @enderror
@@ -50,10 +48,13 @@
                             <div class="mb-3">
                                 <label class="form-label">Type *</label>
                                 <select name="type" class="form-control" required>
-                                    <option value="C" @if($log->type == 'C') selected @endif>Coding</option>
-                                    <option value="M" @if($log->type == 'M') selected @endif>Meeting</option>
-                                    <option value="P" @if($log->type == 'P') selected @endif>Playing</option>
-                                    <option value="V" @if($log->type == 'V') selected @endif>Watching Video</option>
+                                    <option value="C" @if ($log->type == 'C') selected @endif>Coding</option>
+                                    <option value="M" @if ($log->type == 'M') selected @endif>Meeting
+                                    </option>
+                                    <option value="P" @if ($log->type == 'P') selected @endif>Playing
+                                    </option>
+                                    <option value="V" @if ($log->type == 'V') selected @endif>Watching Video
+                                    </option>
                                 </select>
                                 @error('type')
                                     <div class="pt-2 text-danger">{{ $message }}</div>
@@ -75,7 +76,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
     </div>
