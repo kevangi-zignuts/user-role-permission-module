@@ -26,8 +26,8 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="exampleFormControlTextarea1">Description</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"></textarea>
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" rows="3" name="description"></textarea>
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-6">

@@ -24,8 +24,7 @@
                     value="{{ $search }}">
             </div>
             <div class="input-group w-px-500 m-2">
-                <select name="filter" class="form-select" id="inputGroupSelect04"
-                    aria-label="Example select with button addon" equired>
+                <select name="filter" class="form-select" required>
                     <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All User</option>
                     <option value="active" {{ $filter == 'active' ? 'selected' : '' }}>Activated User</option>
                     <option value="inactive" {{ $filter == 'inactive' ? 'selected' : '' }}>InActivated User</option>
@@ -48,11 +47,11 @@
             <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
-                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
+                    <thead class="bg-purple">
                         <tr>
                             <th scope="col" class="text-white">Name</th>
                             <th scope="col" class="text-white">Role</th>
-                            <th class="text-white">Status</th>
+                            <th scope="col" class="text-white">Status</th>
                             <th scope="col" class="text-white">Action</th>
                         </tr>
                     </thead>
@@ -82,14 +81,14 @@
                             <td>
                                 <div class="form-check form-switch">
                                     <input data-route="{{ route('users.status', ['id' => $user->id]) }}"
-                                        class="form-check-input toggle-class" type="checkbox" role="switch"
+                                        class="form-check-input" type="checkbox" role="switch"
                                         id="userSwitch{{ $user->id }}" data-onstyle="danger" data-offstyle="info"
                                         data-toggle="toggle" data-on="Pending" data-off="Approved"
                                         {{ $user->is_active == 1 ? 'checked' : '' }}>
                                 </div>
                             </td>
                             <td class="pt-0">
-                                <div class="dropdown" style="position: absolute">
+                                <div class="dropdown position-absolute">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                         data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                     <div class="dropdown-menu">

@@ -12,8 +12,7 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Add Company</span>
                         </div>
-                        <form action="{{ route('company.update', ['id' => $company->id]) }}" method="post"
-                            id="formAuthentication" class="mb-3">
+                        <form action="{{ route('company.update', ['id' => $company->id]) }}" method="post"class="mb-3">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Company Name *</label>

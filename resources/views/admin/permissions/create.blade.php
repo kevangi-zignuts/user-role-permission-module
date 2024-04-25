@@ -12,19 +12,18 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Create Permission</span>
                         </div>
-                        <form id="formAuthentication" class="mb-3" action="{{ route('permissions.store') }}" method="post">
+                        <form class="mb-3" action="{{ route('permissions.store') }}" method="post">
                             @csrf
                             <div class="mb-3">
                                 <label>Permission Name *</label>
                                 <input type="text" class="form-control" name="permission_name" autofocus required>
-                                <div class="valid-feedback"> Looks good! </div>
                                 @error('permission_name')
                                     <div class="text-danger pt-2">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
                                 <label for="exampleFormControlTextarea1">Description</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"></textarea>
+                                <textarea class="form-control" rows="3" name="description"></textarea>
                             </div>
 
                             <table class="table">

@@ -14,7 +14,7 @@
                         @if ($errors && $errors->any())
                             @dd($errors->all())
                         @endif
-                        <form action="{{ route('company.store') }}" method="post" id="formAuthentication" class="mb-3">
+                        <form action="{{ route('company.store') }}" method="post" class="mb-3">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Company Name *</label>

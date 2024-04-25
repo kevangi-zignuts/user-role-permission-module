@@ -17,6 +17,14 @@
 @endsection
 
 @section('content')
+    {{-- @dd($errors)
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </div>
+    @endif --}}
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner py-4 mx-auto">
@@ -25,24 +33,24 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Create User</span>
                         </div>
-                        <form action="{{ route('users.store') }}" method="post" id="formAuthentication" class="mb-3">
+                        <form action="{{ route('users.store') }}" method="post" class="mb-3">
                             @csrf
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">First Name *</label>
-                                    <input type="text" class="form-control" name="first_name" required />
+                                    <input type="text" class="form-control" name="first_name" />
                                     @error('first_name')
                                         <div class="text-danger pt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-control phone-mask" name="last_name" />
+                                    <input type="text" class="form-control" name="last_name" />
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Email *</label>
-                                <input type="email" class="form-control" name="email" autofocus required>
+                                <input type="email" class="form-control" name="email" autofocus>
                                 @error('email')
                                     <div class="pt-2 text-danger">{{ $message }}</div>
                                 @enderror
@@ -55,13 +63,13 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="exampleFormControlTextarea1">Address</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="address"></textarea>
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control"rows="3" name="address"></textarea>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="select2Primary" class="form-label">Select Role</label>
                                 <div class="select2-primary">
-                                    <select id="select2Primary" class="select2 form-select" name="roles[]" multiple>
+                                    <select class="select2 form-select" name="roles[]" multiple>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}">{{ $role->role_name }}</option>
                                         @endforeach

@@ -12,8 +12,7 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Add Activity Log</span>
                         </div>
-                        <form action="{{ route('activityLogs.update', ['id' => $log->id]) }}" method="post"
-                            id="formAuthentication" class="mb-3">
+                        <form action="{{ route('activityLogs.update', ['id' => $log->id]) }}" method="post" class="mb-3">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Name *</label>
@@ -39,8 +38,8 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="exampleFormControlTextarea1">Log</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="log">{{ $log->log }}</textarea>
+                                <label class="form-label">Log</label>
+                                <textarea class="form-control" rows="3" name="log">{{ $log->log }}</textarea>
                                 @error('log')
                                     <div class="pt-2 text-danger">{{ $message }}</div>
                                 @enderror

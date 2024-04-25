@@ -48,7 +48,7 @@
             <div class="table-responsive text-nowrap p-2">
 
                 <table class="table table-hover">
-                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
+                    <thead class="bg-purple">
                         <tr>
                             <th scope="col" class="text-white">Name</th>
                             <th scope="col" class="text-white">Designation</th>
@@ -87,7 +87,7 @@
                                 </td>
                                 @if ($access['edit'] || $access['delete'])
                                     <td class="pt-0">
-                                        <div class="dropdown" style="position: absolute">
+                                        <div class="dropdown position-absolute">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                                 data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                             <div class="dropdown-menu">

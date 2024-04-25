@@ -12,7 +12,7 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Add People</span>
                         </div>
-                        <form action="{{ route('people.store') }}" method="post" id="formAuthentication" class="mb-3">
+                        <form action="{{ route('people.store') }}" method="post" class="mb-3">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Name *</label>
@@ -43,8 +43,8 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="exampleFormControlTextarea1">Address</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="address"></textarea>
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" rows="3" name="address"></textarea>
                             </div>
                             <div class="row">
                                 <div class="mt-3">

@@ -28,8 +28,7 @@
                     value="{{ $search }}">
             </div>
             <div class="input-group w-px-500 m-2">
-                <select name="filter" class="form-select" id="inputGroupSelect04"
-                    aria-label="Example select with button addon" equired>
+                <select name="filter" class="form-select" id="filterSelect" required>
                     <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Modules</option>
                     <option value="active" {{ $filter == 'active' ? 'selected' : '' }}>Activated Modules</option>
                     <option value="inactive" {{ $filter == 'inactive' ? 'selected' : '' }}>InActivated Modules</option>
@@ -44,7 +43,7 @@
         <div class="card-body">
             <div class="table-responsive text-nowrap p-2">
                 <table class="table">
-                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
+                    <thead class="bg-purple">
                         <tr>
                             <th></th>
                             <th scope="col" class="text-white">Name</th>
@@ -63,8 +62,8 @@
                             @if ($module->parent_code === null)
                                 <tr>
                                     <td class="clickable" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseExample_{{ $module->code }}" aria-expended="false"
-                                        aria-controls="collapseExample_{{ $module->code }}"><button
+                                        data-bs-target="#collapse_{{ $module->code }}" aria-expended="false"
+                                        aria-controls="collapse_{{ $module->code }}"><button
                                             class="btn btn-default btn-xs"><i class="fa-solid fa-caret-down"></i></button>
                                     </td>
                                     <td>{{ $module->module_name }}</td>
@@ -88,7 +87,7 @@
                                     <td><a href="{{ route('modules.edit', ['code' => $module->code]) }}"><i
                                                 class="fa-solid fa-pen-to-square"></i></a></td>
                                 </tr>
-                                <tr class="collapse" id = "collapseExample_{{ $module->code }}">
+                                <tr class="collapse" id = "collapse_{{ $module->code }}">
                                     <td colspan="5">
                                         <table class="table">
                                             <thead class="table-light">

@@ -15,8 +15,7 @@
                     value="{{ $search }}">
             </div>
             <div class="input-group w-px-500 m-2">
-                <select name="filter" class="form-select" id="inputGroupSelect04"
-                    aria-label="Example select with button addon" equired>
+                <select name="filter" class="form-select" required>
                     <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Meetings</option>
                     <option value="active" {{ $filter == 'active' ? 'selected' : '' }}>Activated Meetings</option>
                     <option value="inactive" {{ $filter == 'inactive' ? 'selected' : '' }}>InActivated Meetings</option>
@@ -43,13 +42,13 @@
             <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
-                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
+                    <thead class="bg-purple">
                         <tr>
                             <th scope="col" class="text-white">Title</th>
                             <th scope="col" class="text-white">Description</th>
                             <th scope="col" class="text-white">Date</th>
                             <th scope="col" class="text-white">Time</th>
-                            <th class="text-white">Status</th>
+                            <th scope="col" class="text-white">Status</th>
                             @if ($access['edit'] || $access['delete'])
                                 <th scope="col" class="text-white">Action</th>
                             @endif
@@ -86,7 +85,7 @@
                                 </td>
                                 @if ($access['edit'] || $access['delete'])
                                     <td class="pt-0">
-                                        <div class="dropdown" style="position: absolute">
+                                        <div class="dropdown position-absolute">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                                 data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                             <div class="dropdown-menu">

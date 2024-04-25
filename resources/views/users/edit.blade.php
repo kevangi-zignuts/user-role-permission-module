@@ -1,13 +1,12 @@
 <div class="modal fade" id="editUser" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-add-new-role">
-        <div class="modal-content p-3 p-md-5"
-            style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
+        <div class="modal-content p-3 p-md-5 bg-purple">
             <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
             <div class="modal-body">
                 <div class="text-center mb-4">
                     <h3 class="role-title mb-2 text-white">Edit Details</h3>
                 </div>
-                <form action="{{ route('user.update') }}" id="resetPasswordForm" class="row g-3" method="post">
+                <form action="{{ route('user.update') }}" class="row g-3" method="post">
                     @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -22,7 +21,7 @@
                         <div class="col-md-6">
                             <label class="form-label text-white">Last Name</label>
                             <input type="text"
-                                class="form-control phone-mask border-0 border border-bottom rounded-0 border-white text-white bg-transparent"
+                                class="form-control border-0 border border-bottom rounded-0 border-white text-white bg-transparent"
                                 name="last_name" value="{{ $user->last_name }}" />
                         </div>
                     </div>
@@ -42,9 +41,8 @@
                         @enderror
                     </div>
                     <div class="form-group mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label text-white">Address</label>
-                        <textarea class="form-control rounded-0 border-white text-white bg-transparent" id="exampleFormControlTextarea1"
-                            rows="3" name="address">{{ $user->address }}</textarea>
+                        <label class="form-label text-white">Address</label>
+                        <textarea class="form-control rounded-0 border-white text-white bg-transparent" rows="3" name="address">{{ $user->address }}</textarea>
                     </div>
                     <div class="col-12 text-center mt-4">
                         <button type="submit"

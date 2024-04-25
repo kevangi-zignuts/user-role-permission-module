@@ -33,11 +33,7 @@
 
 <style>
     .bg-purple {
-        background: rgb(115, 103, 240);
-    }
-
-    .font-white {
-        color: white;
+        background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);
     }
 </style>
 <!-- Vendor Styles -->

@@ -12,8 +12,8 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Edit Permission</span>
                         </div>
-                        <form id="formAuthentication" class="mb-3"
-                            action="{{ route('permissions.update', ['id' => $permission->id]) }}" method="post">
+                        <form class="mb-3" action="{{ route('permissions.update', ['id' => $permission->id]) }}"
+                            method="post">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Permission Name *</label>
@@ -24,8 +24,8 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="exampleFormControlTextarea1">Description</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description">{{ $permission->description }}</textarea>
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" rows="3" name="description">{{ $permission->description }}</textarea>
                             </div>
 
                             <table class="table">
@@ -52,7 +52,6 @@
                                                     value="0">
                                                 <input class="form-check-input"
                                                     name="modules[{{ $module->code }}][add_access]" type="checkbox"
-                                                    id="flexCheckChecked"
                                                     {{ optional($pivotData)->add_access == '1' ? 'checked' : '' }}
                                                     value="1">
                                             </td>
@@ -61,7 +60,6 @@
                                                     value="0">
                                                 <input class="form-check-input"
                                                     name="modules[{{ $module->code }}][view_access]" type="checkbox"
-                                                    id="flexCheckChecked"
                                                     {{ optional($pivotData)->view_access == '1' ? 'checked' : '' }}
                                                     value="1">
                                             </td>
@@ -70,7 +68,6 @@
                                                     value="0">
                                                 <input class="form-check-input"
                                                     name="modules[{{ $module->code }}][edit_access]" type="checkbox"
-                                                    id="flexCheckChecked"
                                                     {{ optional($pivotData)->edit_access == '1' ? 'checked' : '' }}
                                                     value="1">
                                             </td>
@@ -79,7 +76,6 @@
                                                     value="0">
                                                 <input class="form-check-input"
                                                     name="modules[{{ $module->code }}][delete_access]" type="checkbox"
-                                                    id="flexCheckChecked"
                                                     {{ optional($pivotData)->delete_access == '1' ? 'checked' : '' }}
                                                     value="1">
                                             </td>
@@ -103,7 +99,7 @@
                                                             value="0">
                                                         <input class="form-check-input"
                                                             name="modules[{{ $submodule->code }}][add_access]"
-                                                            type="checkbox" id="flexCheckChecked"
+                                                            type="checkbox"
                                                             {{ optional($pivotData)->add_access == '1' ? 'checked' : '' }}
                                                             value="1">
                                                     </td>
@@ -113,7 +109,7 @@
                                                             value="0">
                                                         <input class="form-check-input"
                                                             name="modules[{{ $submodule->code }}][view_access]"
-                                                            type="checkbox" id="flexCheckChecked"
+                                                            type="checkbox"
                                                             {{ optional($pivotData)->view_access == '1' ? 'checked' : '' }}
                                                             value="1">
                                                     </td>
@@ -123,7 +119,7 @@
                                                             value="0">
                                                         <input class="form-check-input"
                                                             name="modules[{{ $submodule->code }}][edit_access]"
-                                                            type="checkbox" id="flexCheckChecked"
+                                                            type="checkbox"
                                                             {{ optional($pivotData)->edit_access == '1' ? 'checked' : '' }}
                                                             value="1">
                                                     </td>
@@ -133,7 +129,7 @@
                                                             value="0">
                                                         <input class="form-check-input"
                                                             name="modules[{{ $submodule->code }}][delete_access]"
-                                                            type="checkbox" id="flexCheckChecked"
+                                                            type="checkbox"
                                                             {{ optional($pivotData)->delete_access == '1' ? 'checked' : '' }}
                                                             value="1">
                                                     </td>

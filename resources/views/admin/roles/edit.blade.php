@@ -26,8 +26,7 @@
                         <div class="app-brand justify-content-center mb-4 mt-2">
                             <span class="app-brand-text demo text-body fw-bold ms-1">Edit Role</span>
                         </div>
-                        <form action="{{ route('roles.update', ['id' => $role->id]) }}" method="post"
-                            id="formAuthentication" class="mb-3">
+                        <form action="{{ route('roles.update', ['id' => $role->id]) }}" method="post" class="mb-3">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Role Name *</label>
@@ -38,13 +37,13 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="exampleFormControlTextarea1">Description</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description">{{ $role->description }}</textarea>
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" rows="3" name="description">{{ $role->description }}</textarea>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label for="select2Primary" class="form-label">Primary</label>
+                                <label for="select2Primary" class="form-label">Select Permission</label>
                                 <div class="select2-primary">
-                                    <select id="select2Primary" class="select2 form-select" name="permissions[]" multiple>
+                                    <select class="select2 form-select" name="permissions[]" multiple>
                                         @foreach ($permissions as $permission)
                                             <option value="{{ $permission->id }}" value="{{ $permission->id }}"
                                                 {{ $role->permission->contains($permission->id) ? 'selected' : '' }}>

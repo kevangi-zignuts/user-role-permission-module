@@ -27,8 +27,7 @@
                     value="{{ $search }}">
             </div>
             <div class="input-group w-px-500 m-2">
-                <select name="filter" class="form-select" id="inputGroupSelect04"
-                    aria-label="Example select with button addon" equired>
+                <select name="filter" class="form-select" required>
                     <option value="all" {{ $filter == 'all' ? 'selected' : '' }}>All Role</option>
                     <option value="active" {{ $filter == 'active' ? 'selected' : '' }}>Activated Role</option>
                     <option value="inactive" {{ $filter == 'inactive' ? 'selected' : '' }}>InActivated Role</option>
@@ -52,11 +51,11 @@
             <div class="table-responsive text-nowrap p-2">
 
                 <table class="table">
-                    <thead style="background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);">
+                    <thead class="bg-purple">
                         <tr>
                             <th scope="col" class="text-white">Name</th>
                             <th scope="col" class="text-white">Description</th>
-                            <th class="text-white">Status</th>
+                            <th scope="col" class="text-white">Status</th>
                             <th scope="col" class="text-white">Action</th>
                         </tr>
                     </thead>
@@ -87,7 +86,7 @@
                                     </div>
                                 </td>
                                 <td class="pt-0">
-                                    <div class="dropdown" style="position: absolute">
+                                    <div class="dropdown position-absolute">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                                             data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>
                                         <div class="dropdown-menu">
