@@ -16,6 +16,7 @@ class ModuleController extends Controller
    */
   public function index(Request $request)
   {
+    // Querying roles with search and filter conditions
     $searchedModules = Module::query()->where(function ($query) use ($request){
       if($request->input('search') != null){
         $query->where('module_name', 'like', '%' . $request->input('search') . '%');
@@ -25,6 +26,7 @@ class ModuleController extends Controller
       }
     })->get();
 
+    // Set modules which we want it in blade file format
     $modules = collect();
     foreach($searchedModules as $module){
         if($module->parent_code === null){

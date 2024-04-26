@@ -1,6 +1,6 @@
 @extends('layouts/layoutMaster')
 
-@section('title', 'User Create')
+@section('title', 'Company - Create')
 
 @section('content')
     <div class="container-xxl">
@@ -9,7 +9,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="app-brand justify-content-center mb-4 mt-2">
-                            <span class="app-brand-text demo text-body fw-bold ms-1">Add Company</span>
+                            <span class="app-brand-text demo text-body fw-bold ms-1">Add Company Details</span>
                         </div>
                         @if ($errors && $errors->any())
                             @dd($errors->all())

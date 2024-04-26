@@ -16,18 +16,22 @@ class NoteController extends Controller
    */
   public function index(Request $request)
   {
+    // Determine user's access permissions
     $access = [
       'add'    => Auth::user()->hasPermission('note', 'add_access'),
       'view'   => Auth::user()->hasPermission('note', 'view_access'),
       'edit'   => Auth::user()->hasPermission('note', 'edit_access'),
       'delete' => Auth::user()->hasPermission('note', 'delete_access'),
     ];
-    // search the user
+
+    // Querying Notes with search conditions
     $notes = Note::query()->where(function ($query) use ($request){
       if($request->input('search') != null){
         $query->where('title', 'like', '%' . $request->input('search') . '%');
       }
     })->paginate(8);
+
+    // Append search parameters to the pagination links
     $notes->appends(['search' => $request->input('search')]);
 
     return view('users.notes.index', ['notes' => $notes, 'search' => $request->input('search'), 'access' => $access]);
@@ -46,17 +50,13 @@ class NoteController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
-      'title'       => 'required|string|max:255',
-      'description' => 'required',
+    $data = $request->validate([
+      'title'       => 'required|string|max:64',
+      'description' => 'required|string|max:255',
     ]);
 
-    $requestData = $request->only(['title', 'description']);
-    $requestData = array_filter($requestData, function ($value) {
-      return !is_null($value);
-    });
-    $requestData['user_id'] = Auth::id();
-    Note::create($requestData);
+    $data['user_id'] = Auth::id();
+    Note::create($data);
     return redirect()->route('notes.index', [
       'success' => true,
       'message' => 'Note added successfully!',
@@ -78,8 +78,8 @@ class NoteController extends Controller
   public function update(Request $request, $id)
   {
     $request->validate([
-      'title'       => 'required|string|max:255',
-      'description' => 'required',
+      'title'       => 'required|string|max:64',
+      'description' => 'required|string|max:255',
     ]);
 
     $note = Note::findOrFail($id);

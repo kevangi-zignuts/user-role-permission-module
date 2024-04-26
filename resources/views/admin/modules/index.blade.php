@@ -190,85 +190,70 @@
     {{-- Script for switch --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const confirmOptions = {
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, change it!',
-                customClass: {
-                    confirmButton: 'btn btn-primary me-3',
-                    cancelButton: 'btn btn-label-secondary'
-                },
-                buttonsStyling: false
-            };
-
-            function handleSwitchClick(switchElement, code) {
-                Swal.fire(confirmOptions).then(function(result) {
-                    if (result.isConfirmed) {
-                        var status = $(switchElement).prop('checked') ? 1 : 0;
-                        var route = $(switchElement).data('route');
-                        $.ajax({
-                            type: "GET",
-                            dataType: "json",
-                            url: route,
-                            success: function(data) {
-                                if (data.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Status Updated!!',
-                                        text: data.message,
-                                        customClass: {
-                                            confirmButton: 'btn btn-success'
-                                        }
-                                    });
-                                } else {
+            @foreach ($modules as $module)
+                const switch{{ $module->code }} = document.getElementById('moduleSwitch{{ $module->code }}');
+                switch{{ $module->code }}.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, change it!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary me-3',
+                            cancelButton: 'btn btn-label-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var status = $(switch{{ $module->code }}).prop('checked') == true ? 1 :
+                                0;
+                            var route = $(switch{{ $module->code }}).data('route');
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: route,
+                                success: function(data) {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Status Updated!!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-success'
+                                            }
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error!',
+                                            text: data.message,
+                                            customClass: {
+                                                confirmButton: 'btn btn-danger'
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error!',
-                                        text: data.message,
+                                        text: 'An error occurred while processing your request. Please try again later.',
                                         customClass: {
                                             confirmButton: 'btn btn-danger'
                                         }
                                     });
                                 }
-                            },
-                            error: function(xhr, status, error) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error!',
-                                    text: 'An error occurred while processing your request. Please try again later.',
-                                    customClass: {
-                                        confirmButton: 'btn btn-danger'
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        var currentState = $(switchElement).prop('checked');
-                        $(switchElement).prop('checked', !currentState);
-                    }
-                });
-            }
-
-            @foreach ($modules as $module)
-                const switch{{ $module->code }} = document.getElementById('moduleSwitch{{ $module->code }}');
-                switch{{ $module->code }}.addEventListener('click', function() {
-                    handleSwitchClick(switch{{ $module->code }}, '{{ $module->code }}');
-                });
-
-                @foreach ($module->submodules as $submodule)
-                    const switch{{ $submodule->code }} = document.getElementById(
-                        'moduleSwitch{{ $submodule->code }}');
-                    switch{{ $submodule->code }}.addEventListener('click', function() {
-                        handleSwitchClick(switch{{ $submodule->code }}, '{{ $submodule->code }}');
+                            });
+                        } else {
+                            var currentState = $(switch{{ $module->code }}).prop('checked');
+                            $(switch{{ $module->code }}).prop('checked', !currentState);
+                        }
                     });
-                @endforeach
+                });
             @endforeach
         });
     </script>
-    {{-- Script for switch --}}
-
 
 
 < @endsection

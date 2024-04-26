@@ -1,6 +1,6 @@
 @extends('layouts/layoutMaster')
 
-@section('title', 'User Create')
+@section('title', 'People - Create')
 
 @section('content')
 

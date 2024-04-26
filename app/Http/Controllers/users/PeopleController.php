@@ -18,6 +18,7 @@ class PeopleController extends Controller
    */
   public function index(Request $request)
   {
+    // Determine user's access permissions
     $access = [
       'add'    => Auth::user()->hasPermission('peo', 'add_access'),
       'view'   => Auth::user()->hasPermission('peo', 'view_access'),
@@ -25,6 +26,7 @@ class PeopleController extends Controller
       'delete' => Auth::user()->hasPermission('peo', 'delete_access'),
     ];
 
+    // Querying Peoples with search and filter conditions
     $peoples  = People::query()->where(function ($query) use ($request){
       if($request->input('search') != null){
         $query->where('name', 'like', '%' . $request->input('search') . '%');
@@ -33,6 +35,8 @@ class PeopleController extends Controller
         $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
       }
     })->paginate(8);
+
+    // Append search and filter parameters to the pagination links
     $peoples->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
     
     return view('users.people.index', ['peoples' => $peoples, 'search' => $request->input('search'), 'filter' => $request->input('filter'), 'access' => $access]);
@@ -51,19 +55,16 @@ class PeopleController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
-      'name'        => 'required|string|max:255',
+    $data = $request->validate([
+      'name'        => 'required|string|max:64',
       'email'       => 'email|required',
       'designation' => 'required',
       'contact_no'  => 'numeric|nullable',
+      'address'     => 'string|max:255',
     ]);
 
-    $requestData = $request->only(['name', 'email', 'designation', 'contact_no', 'address']);
-    $requestData = array_filter($requestData, function ($value) {
-      return !is_null($value);
-    });
-    $requestData['user_id'] = Auth::id();
-    People::create($requestData);
+    $data['user_id'] = Auth::id();
+    People::create($data);
 
     return redirect()->route('people.index', [
       'success' => true,
@@ -102,10 +103,11 @@ class PeopleController extends Controller
   public function update(Request $request, $id)
   {
     $request->validate([
-      'name'        => 'required|string|max:255',
+      'name'        => 'required|string|max:64',
       'email'       => 'email|required',
       'designation' => 'required',
       'contact_no'  => 'numeric|nullable',
+      'address'     => 'string|max:255',
     ]);
 
     $people = People::findOrFail($id);

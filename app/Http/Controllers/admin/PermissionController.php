@@ -16,6 +16,7 @@ class PermissionController extends Controller
    */
   public function index(Request $request)
   {
+    // Get the permission which is searched or filtered
     $permissions = Permission::query()->where(function ($query) use ($request){
       if($request->input('search') != null){
         $query->where('permission_name', 'like', '%' . $request->input('search') . '%');
@@ -24,6 +25,7 @@ class PermissionController extends Controller
         $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
       }
     })->paginate(8);
+    // Append search and filter with permissions
     $permissions->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
 
     return view('admin.permissions.index', ['permissions' => $permissions, 'filter' => $request->input('filter'), 'search' => $request->input('search')]);
@@ -34,7 +36,7 @@ class PermissionController extends Controller
    */
   public function create()
   {
-    $modules = Module::where('parent_code', null)
+    $modules = Module::whereNull('parent_code')
                     ->where('is_active', 1)
                     ->get();
     return view('admin.permissions.create', ['modules' => $modules]);
@@ -45,25 +47,23 @@ class PermissionController extends Controller
    */
   public function store(Request $request)
   {
-    try {
-      $request->validate([
-        'permission_name' => 'required|string|max:255',
-        'description'     => 'nullable|string',
-        'modules'         => 'array',
-        'modules.*'       => 'array|nullable',
-      ]);
+    $request->validate([
+      'permission_name' => 'required|string|max:255',
+      'description'     => 'nullable|string',
+      'modules'         => 'array',
+      'modules.*'       => 'array|nullable',
+      'modules.*.*'     => 'boolean',
+    ]);
 
-      $permission = Permission::create($request->only(['permission_name', 'description']));
-      $modules    = $request->input('modules', []);
-      $permission->module()->attach($modules);
+    $permission = Permission::create($request->only(['permission_name', 'description']));
 
-      return redirect()->route('permissions.index', [
-        'success' => true,
-        'message' => 'Permission created successfully!',
-      ]);
-    } catch (ValidationException $e) {
-      return redirect() ->back()->withErrors($e->validator->errors())->withInput();
-    }
+    // Attach the modules to the permission
+    $permission->module()->attach($request->input('modules', []));
+
+    return redirect()->route('permissions.index', [
+      'success' => true,
+      'message' => 'Permission created successfully!',
+    ]);
   }
 
   /**
@@ -76,7 +76,7 @@ class PermissionController extends Controller
     return Response::json(
       [
         'success' => true,
-        'message' => 'Successfully user deleted',
+        'message' => 'Status Updated Successfully',
       ],
       200
     );
@@ -109,10 +109,9 @@ class PermissionController extends Controller
     
     $permission = Permission::findOrFail($id);
     $permission->update($request->only(['permission_name', 'description']));
-
-    $selectedModules = $request->input('modules', []);
     
-    $permission->module()->sync($selectedModules);
+    // Sync the modules associated with the permission
+    $permission->module()->sync($request->input('modules', []));
 
     return redirect()->route('permissions.index', [
       'success' => true,
@@ -133,7 +132,7 @@ class PermissionController extends Controller
     return Response::json(
       [
         'success' => true,
-        'message' => 'Successfully user deleted',
+        'message' => 'Successfully permission deleted',
       ],
       200
     );

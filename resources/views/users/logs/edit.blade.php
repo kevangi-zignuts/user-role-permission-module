@@ -1,6 +1,6 @@
 @extends('layouts/layoutMaster')
 
-@section('title', 'User Create')
+@section('title', 'Edit Activity log')
 
 @section('content')
 
@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="app-brand justify-content-center mb-4 mt-2">
-                            <span class="app-brand-text demo text-body fw-bold ms-1">Add Activity Log</span>
+                            <span class="app-brand-text demo text-body fw-bold ms-1">Edit Activity Log</span>
                         </div>
                         <form action="{{ route('activityLogs.update', ['id' => $log->id]) }}" method="post" class="mb-3">
                             @csrf

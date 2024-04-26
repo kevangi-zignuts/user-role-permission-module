@@ -17,6 +17,7 @@ class MeetingController extends Controller
    */
   public function index(Request $request)
   {
+    // Determine user's access permissions
     $access = [
       'add'    => Auth::user()->hasPermission('meet', 'add_access'),
       'view'   => Auth::user()->hasPermission('meet', 'view_access'),
@@ -24,6 +25,7 @@ class MeetingController extends Controller
       'delete' => Auth::user()->hasPermission('meet', 'delete_access'),
     ];
 
+    // Querying meetings with search and filter conditions
     $meetings  = Meeting::query()->where(function ($query) use ($request){
       if($request->input('search') != null){
         $query->where('title', 'like', '%' . $request->input('search') . '%');
@@ -32,6 +34,8 @@ class MeetingController extends Controller
         $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
       }
     })->paginate(8);
+
+    // Append search and filter parameters to the pagination links
     $meetings->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
 
     return view('users.meetings.index', ['meetings' => $meetings, 'search' => $request->input('search'), 'filter' => $request->input('filter'), 'access' => $access]);
@@ -50,18 +54,15 @@ class MeetingController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
-      'title' => 'required|string|max:255',
-      'date'  => 'required|date|after_or_equal:today',
-      'time'  => 'required',
+    $data = $request->validate([
+      'title'       => 'required|string|max:64',
+      'description' => 'string|max:255',
+      'date'        => 'required|date|after_or_equal:today',
+      'time'        => 'required',
     ]);
 
-    $requestData = $request->only(['title', 'description', 'date', 'time']);
-    $requestData = array_filter($requestData, function ($value) {
-      return !is_null($value);
-    });
-    $requestData['user_id'] = Auth::id();
-    Meeting::create($requestData);
+    $data['user_id'] = Auth::id();
+    Meeting::create($data);
 
     return redirect()->route('meetings.index', [
       'success' => true,
@@ -136,7 +137,13 @@ class MeetingController extends Controller
   {
     $meeting = Meeting::find($id);
     if (!$meeting) {
-      return redirect()->route('roles.index')->with('fail', 'We can not found data');
+      return Response::json(
+        [
+          'error' => true,
+          'message' => "We can not found data",
+        ],
+        200
+      );
     }
     $meeting->delete();
     return Response::json(

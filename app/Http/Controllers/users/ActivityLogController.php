@@ -16,6 +16,7 @@ class ActivityLogController extends Controller
    */
   public function index(Request $request)
   {
+    // Determine user's access permissions
     $access = [
       'add'    => Auth::user()->hasPermission('act', 'add_access'),
       'view'   => Auth::user()->hasPermission('act', 'view_access'),
@@ -23,6 +24,7 @@ class ActivityLogController extends Controller
       'delete' => Auth::user()->hasPermission('act', 'delete_access'),
     ];
 
+    // Querying Activity logs with search and filter conditions
     $logs  = ActivityLog::query()->where(function ($query) use ($request){
       if($request->input('search') != null){
         $logs = $query->where('name', 'like', '%' . $request->input('search') . '%');
@@ -31,6 +33,8 @@ class ActivityLogController extends Controller
         $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
       }
     })->paginate(8);
+
+    // Append search and filter parameters to the pagination links
     $logs->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
     
     return view('users.logs.index', ['logs' => $logs, 'search' => $request->input('search'), 'filter' => $request->input('filter'), 'access' => $access]);
@@ -49,18 +53,14 @@ class ActivityLogController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
+    $data = $request->validate([
       'name' => 'required|string|max:255',
       'type' => 'required',
       'log'  => 'required',
     ]);
 
-    $requestData = $request->only(['name', 'type', 'log']);
-    $requestData = array_filter($requestData, function ($value) {
-      return !is_null($value);
-    });
-    $requestData['user_id'] = Auth::id();
-    ActivityLog::create($requestData);
+    $data['user_id'] = Auth::id();
+    ActivityLog::create($data);
 
     return redirect()->route('activityLogs.index', [
       'success' => true,
@@ -78,7 +78,7 @@ class ActivityLogController extends Controller
     return Response::json(
       [
         'success' => true,
-        'message' => 'Successfully status changed',
+        'message' => 'Status changed successfully',
       ],
       200
     );
@@ -120,7 +120,13 @@ class ActivityLogController extends Controller
   {
     $log = ActivityLog::find($id);
     if (!$log) {
-      return redirect()->route('roles.index')->with('fail', 'We can not found data');
+      return Response::json(
+        [
+          'error' => true,
+          'message' => "We can not found data",
+        ],
+        200
+      );
     }
     $log->delete();
     return Response::json(

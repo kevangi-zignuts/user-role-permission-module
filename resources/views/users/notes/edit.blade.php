@@ -1,6 +1,6 @@
 @extends('layouts/layoutMaster')
 
-@section('title', 'User Create')
+@section('title', 'Notes Edit')
 
 @section('content')
 
@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="app-brand justify-content-center mb-4 mt-2">
-                            <span class="app-brand-text demo text-body fw-bold ms-1">Edit People</span>
+                            <span class="app-brand-text demo text-body fw-bold ms-1">Edit Note</span>
                         </div>
                         <form action="{{ route('notes.update', ['id' => $note->id]) }}" method="post" class="mb-3">
                             @csrf

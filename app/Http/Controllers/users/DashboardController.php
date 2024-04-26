@@ -9,12 +9,18 @@ use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
+  /**
+   * user's dashboard
+   */
   public function index()
   {
     $user = User::findOrFail(auth()->id());
     return view('users.dashboard', ['user' => $user]);
   }
 
+  /**
+   * reset password in user's dashboard
+   */
   public function resetPassword(Request $request)
   {
     $request->validate([
@@ -41,12 +47,18 @@ class DashboardController extends Controller
     ]);
   }
 
+  /**
+   * show a Form for edit the user's details
+   */
   public function edit()
   {
     $user = User::findOrFail(auth()->id());
     return view('users.edit', ['user' => $user]);
   }
 
+  /**
+   * update the user's details
+   */
   public function update(Request $request)
   {
     $request->validate([

@@ -39,11 +39,6 @@ class LoginBasic extends Controller
         Log::error('Decryption error: ' . $e->getMessage());
 
         return redirect()->route('login')->withErrors(['error' => 'Invalid remember token']);
-    } catch (Throwable $e) {
-        // Handle other errors
-        Log::error('Error: ' . $e->getMessage());
-
-        return redirect()->route('login')->withErrors(['error' => 'An unexpected error occurred']);
     }
 
     return view('content.authentications.auth-login-basic', [
@@ -82,10 +77,12 @@ class LoginBasic extends Controller
           return redirect()->route('user.dashboard')->with('success', 'You are logged in successfully')->withCookie($cookie);
       }
 
+      // If remember me option is not selected
       if(Auth::attempt($credentials) && $request->hasCookie('remember_token')){
         Cookie::queue(Cookie::forget('remember_token'));
       }
 
+      // Redirect the user based on their role
       if ($user->email === 'admin@example.com') {
         return redirect()->route('admin.dashboard')->with('success', 'You are logged in successfully');
       }
@@ -113,8 +110,6 @@ class LoginBasic extends Controller
         ],
         200
       );
-
-      // return redirect()->route('login')->with('success', 'You have been logged out.');
     } else {
       return redirect()->route('login')->with('error', 'You are already logged out.');
     }

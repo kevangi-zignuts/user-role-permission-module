@@ -36,6 +36,8 @@ class ForgetPasswordController extends Controller
 
     $user  = User::where('email', $request->email)->first();
     $token = Str::random(64);
+
+    // Update or insert the password reset token for the user
     DB::table('password_reset_tokens')->updateOrInsert(
       [
         'email' => $request->email,
@@ -46,6 +48,7 @@ class ForgetPasswordController extends Controller
       ]
     );
 
+    // Send a password reset email to the user
     Mail::to($user->email)->send(new ForgetPassword($token, $user->first_name));
 
     return redirect()

@@ -17,6 +17,7 @@ class CompanyController extends Controller
    */
   public function index(Request $request)
   {
+    // Determine user's access permissions
     $access = [
       'add'    => Auth::user()->hasPermission('com', 'add_access'),
       'view'   => Auth::user()->hasPermission('com', 'view_access'),
@@ -24,9 +25,12 @@ class CompanyController extends Controller
       'delete' => Auth::user()->hasPermission('com', 'delete_access'),
     ];
 
+    // Querying Activity logs with search conditions
     $companies = Company::query()->where(function ($query) use ($request){
-      $query->where('company_name', 'like', '%' . $request->input('search') . '%');
+        $query->where('company_name', 'like', '%' . $request->input('search') . '%');
     })->paginate(8);
+
+    // Append search parameter to the pagination links
     $companies->appends(['search' => $request->input('search')]);
     
     return view('users.company.index', ['companies' => $companies, 'access' => $access, 'search' => $request->input('search')]);
@@ -45,24 +49,18 @@ class CompanyController extends Controller
    */
   public function store(Request $request)
   {
-    $request->validate([
+    $data = $request->validate([
       'company_name' => 'required|string|max:255',
       'owner_name'   => 'required|string|max:255',
       'industry'     => 'required|string|max:255',
     ]);
 
-
-    $requestData = $request->only(['company_name', 'owner_name', 'industry']);
-    $requestData = array_filter($requestData, function ($value) {
-      return !is_null($value);
-    });
-    $requestData['user_id'] = Auth::id();
-    Company::create($requestData);
-    return redirect()
-      ->route('company.index', [
+    $data['user_id'] = Auth::id();
+    Company::create($data);
+    return redirect()->route('company.index', [
         'success' => true,
         'message' => 'Company added successfully!',
-      ]);
+    ]);
   }
 
   /**
@@ -101,7 +99,13 @@ class CompanyController extends Controller
   {
     $company = Company::find($id);
     if (!$company) {
-      return redirect()->route('roles.index')->with('fail', 'We can not found data');
+      return Response::json(
+        [
+          'error' => true,
+          'message' => "We can not found data",
+        ],
+        200
+      );
     }
     $company->delete();
     return Response::json(

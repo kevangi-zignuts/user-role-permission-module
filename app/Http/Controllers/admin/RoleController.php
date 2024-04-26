@@ -16,6 +16,7 @@ class RoleController extends Controller
    */
   public function index(Request $request)
   {
+    // Querying roles with search and filter conditions
     $roles  = Role::query()->where(function ($query) use ($request){
       if($request->input('search') != null){
         $query->where('role_name', 'like', '%' . $request->input('search') . '%');
@@ -25,6 +26,7 @@ class RoleController extends Controller
       }
     })->paginate(8);
 
+    // Append search and filter parameters to the pagination links
     $roles->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
     return view('admin.roles.index', ['roles' => $roles, 'filter' => $request->input('filter'), 'search' => $request->input('search')]);
   }
@@ -44,15 +46,15 @@ class RoleController extends Controller
   public function store(Request $request)
   {
     $request->validate([
-      'role_name'   => 'required|string|max:255',
-      'description' => 'nullable|string',
-      'permissions' => 'array',
+      'role_name'     => 'required|string|max:255',
+      'description'   => 'nullable|string',
+      'permissions'   => 'array',
+      'permissions.*' => 'integer',
     ]);
     $role = Role::create($request->only(['role_name', 'description']));
 
-    $permissionIds = $request->input('permissions', []);
-
-    $role->permission()->attach($permissionIds);
+    // Attach the permissions to the role
+    $role->permission()->attach($request->input('permissions', []));
 
     return redirect()->route('roles.index', [
       'success' => true,
@@ -92,13 +94,16 @@ class RoleController extends Controller
   public function update(Request $request, $id)
   {
     $request->validate([
-      'role_name'   => 'required|string|max:255',
-      'description' => 'nullable|string',
-      'permissions' => 'array',
+      'role_name'     => 'required|string|max:255',
+      'description'   => 'nullable|string',
+      'permissions'   => 'array',
+      'permissions.*' => 'integer',
     ]);
 
     $role = Role::findOrFail($id);
     $role->update($request->only(['role_name', 'description']));
+
+    // Sync the permissions associated with the role
     $role->permission()->sync($request->input('permissions', []));
 
     return redirect()->route('roles.index', [
@@ -116,8 +121,8 @@ class RoleController extends Controller
     if (!$role) {
       return Response::json(
         [
-          'success' => true,
-          'message' => 'Successfully user deleted',
+          'error' => true,
+          'message' => 'Some error in deleting User',
         ],
         200
       );

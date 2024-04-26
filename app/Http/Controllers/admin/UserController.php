@@ -26,6 +26,7 @@ class UserController extends Controller
    */
   public function index(Request $request)
   {
+    // Querying users with search and filter conditions
     $users  = User::query()->with('role')->where(function ($query) use ($request){
       if($request->input('search') != null){
         $query->where(function ($query) use ($request) {
@@ -36,6 +37,8 @@ class UserController extends Controller
         $query->where('is_active', $request->input('filter') == 'active' ? '1' : '0');
       }
     })->where('email', '!=', 'admin@example.com')->paginate(8);
+
+    // Append search and filter parameters to the pagination links
     $users->appends(['search' => $request->input('search'), 'filter' => $request->input('filter')]);
 
     return view('admin.users.index', ['users' => $users, 'search' => $request->input('search'), 'filter' => $request->input('filter')]);
@@ -67,15 +70,14 @@ class UserController extends Controller
       ],
       'contact_no' => 'numeric|nullable',
       'roles' => 'array|nullable',
+      'roles.*' => 'integer',
     ]);
 
-    $email = $request->input('email');
     $token = md5(uniqid(rand(), true));
-    $temporaryPassword = Str::random(10);
     $user = new User();
     $user->fill(
       $request->only('first_name', 'last_name', 'email', 'contact_no', 'address') + [
-        'password'         => Hash::make($temporaryPassword),
+        'password'         => Hash::make(Str::random(10)),
         'invitation_token' => $token,
         'status'           => 'I',
       ]);
@@ -85,9 +87,8 @@ class UserController extends Controller
 
     $token = $user->createToken($user->email)->plainTextToken;
 
-    $roleIds = $request->input('roles', []);
-
-    $user->role()->sync($roleIds);
+    // Attach the roles to the user
+    $user->role()->attach($request->input('roles', []));
 
     return redirect()->route('users.index', [
       'success' => true,
@@ -130,10 +131,13 @@ class UserController extends Controller
       'first_name' => 'required|string|max:255',
       'contact_no' => 'numeric|nullable',
       'roles' => 'array',
+      'roles.*' => 'integer',
     ]);
 
     $user = User::findOrFail($id);
     $user->update($request->only(['first_name', 'last_name', 'contact_no', 'address']));
+    
+    // Sync the roles associated with the user
     $user->role()->sync($request->input('roles', []));
 
     return redirect()->route('users.index', [
@@ -149,9 +153,13 @@ class UserController extends Controller
   {
     $user = User::find($id);
     if (!$user) {
-      return redirect()
-        ->route('users.index')
-        ->with('fail', 'We can not found data');
+        return Response::json(
+          [
+            'error' => true,
+            'message' => 'We can not found data',
+          ],
+          200
+        );
     }
     $user->tokens()->delete();
     $user->delete();
@@ -174,9 +182,8 @@ class UserController extends Controller
       'password' => 'required|confirmed',
     ]);
     $user     = User::findOrFail($request['userId']);
-    $password = Hash::make($request['password']);
 
-    $user->update(['password' => $password]);
+    $user->update(['password' => Hash::make($request['password'])]);
 
     Mail::to($user->email)->send(new ResetPassword($user->first_name));
 
@@ -198,7 +205,7 @@ class UserController extends Controller
     return Response::json(
       [
         'success' => true,
-        'message' => 'Successfully user deleted',
+        'message' => 'User ForcedLogout Successfully',
       ],
       200
     );
