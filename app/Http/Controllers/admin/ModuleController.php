@@ -16,7 +16,7 @@ class ModuleController extends Controller
    */
   public function index(Request $request)
   {
-    $modules = Module::query()->where(function ($query) use ($request){
+    $searchedModules = Module::query()->where(function ($query) use ($request){
       if($request->input('search') != null){
         $query->where('module_name', 'like', '%' . $request->input('search') . '%');
       }
@@ -25,17 +25,23 @@ class ModuleController extends Controller
       }
     })->get();
 
-    $modules = $modules->flatMap(function ($module) use ($request) {
-        return collect([$module->parent_code ? Module::find($module->parent_code) : null, $module])
-          ->filter(function ($item) use ($request, $module) {
-            return $item && (($item->is_active == $module->is_active) || $request->input('filter') == 'all');
-          })->when($module->parent_code === null, function ($collection) use ($module, $request) {
-            return $collection->merge($request->input('filter') != 'all' ? $module->submodules->filter(function ($submodule) use ($module) {
-                return $module->is_active == $submodule->is_active;
-            }) : $module->submodules);
-          })->all();
-        })->unique('code');
-
+    $modules = collect();
+    foreach($searchedModules as $module){
+        if($module->parent_code === null){
+          foreach($module->submodules as $submodule){
+            if($submodule->is_active == $module->is_active || $request->input('filter') == 'all'){
+              $modules->push($submodule);
+            }
+          }
+        }else{
+          $tempModule = Module::find($module->parent_code);
+          if($tempModule->is_active == $module->is_active || $request->input('filter') == 'all'){
+            $modules->push($tempModule);
+          }
+        }
+        $modules->push($module);
+    }
+    $modules = $modules->unique('code');
 
     return view('admin.modules.index', ['modules' => $modules, 'search' => $request->input('search'), 'filter' => $request->input('filter')]);
   }

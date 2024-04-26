@@ -48,7 +48,7 @@
                             <th></th>
                             <th scope="col" class="text-white">Name</th>
                             <th scope="col" class="text-white">Description</th>
-                            <th class="text-white">Status</th>
+                            <th scope="col" class="text-white">Status</th>
                             <th scope="col" class="text-white">Action</th>
                         </tr>
                     </thead>
@@ -78,8 +78,8 @@
                                     <td>
                                         <div class="form-check form-switch">
                                             <input data-route="{{ route('modules.status', ['code' => $module->code]) }}"
-                                                class="form-check-input toggle-class" type="checkbox" role="switch"
-                                                id="moduleSwitch{{ $module->id }}" data-onstyle="danger"
+                                                class="form-check-input" type="checkbox" role="switch"
+                                                id="moduleSwitch{{ $module->code }}" data-onstyle="danger"
                                                 data-offstyle="info" data-toggle="toggle" data-on="Pending"
                                                 data-off="Approved" {{ $module->is_active == 1 ? 'checked' : '' }}>
                                         </div>
@@ -114,7 +114,8 @@
                                                                 <div class="form-check form-switch">
                                                                     <input
                                                                         data-route="{{ route('modules.status', ['code' => $submodule->code]) }}"
-                                                                        class="form-check-input toggle-class"
+                                                                        class="form-check-input "
+                                                                        id="moduleSwitch{{ $submodule->code }}"
                                                                         type="checkbox" role="switch" data-onstyle="danger"
                                                                         data-offstyle="info" data-toggle="toggle"
                                                                         data-on="Pending" data-off="Approved"
@@ -183,8 +184,91 @@
 
 
 @section('page-script')
-    <script src="{{ asset('assets/js/toggle-sweet-alert.js') }}"></script>
     <script src="{{ asset('assets/js/toast-message.js') }}"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 
-@endsection
+    {{-- Script for switch --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const confirmOptions = {
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, change it!',
+                customClass: {
+                    confirmButton: 'btn btn-primary me-3',
+                    cancelButton: 'btn btn-label-secondary'
+                },
+                buttonsStyling: false
+            };
+
+            function handleSwitchClick(switchElement, code) {
+                Swal.fire(confirmOptions).then(function(result) {
+                    if (result.isConfirmed) {
+                        var status = $(switchElement).prop('checked') ? 1 : 0;
+                        var route = $(switchElement).data('route');
+                        $.ajax({
+                            type: "GET",
+                            dataType: "json",
+                            url: route,
+                            success: function(data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Status Updated!!',
+                                        text: data.message,
+                                        customClass: {
+                                            confirmButton: 'btn btn-success'
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: data.message,
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: 'An error occurred while processing your request. Please try again later.',
+                                    customClass: {
+                                        confirmButton: 'btn btn-danger'
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        var currentState = $(switchElement).prop('checked');
+                        $(switchElement).prop('checked', !currentState);
+                    }
+                });
+            }
+
+            @foreach ($modules as $module)
+                const switch{{ $module->code }} = document.getElementById('moduleSwitch{{ $module->code }}');
+                switch{{ $module->code }}.addEventListener('click', function() {
+                    handleSwitchClick(switch{{ $module->code }}, '{{ $module->code }}');
+                });
+
+                @foreach ($module->submodules as $submodule)
+                    const switch{{ $submodule->code }} = document.getElementById(
+                        'moduleSwitch{{ $submodule->code }}');
+                    switch{{ $submodule->code }}.addEventListener('click', function() {
+                        handleSwitchClick(switch{{ $submodule->code }}, '{{ $submodule->code }}');
+                    });
+                @endforeach
+            @endforeach
+        });
+    </script>
+    {{-- Script for switch --}}
+
+
+
+< @endsection

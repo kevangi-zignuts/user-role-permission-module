@@ -58,26 +58,27 @@ class MenuServiceProvider extends ServiceProvider
     $staticMenuJson = file_get_contents(base_path('resources/menu/userVerticalMenu.json'));
     $staticMenuData = json_decode($staticMenuJson, true);
 
-    $menu = Module::all()->filter(function ($module) use ($user) {
-        return $module->parent_code === null && $user->hasPermission($module->code, 'view_access');
-      })->map(function ($module) use ($user) {
-        $submodulesArray = $module->submodules
-          ->filter(function ($submodule) use ($user) {
-            return $user->hasPermission($submodule->code, 'view_access');
-          })
-          ->toArray();
+    $modules = Module::all();
+    $menu = [];
+    foreach($modules as $module){
+      if($module->parent_code === null && $user->hasPermission($module->code, 'view_access')){
+        $submodulesArray = [];
+        foreach($module->submodules as $submodule){
+          if($user->hasPermission($submodule->code, 'view_access')){
+            $submodulesArray[] = $submodule;
+          }
+        }
         if (!empty($submodulesArray)) {
           $moduleArray = $module->toArray();
           $moduleArray['submenu'] = $submodulesArray;
-          return $moduleArray;
+          $menu[] = $moduleArray;
         }
-        return null;
-      })->filter()->toArray();
-      
+      }
+    }
+    
     $staticMenuData['menu'] = array_merge($staticMenuData['menu'], $menu);
     // Format the menu
     $menu = [(object) $staticMenuData];
-    // dd($menu);
     return $menu;
   }
 }

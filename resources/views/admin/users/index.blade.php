@@ -105,8 +105,8 @@
                                                 class="ti ti-key me-1"></i> Reset
                                             Password</a>
                                         <button data-route="{{ route('users.forceLogout', ['id' => $user->id]) }}"
-                                            class="btn text-danger forced-logout-class" type="button"><i
-                                                class='ti ti-logout me-2'></i> Force Logout</button>
+                                            class="btn text-danger" id="forcedLogoutUser{{ $user->id }}"
+                                            type="button"><i class='ti ti-logout me-2'></i> Force Logout</button>
                                     </div>
                                 </div>
                             </td>
@@ -243,7 +243,7 @@
 </script>
 {{-- Script for switch --}}
 
-{{-- Script for delete user --}}
+{{-- Script for delete user confirmation sweetalert --}}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         @foreach ($users as $user)
@@ -307,5 +307,73 @@
         @endforeach
     });
 </script>
-{{-- Script for delete user --}}
+{{-- Script for delete user confirmation sweetalert --}}
+
+{{-- Script for forcelogout confirmation sweetalert --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        @foreach ($users as $user)
+            const forcedLogout{{ $user->id }} = document.getElementById(
+                'forcedLogoutUser{{ $user->id }}');
+            forcedLogout{{ $user->id }}.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, logout it!',
+                    customClass: {
+                        confirmButton: 'btn btn-primary me-3',
+                        cancelButton: 'btn btn-label-secondary'
+                    },
+                    buttonsStyling: false
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        var route = $(forcedLogout{{ $user->id }}).data('route');
+                        $.ajax({
+                            type: "GET",
+                            dataType: "json",
+                            url: route,
+                            success: function(data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Logout Successfully!!',
+                                        text: data.message,
+                                        customClass: {
+                                            confirmButton: 'btn btn-success'
+                                        }
+                                    }).then(function() {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: data.message,
+                                        customClass: {
+                                            confirmButton: 'btn btn-danger'
+                                        }
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: 'An error occurred while processing your request. Please try again later.',
+                                    customClass: {
+                                        confirmButton: 'btn btn-danger'
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        @endforeach
+    });
+</script>
+{{-- Script for forcelogout confirmation sweetalert --}}
+
 @endsection
