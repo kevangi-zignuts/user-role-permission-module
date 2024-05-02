@@ -7,25 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Meeting extends Model
 {
-  use HasFactory;
-  protected $fillable = ['title', 'description', 'date', 'time', 'is_active', 'user_id', 'created_by', 'updated_by'];
+    use HasFactory;
 
-  public static function boot()
-  {
-    parent::boot();
+    protected $fillable = ['title', 'description', 'date', 'time', 'is_active', 'user_id', 'created_by', 'updated_by'];
 
-    static::creating(function ($module) {
-      $user = auth()->user();
-      if ($user) {
-        $module->created_by = $user->id;
-      }
-    });
+    public static function boot()
+    {
+        parent::boot();
 
-    static::updating(function ($module) {
-      $user = auth()->user();
-      if ($user) {
-        $module->updated_by = $user->id;
-      }
-    });
-  }
+        static::creating(function ($module) {
+            $user = auth()->user();
+            if ($user) {
+                $module->created_by = $user->id;
+            }
+        });
+
+        static::updating(function ($module) {
+            $user = auth()->user();
+            if ($user) {
+                $module->updated_by = $user->id;
+            }
+        });
+    }
 }

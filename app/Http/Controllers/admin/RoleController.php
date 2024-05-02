@@ -4,10 +4,12 @@ namespace App\Http\Controllers\admin;
 
 use App\Models\Role;
 use App\Models\Permission;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
@@ -51,6 +53,7 @@ class RoleController extends Controller
       'permissions'   => 'array',
       'permissions.*' => 'integer',
     ]);
+    
     $role = Role::create($request->only(['role_name', 'description']));
 
     // Attach the permissions to the role

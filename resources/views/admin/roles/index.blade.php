@@ -8,15 +8,11 @@
 
 @section('content')
 
-    @if (session('success'))
-        <div class="alert alert-success" id="alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
+    @if ($errors->any())
         <div class="alert alert-danger" role="alert-error">
-            {{ session('message') }}
+            @foreach ($errors->all() as $error)
+                {{ $error }}
+            @endforeach
         </div>
     @endif
 
@@ -42,9 +38,7 @@
         <div class="card-header d-flex justify-content-between">
             <div class="link">
                 <a href="{{ route('roles.create') }}" class="btn btn-primary m-3 mt-0 mb-0"><i
-                        class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add
-                    a
-                    Role</a>
+                        class="fa-solid fa-plus p-2 pt-0 pb-0"></i>Add a Role</a>
             </div>
         </div>
         <div class="card-body">

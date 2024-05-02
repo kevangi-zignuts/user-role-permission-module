@@ -18,6 +18,24 @@
 
 @section('content')
 
+    {{-- @if (Session::has('errors'))
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (Session::get('errors')->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+                {{ Session::forget('errors') }}
+            </ul>
+        </div>
+    @endif --}}
+    {{-- @if ($errors->any())
+        <div class="alert alert-danger" role="alert-error">
+            @foreach ($errors->all() as $error)
+                {{ $error }}
+            @endforeach
+        </div>
+    @endif --}}
+
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner py-4 mx-auto">
@@ -30,11 +48,13 @@
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Role Name *</label>
-                                <input type="text" class="form-control" name="role_name" autofocus required>
-                                @error('role_name')
-                                    <div class="text-danger pt-2">{{ $message }}</div>
-                                @enderror
+                                <input type="text" class="form-control" name="role_name" autofocus>
                             </div>
+                            @error('role_name')
+                                <div class="alert alert-danger" role="alert-error">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                             <div class="form-group mb-3">
                                 <label>Description</label>
                                 <textarea class="form-control" rows="3" name="description"></textarea>
