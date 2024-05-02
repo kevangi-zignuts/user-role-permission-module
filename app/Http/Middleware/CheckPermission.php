@@ -21,11 +21,13 @@ class CheckPermission
             return redirect()->route('login');
         }
         if (! Auth::user()->hasPermission($moduleCode, $accessType)) {
-            return redirect()->back()->with('error', 'Unauthorized Access');
+            session(['error' => 'Unauthorized Access']);
+            return redirect()->back();
         }
         $module = Module::findOrFail($moduleCode);
         if ($module->parent_code !== null && ! Auth::user()->hasPermission($module->parent_code, 'view_access')) {
-            return redirect()->back()->with('error', 'Unauthorized Access');
+            session(['error' => 'Unauthorized Access']);
+            return redirect()->back();
         }
 
         return $next($request);

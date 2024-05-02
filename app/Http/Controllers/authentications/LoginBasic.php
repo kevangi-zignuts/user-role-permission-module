@@ -38,7 +38,8 @@ class LoginBasic extends Controller
         // Handle decryption error
         Log::error('Decryption error: ' . $e->getMessage());
 
-        return redirect()->route('login')->withErrors(['error' => 'Invalid remember token']);
+        session(['error' => 'Invalid remember token!']);
+        return redirect()->route('login');
     }
 
     return view('content.authentications.auth-login-basic', [
@@ -71,10 +72,12 @@ class LoginBasic extends Controller
           $cookie = Cookie::make('remember_token', encrypt($rememberToken), 60 * 24 * 30);
 
           if ($user->email === 'admin@example.com') {
-            return redirect()->route('admin.dashboard')->with('success', 'You are logged in successfully')->withCookie($cookie);
+            session(['success' => 'You are logged in successfully!']);
+            return redirect()->route('admin.dashboard')->withCookie($cookie);
           }
 
-          return redirect()->route('user.dashboard')->with('success', 'You are logged in successfully')->withCookie($cookie);
+          session(['success' => 'You are logged in successfully!']);
+          return redirect()->route('user.dashboard')->withCookie($cookie);
       }
 
       // If remember me option is not selected
@@ -84,13 +87,15 @@ class LoginBasic extends Controller
 
       // Redirect the user based on their role
       if ($user->email === 'admin@example.com') {
-        return redirect()->route('admin.dashboard')->with('success', 'You are logged in successfully');
+        session(['success' => 'You are logged in successfully!']);
+        return redirect()->route('admin.dashboard');
       }
       return redirect()->route('user.dashboard')->with('success', 'You are logged in successfully');
     }
 
     // If authentication fails, redirect back with errors
-    return back()->withInput($request->only('email', 'remember'))->withErrors(['email' => 'Invalid credentials']);
+    session(['error' => 'Invalid credentials']);
+    return back()->withInput($request->only('email', 'remember'));
   }
 
   /**
@@ -111,7 +116,7 @@ class LoginBasic extends Controller
         200
       );
     } else {
-      return redirect()->route('login')->with('error', 'You are already logged out.');
+      session(['error' => 'You are already logged out!!']);
     }
   }
 }

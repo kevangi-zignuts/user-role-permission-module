@@ -16,10 +16,6 @@
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
 @endsection
 
-@section('page-script')
-    <script src="{{ asset('assets/js/pages-auth.js') }}"></script>
-@endsection
-
 @section('content')
 
     <div class="authentication-wrapper authentication-cover authentication-bg">
@@ -81,4 +77,39 @@
             <!-- /Forgot Password -->
         </div>
     </div>
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/pages-auth.js') }}"></script>
+    {{-- Script for toast message --}}
+    @if (session('success'))
+        @php
+            $successMessage = session('success');
+            session()->forget('success');
+        @endphp
+
+        <script>
+            var successMessage = {!! json_encode($successMessage) !!};
+            $('.toast-body').text(successMessage);
+            $('i.ti-bell').addClass('text-success');
+            $('.toast-title').text('Success');
+            new bootstrap.Toast($('.toast-ex')[0]).show();
+        </script>
+    @endif
+
+    @if (session('error'))
+        @php
+            $errorMessage = session('error');
+            session()->forget('error');
+        @endphp
+
+        <script>
+            var errorMessage = {!! json_encode($errorMessage) !!};
+            $('.toast-body').text(errorMessage);
+            $('i.ti-bell').addClass('text-danger');
+            $('.toast-title').text('Error');
+            new bootstrap.Toast($('.toast-ex')[0]).show();
+        </script>
+    @endif
+    {{-- Script for toast message --}}
 @endsection

@@ -51,8 +51,8 @@ class ForgetPasswordController extends Controller
     // Send a password reset email to the user
     Mail::to($user->email)->send(new ForgetPassword($token, $user->first_name));
 
+    session(['success' => 'We have e-mailed you password reset link!']);
     return redirect()
-      ->route('auth-login-basic')
-      ->with('message', 'We have e-mailed your password reset link!');
+      ->route('auth-login-basic');
   }
 }

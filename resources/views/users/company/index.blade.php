@@ -93,19 +93,12 @@
         aria-atomic="true" data-bs-delay="2000">
         <div class="toast-header">
             <i class="ti ti-bell ti-xs me-2 text-success"></i>
-            <div class="me-auto fw-semibold">Success</div>
+            <div class="me-auto fw-semibold toast-title"></div>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body">
-            Hello, world! This is a toast message.
-        </div>
+        <div class="toast-body"></div>
     </div>
     <!--/ Toast message -->
-
-
-
-
-
 
 @endsection
 
@@ -180,6 +173,36 @@
     </script>
     {{-- Script for delete company details --}}
 
+    {{-- Script for toast message --}}
+    @if (session('success'))
+        @php
+            $successMessage = session('success');
+            session()->forget('success');
+        @endphp
 
+        <script>
+            var successMessage = {!! json_encode($successMessage) !!};
+            $('.toast-body').text(successMessage);
+            $('i.ti-bell').addClass('text-success');
+            $('.toast-title').text('Success');
+            new bootstrap.Toast($('.toast-ex')[0]).show();
+        </script>
+    @endif
+
+    @if (session('error'))
+        @php
+            $errorMessage = session('error');
+            session()->forget('error');
+        @endphp
+
+        <script>
+            var errorMessage = {!! json_encode($errorMessage) !!};
+            $('.toast-body').text(errorMessage);
+            $('i.ti-bell').addClass('text-danger');
+            $('.toast-title').text('Error');
+            new bootstrap.Toast($('.toast-ex')[0]).show();
+        </script>
+    @endif
+    {{-- Script for toast message --}}
 
 @endsection

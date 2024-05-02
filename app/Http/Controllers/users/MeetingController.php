@@ -64,10 +64,8 @@ class MeetingController extends Controller
         $data['user_id'] = Auth::id();
         Meeting::create($data);
 
-        return redirect()->route('meetings.index', [
-            'success' => true,
-            'message' => 'Meeting added successfully!',
-        ]);
+        session(['success' => 'Meeting added successfully!']);
+        return redirect()->route('meetings.index');
     }
 
     /**
@@ -126,10 +124,8 @@ class MeetingController extends Controller
         $meeting = Meeting::findOrFail($id);
         $meeting->update($request->only(['title', 'description', 'date', 'time']));
 
-        return redirect()->route('meetings.index', [
-            'success' => true,
-            'message' => 'Meeting Details updated successfully',
-        ]);
+        session(['success' => 'Meeting Details updated successfully!']);
+        return redirect()->route('meetings.index');
     }
 
     /**

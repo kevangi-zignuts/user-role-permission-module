@@ -8,14 +8,6 @@
 
 @section('content')
 
-    @if ($errors->any())
-        <div class="alert alert-danger" role="alert-error">
-            @foreach ($errors->all() as $error)
-                {{ $error }}
-            @endforeach
-        </div>
-    @endif
-
     <div class="search-filter m-3 w-75 mx-auto">
         <form action="{{ route('roles.index') }}" method="GET" class="d-flex">
             <div class="input-group m-2">
@@ -106,12 +98,11 @@
     <div class="bs-toast toast toast-ex animate__animated animate__tada my-2" role="alert" aria-live="assertive"
         aria-atomic="true" data-bs-delay="2000">
         <div class="toast-header">
-            <i class="ti ti-bell ti-xs me-2 text-success"></i>
-            <div class="me-auto fw-semibold">Success</div>
+            <i class="ti ti-bell ti-xs me-2 "></i>
+            <div class="me-auto fw-semibold toast-title"></div>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-            Hello, world! This is a toast message.
         </div>
     </div>
     <!--/ Toast message -->
@@ -146,7 +137,6 @@
 
 
 @section('page-script')
-    <script src="{{ asset('assets/js/toast-message.js') }}"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
 
     {{-- Script for switch --}}
@@ -283,4 +273,36 @@
         });
     </script>
     {{-- Script for delete role --}}
+
+    {{-- Script for toast message --}}
+    @if (session('success'))
+        @php
+            $successMessage = session('success');
+            session()->forget('success');
+        @endphp
+
+        <script>
+            var successMessage = {!! json_encode($successMessage) !!};
+            $('.toast-body').text(successMessage);
+            $('i.ti-bell').addClass('text-success');
+            $('.toast-title').text('Success');
+            new bootstrap.Toast($('.toast-ex')[0]).show();
+        </script>
+    @endif
+
+    @if (session('error'))
+        @php
+            $errorMessage = session('error');
+            session()->forget('error');
+        @endphp
+
+        <script>
+            var errorMessage = {!! json_encode($errorMessage) !!};
+            $('.toast-body').text(errorMessage);
+            $('i.ti-bell').addClass('text-danger');
+            $('.toast-title').text('Error');
+            new bootstrap.Toast($('.toast-ex')[0]).show();
+        </script>
+    @endif
+    {{-- Script for toast message --}}
 @endsection

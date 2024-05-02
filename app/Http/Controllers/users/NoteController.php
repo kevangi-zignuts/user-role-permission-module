@@ -58,10 +58,8 @@ class NoteController extends Controller
         $data['user_id'] = Auth::id();
         Note::create($data);
 
-        return redirect()->route('notes.index', [
-            'success' => true,
-            'message' => 'Note added successfully!',
-        ]);
+        session(['success' => 'Note added successfully!']);
+        return redirect()->route('notes.index');
     }
 
     /**
@@ -87,10 +85,8 @@ class NoteController extends Controller
         $note = Note::findOrFail($id);
         $note->update($request->only(['title', 'description']));
 
-        return redirect()->route('notes.index', [
-            'success' => true,
-            'message' => 'Note updated successfully',
-        ]);
+        session(['success' => 'Note updated successfully!']);
+        return redirect()->route('notes.index');
     }
 
     /**

@@ -85,9 +85,7 @@ class ModuleController extends Controller
         $module = Module::findOrFail($code);
         $module->update($request->only(['module_name', 'description']));
 
-        return redirect()->route('modules.index', [
-            'success' => true,
-            'message' => 'Module Updated successfully!',
-        ]);
+        session(['success' => 'Module Updated successfully!!']);
+        return redirect()->route('modules.index');
     }
 }

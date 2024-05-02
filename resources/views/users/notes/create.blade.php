@@ -37,5 +37,35 @@
             </div>
         </div>
     </div>
+    <!--/ Toast message -->
+    <div class="bs-toast toast toast-ex animate__animated animate__tada my-2" role="alert" aria-live="assertive"
+        aria-atomic="true" data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="ti ti-bell ti-xs me-2 text-success"></i>
+            <div class="me-auto fw-semibold toast-title"></div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+    <!--/ Toast message -->
+@endsection
+
+@section('page-script')
+    {{-- Script for toast message --}}
+    @if (session('error'))
+        @php
+            $errorMessage = session('error');
+            session()->forget('error');
+        @endphp
+
+        <script>
+            var errorMessage = {!! json_encode($errorMessage) !!};
+            $('.toast-body').text(errorMessage);
+            $('i.ti-bell').addClass('text-danger');
+            $('.toast-title').text('Error');
+            new bootstrap.Toast($('.toast-ex')[0]).show();
+        </script>
+    @endif
+    {{-- Script for toast message --}}
 
 @endsection

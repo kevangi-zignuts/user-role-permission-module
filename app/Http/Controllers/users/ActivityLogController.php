@@ -62,10 +62,8 @@ class ActivityLogController extends Controller
         $data['user_id'] = Auth::id();
         ActivityLog::create($data);
 
-        return redirect()->route('activityLogs.index', [
-            'success' => true,
-            'message' => 'Activity Log added successfully!',
-        ]);
+        session(['success' => 'Activity Log added successfully!']);
+        return redirect()->route('activityLogs.index');
     }
 
     /**
@@ -109,10 +107,8 @@ class ActivityLogController extends Controller
         $log = ActivityLog::findOrFail($id);
         $log->update($request->only(['name', 'type', 'log']));
 
-        return redirect()->route('activityLogs.index', [
-            'success' => true,
-            'message' => 'Activity Log Details updated successfully',
-        ]);
+        session(['success' => 'Activity Log Details updated successfully!']);
+        return redirect()->route('activityLogs.index');
     }
 
     /**
@@ -121,7 +117,7 @@ class ActivityLogController extends Controller
     public function delete($id)
     {
         $log = ActivityLog::find($id);
-        if (! $log) {
+        if (!$log) {
             return Response::json(
                 [
                     'error' => true,

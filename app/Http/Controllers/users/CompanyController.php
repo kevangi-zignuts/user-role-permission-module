@@ -57,10 +57,8 @@ class CompanyController extends Controller
         $data['user_id'] = Auth::id();
         Company::create($data);
 
-        return redirect()->route('company.index', [
-            'success' => true,
-            'message' => 'Company added successfully!',
-        ]);
+        session(['success' => 'Company added successfully!']);
+        return redirect()->route('company.index');
     }
 
     /**
@@ -87,10 +85,8 @@ class CompanyController extends Controller
         $company = Company::findOrFail($id);
         $company->update($request->only(['company_name', 'owner_name', 'industry']));
 
-        return redirect()->route('company.index', [
-            'success' => true,
-            'message' => 'Company Details updated successfully',
-        ]);
+        session(['success' => 'Company Details updated successfully!']);
+        return redirect()->route('company.index');
     }
 
     /**

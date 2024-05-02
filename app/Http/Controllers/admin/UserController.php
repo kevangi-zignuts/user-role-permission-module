@@ -59,10 +59,7 @@ class UserController extends Controller
             'email'      => [
                                 'email',
                                 'required',
-                                Rule::unique('users')->where(function ($query) {
-                                  // Consider soft deleted records as non-unique
-                                  $query->whereNull('deleted_at');
-                                }),
+                                Rule::unique('users')->ignore(auth()->id())->whereNull('deleted_at'),
                             ],
             'contact_no' => 'numeric|nullable',
             'roles'      => 'array|nullable',
@@ -86,10 +83,8 @@ class UserController extends Controller
         // Attach the roles to the user
         $user->role()->attach($request->input('roles', []));
 
-        return redirect()->route('users.index', [
-            'success' => true,
-            'message' => 'User Created successfully!',
-        ]);
+        session(['success' => 'User Created successfully!!']);
+        return redirect()->route('users.index');
     }
 
     /**
@@ -138,10 +133,8 @@ class UserController extends Controller
         // Sync the roles associated with the user
         $user->role()->sync($request->input('roles', []));
 
-        return redirect()->route('users.index', [
-            'success' => true,
-            'message' => 'User Updated successfully!',
-        ]);
+        session(['success' => 'User Updated successfully!!']);
+        return redirect()->route('users.index');
     }
 
     /**
@@ -150,7 +143,7 @@ class UserController extends Controller
     public function delete($id)
     {
         $user = User::find($id);
-        if (! $user) {
+        if (!$user) {
             return Response::json(
                 [
                     'error'   => true,
@@ -187,10 +180,8 @@ class UserController extends Controller
 
         $user->tokens()->delete();
 
-        return redirect()->route('users.index', [
-            'success' => true,
-            'message' => 'Password Reset Successfully',
-        ]);
+        session(['success' => 'Password Reset Successfully!!']);
+        return redirect()->route('users.index');
     }
 
     /**

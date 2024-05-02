@@ -60,10 +60,8 @@ class PermissionController extends Controller
         // Attach the modules to the permission
         $permission->module()->attach($request->input('modules', []));
 
-        return redirect()->route('permissions.index', [
-            'success' => true,
-            'message' => 'Permission created successfully!',
-        ]);
+        session(['success' => 'Permission created successfully!!']);
+        return redirect()->route('permissions.index');
     }
 
     /**
@@ -115,10 +113,8 @@ class PermissionController extends Controller
         // Sync the modules associated with the permission
         $permission->module()->sync($request->input('modules', []));
 
-        return redirect()->route('permissions.index', [
-            'success' => true,
-            'message' => 'Permission updated successfully!',
-        ]);
+        session(['success' => 'Permission updated successfully!!']);
+        return redirect()->route('permissions.index');
     }
 
     /**

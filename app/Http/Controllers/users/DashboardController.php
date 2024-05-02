@@ -36,16 +36,12 @@ class DashboardController extends Controller
             $user->update(['password' => Hash::make($request['password'])]);
             $user->tokens()->delete();
 
-            return redirect()->route('auth-login-basic', [
-                'success' => true,
-                'message' => 'Password Reset Successfully',
-            ]);
+            session(['success' => 'Password Reset Successfully!!']);
+            return redirect()->route('auth-login-basic');
         }
 
-        return redirect()->route('user.dashboard', [
-            'error'   => true,
-            'message' => 'Error In password Reset. Try Again!!',
-        ]);
+        session(['error' => 'Error In password Reset. Try Again!!']);
+        return redirect()->route('user.dashboard');
     }
 
     /**
@@ -71,9 +67,7 @@ class DashboardController extends Controller
         $user = User::findOrFail(auth()->id());
         $user->update($request->only(['first_name', 'last_name', 'contact_no', 'address']));
 
-        return redirect()->route('user.dashboard', [
-            'success' => true,
-            'message' => 'User Updated successfully!',
-        ]);
+        session(['success' => 'User Updated successfully!']);
+        return redirect()->route('user.dashboard');
     }
 }

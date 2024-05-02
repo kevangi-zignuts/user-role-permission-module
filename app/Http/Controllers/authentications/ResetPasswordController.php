@@ -31,7 +31,8 @@ class ResetPasswordController extends Controller
 
       // If neither a reset password token nor a user is found with the token, redirect with error message
       if (!($resetPasswordToken || $user)) {
-          return redirect()->route('auth-login-basic')->with('error', 'Password reset already!! ');
+          session(['error' => 'Password reset already!!']);
+          return redirect()->route('auth-login-basic');
       } elseif ($resetPasswordToken) {
           return view('content.forgetPassword.passwordResetForm', compact('token', 'pageConfigs'));
       }
@@ -39,14 +40,16 @@ class ResetPasswordController extends Controller
       if ($user) {
           if ($user->status === 'A') {
             // If user status is 'A' (accepted), redirect with error message
-              return redirect()->route('auth-login-basic')->with('error', 'Invitation accepted already!! ');
+              session(['error' => 'Invitation accepted already!!']);
+              return redirect()->route('auth-login-basic');
           } elseif ($user->status === 'I') {
             // If user status is 'I' (invaited), load the password reset form view  
             return view('content.forgetPassword.passwordResetForm', compact('token', 'pageConfigs'));
           }
       }
 
-      return redirect()->route('auth-login-basic')->with('error', 'Invalid or expired token');
+      session(['error' => 'Invalid or expired token!']);
+      return redirect()->route('auth-login-basic');
   }
 
   /**
@@ -72,7 +75,8 @@ class ResetPasswordController extends Controller
       // Delete the used token from the database
       DB::table('password_reset_tokens')->where('token', $token)->delete();
 
-      return redirect()->route('auth-login-basic')->with('success', "User's password updated successfully");
+      session(['success' => "User's password updated successfully!"]);
+      return redirect()->route('auth-login-basic');
     }
 
     // If no token record exists, check if the token matches an invitation token
@@ -87,10 +91,12 @@ class ResetPasswordController extends Controller
 
       Auth::login($user);
 
-      return redirect()->route('user.dashboard')->with('success', "User's password updated successfully");
+      session(['success' => 'Module Updated successfully!!']);
+      return redirect()->route('user.dashboard');
     }
 
     // If no valid token is found, redirect to the login page with an error message
-    return redirect()->route('auth-login-basic')->with('error', 'Invalid token');
+    session(['error' => 'Invalid token']);
+    return redirect()->route('auth-login-basic');
   }
 }

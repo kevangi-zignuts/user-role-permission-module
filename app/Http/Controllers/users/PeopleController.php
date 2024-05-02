@@ -64,10 +64,8 @@ class PeopleController extends Controller
         $data['user_id'] = Auth::id();
         People::create($data);
 
-        return redirect()->route('people.index', [
-            'success' => true,
-            'message' => 'People added successfully!',
-        ]);
+        session(['success' => 'People added successfully!!']);
+        return redirect()->route('people.index');
     }
 
     /**
@@ -113,10 +111,8 @@ class PeopleController extends Controller
         $people = People::findOrFail($id);
         $people->update($request->only(['name', 'email', 'designation', 'contact_no', 'address']));
 
-        return redirect()->route('people.index', [
-            'success' => true,
-            'message' => 'People Details updated successfully',
-        ]);
+        session(['success' => 'People Details updated successfully!']);
+        return redirect()->route('people.index');
     }
 
     /**

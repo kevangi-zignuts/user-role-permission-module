@@ -21,9 +21,11 @@ class AdminChecked
                 return $next($request);
             }
 
-            return redirect()->route('user.dashboard')->with('error', 'Trying to access unauthorized part');
+            session(['error' => 'Trying to access unauthorized part']);
+            return redirect()->back();
         }
 
-        return redirect()->route('auth-login-basic')->with('error', 'Trying to access unauthorized part');
+        session(['error' => 'Trying to access unauthorized part']);
+        return redirect()->route('auth-login-basic');
     }
 }

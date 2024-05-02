@@ -59,10 +59,8 @@ class RoleController extends Controller
     // Attach the permissions to the role
     $role->permission()->attach($request->input('permissions', []));
 
-    return redirect()->route('roles.index', [
-      'success' => true,
-      'message' => 'Role Created successfully!',
-    ]);
+    session(['success' => 'Role Created successfully!!']);
+    return redirect()->route('roles.index');
   }
 
   /**
@@ -109,10 +107,8 @@ class RoleController extends Controller
     // Sync the permissions associated with the role
     $role->permission()->sync($request->input('permissions', []));
 
-    return redirect()->route('roles.index', [
-      'success' => true,
-      'message' => 'Role updated successfully',
-    ]);
+    session(['success' => 'Role updated successfully!!']);
+    return redirect()->route('roles.index');
   }
 
   /**
@@ -124,7 +120,7 @@ class RoleController extends Controller
     if (!$role) {
       return Response::json(
         [
-          'error' => true,
+          'error'   => true,
           'message' => 'Some error in deleting User',
         ],
         200
