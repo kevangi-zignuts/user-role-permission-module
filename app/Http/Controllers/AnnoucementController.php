@@ -98,6 +98,7 @@ class AnnoucementController extends Controller
             'date'          => 'required|date',
             'time'          => 'required',
         ]);
+        
         // past announcement can't be update validation check is missing
         $annousment = Annoucement::findOrFail($id);
         if(!$annousment){

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class AnnouncementController extends Controller
 {
@@ -17,13 +18,14 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
         $now = Carbon::now();
+        $perPage = 10;
         $announcements = Announcement::query()->where(function ($query) use ($request, $now) {
             if ($request->input('filter') && $request->input('filter') == 'past') {
                 $query->whereRaw("CONCAT(date, ' ', time) < '{$now->toDateTimeString()}'");
             }else if($request->input('filter') && $request->input('filter') == 'upcoming'){
                 $query->whereRaw("CONCAT(date, ' ', time) > '{$now->toDateTimeString()}'");
             }
-        })->paginate(8);
+        })->paginate($perPage);
         return response()->json($announcements);
     }
 
@@ -60,16 +62,24 @@ class AnnouncementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'message'       => 'required|string|max:64',
-            'date'          => 'required|date_format:Y-m-d',
-            'time'          => 'required',
+        $validator = Validator::make($request->all(), [
+            'message' => 'required|string|max:64',
+            'date' => 'required|date_format:Y-m-d',
+            'time' => 'required',
         ]);
-        // past announcement can't be update validation check is missing
+
         $announcement = Announcement::findOrFail($id);
-        if(!$announcement){
-            return response()->json('error');
-        }
+
+        // past announcement can't be update validation
+        $validator->after(function ($validator) use ($announcement) {
+            if (strtotime($announcement->date . ' ' . $announcement->time) <= time()) {
+                $validator->errors()->add('datetime', 'The announcement can not be updated');
+            }
+        });
+
+        $validator->validate();
+
+        // past announcement can't be update validation check is missing
         $announcement->update($request->only(['message', 'date', 'time']));
 
         return response()->json($announcement);
@@ -84,31 +94,17 @@ class AnnouncementController extends Controller
         // validation missing
        // findOrFail
        // 200 is for the success and ok, fine, good response not for the errors
-        $announcement = Announcement::findOrFail($id);
+       $announcement = Announcement::findOrFail($id);
 
-        if (! $announcement) {
-            return Response::json(
-                [
-                    'error'   => true,
-                    'message' => 'We can not found data',
-                ],
-                404
-            );
-        }
+        $validator = Validator::make([], []);
 
-        $announcementDateTime = new DateTime($announcement->date.' '.$announcement->time);
-        $currentDateTime     = new DateTime();
+        $validator->after(function ($validator) use ($announcement) {
+            if (strtotime($announcement->date . ' ' . $announcement->time) <= time()) {
+                $validator->errors()->add('datetime', 'The announcement can not be delete');
+            }
+        });
 
-        // Check annousment Date and Time if it is in past then can't access delete
-        if ($announcementDateTime < $currentDateTime) {
-            return Response::json(
-                [
-                    'error'   => true,
-                    'message' => 'Announcement Date and Time are in past',
-                ],
-                400
-            );
-        }
+        $validator->validate();
 
         $announcement->delete();
 
