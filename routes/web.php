@@ -1,19 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckUserTokens;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\UserController;
-use App\Http\Middleware\CheckUserTokens;
-use App\Http\Controllers\admin\AdminDashboardController;
-use App\Http\Controllers\admin\ModuleController;
-use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\users\NoteController;
+use App\Http\Controllers\admin\ModuleController;
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\users\PeopleController;
 use App\Http\Controllers\users\CompanyController;
 use App\Http\Controllers\users\MeetingController;
 use App\Http\Controllers\users\DashboardController;
+use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\users\ActivityLogController;
+use App\Http\Controllers\admin\AdminDashboardController;
+use App\Http\Controllers\users\UserAnnoucementController;
 use App\Http\Controllers\authentications\ResetPasswordController;
 use App\Http\Controllers\authentications\ForgetPasswordController;
 
@@ -30,7 +32,7 @@ use App\Http\Controllers\authentications\ForgetPasswordController;
 $controller_path = 'App\Http\Controllers';
 // login page Route
 Route::get('/', $controller_path . '\authentications\LoginBasic@loginForm')->name('auth-login-basic');
-Route::post('/', $controller_path . '\authentications\LoginBasic@login')->name('login');
+Route::post('/login', $controller_path . '\authentications\LoginBasic@login')->name('auth.login');
 // Forget Password Page Route
 Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForm'])->name('forgetPassword');
 Route::post('/forget-password', [ForgetPasswordController::class, 'submit'])->name('forgetPasswordForm');
@@ -82,6 +84,17 @@ Route::middleware('auth', 'adminCheck')->group(function () {
       Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
       Route::get('/forced-logout/{id}', [UserController::class, 'forceLogout'])->name('users.forceLogout');
     });
+    // spelling
+    // Route::group(['prefix' => 'announcements'], function () {
+    //   // index should just "/"
+    //   Route::get('/', [AnnouncementController::class, 'index'])->name('announcements.index');
+    //   Route::get('/create', [AnnouncementController::class, 'create'])->name('announcements.create');
+    //   Route::post('/store', [AnnouncementController::class, 'store'])->name('announcements.store');
+    //   Route::get('/view/{id}', [AnnouncementController::class, 'view'])->name('announcements.view');
+    //   Route::get('/edit/{id}', [AnnouncementController::class, 'edit'])->name('announcements.edit');
+    //   Route::post('/update/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
+    //   Route::get('/delete/{id}', [AnnouncementController::class, 'delete'])->name('announcements.delete');
+    // });
   });
 });
 Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')
@@ -187,6 +200,11 @@ Route::middleware('auth', 'isUser')->group(function () {
       Route::get('/delete/{id}', [PeopleController::class, 'delete'])
         ->name('people.delete')
         ->middleware('permission:' . 'peo' . ',delete_access');
+    });
+
+    Route::group(['prefix' => 'annousements'], function () {
+      Route::get('/index', [UserAnnousementController::class, 'index'])->name('user.annousement.index');
+      Route::get('/view', [UserAnnousementController::class, 'view'])->name('user.annousement.view');
     });
   });
 });

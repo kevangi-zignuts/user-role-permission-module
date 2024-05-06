@@ -29,6 +29,12 @@
       "module_name": "Users",
       "icon": "menu-icon tf-icons ti ti-user",
       "slug": "users.index"
+    },
+    {
+      "url": "admin/announcements/api/index1",
+      "module_name": "Announceements",
+      "icon": "menu-icon tf-icons ti ti-user",
+      "slug": "api.announcements.index"
     }
   ]
 }
