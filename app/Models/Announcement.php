@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,7 @@ class Announcement extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['message', 'date', 'time', 'status','created_by', 'updated_by'];
+    protected $fillable = ['message', 'date', 'time', 'status', 'created_by', 'updated_by'];
 
     public static function boot()
     {

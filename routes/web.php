@@ -32,7 +32,7 @@ use App\Http\Controllers\authentications\ForgetPasswordController;
 $controller_path = 'App\Http\Controllers';
 // login page Route
 Route::get('/', $controller_path . '\authentications\LoginBasic@loginForm')->name('auth-login-basic');
-Route::post('/login', $controller_path . '\authentications\LoginBasic@login')->name('auth.login');
+Route::post('/', $controller_path . '\authentications\LoginBasic@login')->name('login');
 // Forget Password Page Route
 Route::get('/forget-password-link', [ForgetPasswordController::class, 'showForm'])->name('forgetPassword');
 Route::post('/forget-password', [ForgetPasswordController::class, 'submit'])->name('forgetPasswordForm');
@@ -40,7 +40,7 @@ Route::post('/forget-password', [ForgetPasswordController::class, 'submit'])->na
 Route::get('/reset-password-link/{token}', [ResetPasswordController::class, 'showForm'])->name('resetPassword');
 Route::post('/reset-password/{token}', [ResetPasswordController::class, 'submit'])->name('resetPasswordSubmit');
 
-Route::middleware('auth', 'adminCheck')->group(function () {
+Route::middleware(['auth', 'access', 'adminCheck'])->group(function () {
   // Main Page Route
 
   Route::group(['prefix' => 'admin'], function () {
@@ -85,23 +85,14 @@ Route::middleware('auth', 'adminCheck')->group(function () {
       Route::get('/forced-logout/{id}', [UserController::class, 'forceLogout'])->name('users.forceLogout');
     });
     // spelling
-    // Route::group(['prefix' => 'announcements'], function () {
-    //   // index should just "/"
-    //   Route::get('/', [AnnouncementController::class, 'index'])->name('announcements.index');
-    //   Route::get('/create', [AnnouncementController::class, 'create'])->name('announcements.create');
-    //   Route::post('/store', [AnnouncementController::class, 'store'])->name('announcements.store');
-    //   Route::get('/view/{id}', [AnnouncementController::class, 'view'])->name('announcements.view');
-    //   Route::get('/edit/{id}', [AnnouncementController::class, 'edit'])->name('announcements.edit');
-    //   Route::post('/update/{id}', [AnnouncementController::class, 'update'])->name('announcements.update');
-    //   Route::get('/delete/{id}', [AnnouncementController::class, 'delete'])->name('announcements.delete');
-    // });
+
   });
 });
 Route::get('/logout', $controller_path . '\authentications\LoginBasic@logout')
   ->name('auth.logout')
   ->middleware('auth');
 
-Route::middleware('auth', 'isUser')->group(function () {
+Route::middleware(['auth', 'access', 'isUser'])->group(function () {
   Route::group(['prefix' => 'user'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/edit', [DashboardController::class, 'edit'])->name('user.edit');

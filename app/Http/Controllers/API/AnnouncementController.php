@@ -7,6 +7,7 @@ use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -39,6 +40,7 @@ class AnnouncementController extends Controller
             'date'          => 'required|date_format:Y-m-d',
             'time'          => 'required',
         ]);
+        // dd(Auth::check());
         Announcement::create($data);
 
         return response()->json($data);
@@ -67,17 +69,19 @@ class AnnouncementController extends Controller
             'date' => 'required|date_format:Y-m-d',
             'time' => 'required',
         ]);
-
+        
         $announcement = Announcement::findOrFail($id);
-
+        
         // past announcement can't be update validation
         $validator->after(function ($validator) use ($announcement) {
-            if (strtotime($announcement->date . ' ' . $announcement->time) <= time()) {
-                $validator->errors()->add('datetime', 'The announcement can not be updated');
+            if (strtotime($announcement->date . ' ' . $announcement->time) <= Carbon::now()->timestamp) {
+                $validator->errors()->add('datetime', 'The announcement datetime are in past so announcement can not be updated');
             }
         });
-
-        $validator->validate();
+        
+        if($validator->fails()){
+            return response()->json($validator->errors()->first());
+        }
 
         // past announcement can't be update validation check is missing
         $announcement->update($request->only(['message', 'date', 'time']));
@@ -90,21 +94,24 @@ class AnnouncementController extends Controller
      */
     public function delete($id)
     {
-        // soft delete used on migartion and model but never used
-        // validation missing
-       // findOrFail
-       // 200 is for the success and ok, fine, good response not for the errors
-       $announcement = Announcement::findOrFail($id);
-
-        $validator = Validator::make([], []);
+        $validator = Validator::make(['id' => $id], [
+            'id' => 'exists:announcements,id,deleted_at,NULL',
+        ]);
+        if($validator->fails()){
+            return response()->json($validator->errors()->first());
+        }
+    
+        $announcement = Announcement::findOrFail($id);
 
         $validator->after(function ($validator) use ($announcement) {
-            if (strtotime($announcement->date . ' ' . $announcement->time) <= time()) {
+            if (strtotime($announcement->date . ' ' . $announcement->time) <= Carbon::now()->timestamp) {
                 $validator->errors()->add('datetime', 'The announcement can not be delete');
             }
         });
 
-        $validator->validate();
+        if($validator->fails()){
+            return response()->json($validator->errors()->first());
+        }
 
         $announcement->delete();
 

@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
       \App\Http\Middleware\VerifyCsrfToken::class,
       \Illuminate\Routing\Middleware\SubstituteBindings::class,
       \App\Http\Middleware\LocaleMiddleware::class,
-      \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+      // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
     ],
 
     'api' => [
@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
     'adminCheck' => \App\Http\Middleware\AdminChecked::class,
     'permission' => \App\Http\Middleware\CheckPermission::class,
     'isUser' => \App\Http\Middleware\UserChecked::class,
+    'access' => \App\Http\Middleware\checkToken::class,
   ];
 }
